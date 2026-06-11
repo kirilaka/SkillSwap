@@ -17,10 +17,16 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    }
+      "src/*": ["./src/*"],
+      "ui/*": ["./src/shared/ui/*"],
+      "hooks/*": ["./src/shared/hooks/*"]
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
   "include": ["src"]
 }
