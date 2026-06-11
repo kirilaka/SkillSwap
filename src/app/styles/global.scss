@@ -1,0 +1,45 @@
+/* ─── CSS Custom Properties ─────────────────────────────── */
+
+/* Тёмная тема — добавить поддержку через data-theme="dark" */
+[data-theme='dark'] {
+  $color-bg: #0f172a;
+  $color-bg-secondary: #1e293b;
+  $color-text: #f1f5f9;
+  $color-text-secondary: #94a3b8;
+  $color-border: #334155;
+}
+
+/* ─── Reset ──────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $roboto;
+  font-size: $font-size-base;
+  color: $color-text;
+  background-color: $color-bg;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+}

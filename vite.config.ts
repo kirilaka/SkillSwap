@@ -20,7 +20,7 @@ export default defineConfig({
     },
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "src/styles/variables.scss" as *;`,
+        additionalData: `@import "${resolve(__dirname, 'src/app/styles/variables.scss')}";`,
       },
     },
   },
