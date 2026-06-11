@@ -1,0 +1,15 @@
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.horizontal {
+  transform: rotate(0deg);
+}
+
+.vertical {
+  transform: rotate(-90deg);
+}
+
+.open {
+  transform: rotate(180deg);
+}
