@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: {
+      '@': resolve(__dirname, './src'),
       src: resolve(__dirname, './src'),
       ui: resolve(__dirname, './src/shared/ui'),
       hooks: resolve(__dirname, './src/shared/hooks'),
