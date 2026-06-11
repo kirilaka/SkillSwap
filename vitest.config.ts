@@ -13,12 +13,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        'src/main.tsx',
-        'src/setupTests.ts',
-        'src/**/*.d.ts',
-        'src/**/*.stories.*',
-      ],
+      exclude: ['src/main.tsx', 'src/setupTests.ts', 'src/**/*.d.ts', 'src/**/*.stories.*'],
       thresholds: {
         statements: 70,
       },
@@ -27,6 +22,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      src: resolve(__dirname, './src'),
+      ui: resolve(__dirname, './src/shared/ui'),
+      hooks: resolve(__dirname, './src/shared/hooks'),
     },
   },
 })
