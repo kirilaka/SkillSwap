@@ -1,8 +1,10 @@
+@use 'src/assets/fonts/font';
+
 $color-bg: #f9faf7;
 $color-bg-secondary: #fff;
 $color-text: #253017;
 $color-text-secondary: #508826;
-$color-accent_light: #abd27a;
+$color-accent-light: #abd27a;
 $color-accent-dark: #69735d;
 $color-error: #bf3920;
 $color-business: #eee7f7;
@@ -21,6 +23,9 @@ $space-xl: 32px;
 $space-2xl: 48px;
 
 /* Typography */
+$open-sans: 'Open Sans', sans-serif;
+$roboto: 'Roboto', sans-serif;
+$jost: 'Jost', sans-serif;
 $font-sans:
   system-ui,
   -apple-system,
