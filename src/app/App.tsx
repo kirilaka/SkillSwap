@@ -1,6 +1,6 @@
 import { StoreProvider } from './providers/StoreProvider'
 import { AppRouter } from './providers/RouterProvider'
-import './styles/global.css'
+import './styles/global.scss'
 
 export function App() {
   return (
