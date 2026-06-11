@@ -1,4 +1,4 @@
-import styles from './ArrowIcon.module.css'
+import styles from './ArrowIcon.module.scss'
 import ArrowSvg from './Arrow.svg?react'
 
 type Orientation = 'vertical' | 'horizontal'
