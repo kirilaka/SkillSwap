@@ -1,16 +1,19 @@
 .arrow {
   transition: transform 0.2s ease;
-  cursor: pointer;
 }
 
 .horizontal {
   transform: rotate(0deg);
 }
 
+.horizontal_open {
+  transform: rotate(180deg);
+}
+
 .vertical {
   transform: rotate(-90deg);
 }
 
-.open {
-  transform: rotate(180deg);
+.vertical_open {
+  transform: rotate(90deg);
 }
