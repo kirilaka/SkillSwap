@@ -1,7 +1,12 @@
 .logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 12px;
+  margin-top: 40px;
+  margin-left: 36px;
+}
+
+.icon {
   width: 40px;
   height: 40px;
 }
