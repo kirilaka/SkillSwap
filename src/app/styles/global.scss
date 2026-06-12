@@ -21,9 +21,11 @@
 body {
   font-family: $roboto;
   font-size: $font-size-base;
-  color: $color-text;
-  background-color: $color-bg;
   line-height: 1.5;
+  color: $color-text;
+
+  background-color: $color-bg;
+
   -webkit-font-smoothing: antialiased;
 }
 
@@ -33,13 +35,13 @@ a {
 }
 
 img {
-  max-width: 100%;
   display: block;
+  max-width: 100%;
 }
 
 button {
   cursor: pointer;
   border: none;
-  background: none;
   font: inherit;
+  background: none;
 }
