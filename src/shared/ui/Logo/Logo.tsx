@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import logoSvg from '@/assets/icons/logo.svg'
 import styles from './Logo.module.scss'
+import clsx from 'clsx'
 
 interface LogoProps {
   className?: string
@@ -10,10 +11,10 @@ export const Logo = ({ className }: LogoProps) => {
   return (
     <Link
       to="/"
-      className={`${styles.logo} ${className ?? ''}`}
-      aria-label="SkillSwap - на главную"
+      className={clsx(styles.logo, className)}
+      aria-label="На главную страницу SkillSwap"
     >
-      <img src={logoSvg} alt="SkillSwap логотип" className={styles.icon} />
+      <img src={logoSvg} alt="Логотип SkillSwap" className={styles.icon} />
       <span className={styles.text}>SkillSwap</span>
     </Link>
   )
