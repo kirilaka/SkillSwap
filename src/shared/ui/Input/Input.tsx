@@ -1,27 +1,48 @@
-import React from 'react'
-import './Input.scss'
-import searchIcon from './search.svg'
+import { ChangeEvent, ReactNode } from 'react'
+import { clsx } from 'clsx'
+import styles from './Input.module.scss'
+
 interface InputProps {
+  /** Текст-подсказка внутри поля ввода */
   placeholder?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  /** Обработчик изменения значения в инпуте */
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  /** Дополнительные CSS-классы для внешней стилизации */
   className?: string
+  /**
+   * Позиция будущей иконки для настройки отступов.
+   * 'none' — без иконки, 'left' — иконка будет слева, 'right' — справа.
+   */
+  iconPosition?: 'none' | 'left' | 'right'
+  /** Декоративная иконка в инпуте */
+  icon?: ReactNode
 }
-const Input: React.FC<InputProps> = ({
+
+export const Input = ({
   placeholder = 'Искать навык',
   onChange,
-  className = '',
-}) => {
+  className,
+  iconPosition = 'none',
+  icon,
+}: InputProps) => {
   return (
-    <div className={`custom-input-wrapper ${className}`}>
-      <img src={searchIcon} alt="Поиск" className="search-icon" />
+    <div
+      className={clsx(
+        styles.customInputWrapper,
+        {
+          [styles.customInputWrapperWithIconLeft]: iconPosition === 'left',
+          [styles.customInputWrapperWithIconRight]: iconPosition === 'right',
+        },
+        className,
+      )}
+    >
       <input
         type="text"
         placeholder={placeholder}
         onChange={onChange}
-        className="custom-input-field"
+        className={styles.customInputField}
       />
+      {icon && <div className={styles.inputIconContainer}>{icon}</div>}
     </div>
   )
 }
-
-export default Input
