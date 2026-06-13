@@ -27,6 +27,7 @@ export const NavItem = ({
 }: NavItemProps) => {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={clsx(
         className,
@@ -35,7 +36,7 @@ export const NavItem = ({
         styles.navItem,
       )}
     >
-      <span>{label}</span>
+      <span className={styles.labelText}>{label}</span>
       {hasArrow && <ArrowIcon isOpen={isOpen} />}
     </button>
   )

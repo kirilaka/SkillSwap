@@ -12,6 +12,13 @@
   letter-spacing: 0.32px;
 }
 
+.navItem:hover {
+  .labelText {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
 .active {
   color: $color-text-secondary;
 }
