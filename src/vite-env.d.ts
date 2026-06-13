@@ -6,10 +6,10 @@ declare module '*.svg?react' {
 }
 
 declare module '*.png'
-
 declare module '*.jpg'
-
 declare module '*.json'
+declare module '*.css'
+declare module '*.scss'
 
 declare module '*.module.css' {
   const classes: { [key: string]: string }
