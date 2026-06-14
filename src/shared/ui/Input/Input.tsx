@@ -9,6 +9,10 @@ interface InputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   /** Дополнительные CSS-классы для внешней стилизации */
   className?: string
+  /** Имя инпута */
+  inputName?: string
+  /** id инпута */
+  inputId?: string
   /**
    * Позиция будущей иконки для настройки отступов.
    * 'none' — без иконки, 'left' — иконка будет слева, 'right' — справа.
@@ -19,30 +23,28 @@ interface InputProps {
 }
 
 export const Input = ({
-  placeholder = 'Искать навык',
+  placeholder = 'Поле ввода',
   onChange,
   className,
+  inputName = '',
+  inputId = '',
   iconPosition = 'none',
   icon,
 }: InputProps) => {
   return (
-    <div
-      className={clsx(
-        styles.customInputWrapper,
-        {
-          [styles.customInputWrapperWithIconLeft]: iconPosition === 'left',
-          [styles.customInputWrapperWithIconRight]: iconPosition === 'right',
-        },
-        className,
-      )}
-    >
+    <div className={clsx(styles.customInputWrapper, className)}>
       <input
         type="text"
+        name={inputName}
+        id={inputId}
         placeholder={placeholder}
         onChange={onChange}
-        className={styles.customInputField}
+        className={clsx(styles.customInputField, {
+          [styles.customInputFieldWithIconLeft]: iconPosition === 'left',
+          [styles.customInputFieldWithIconRight]: iconPosition === 'right',
+        })}
       />
-      {icon && <div className={styles.inputIconContainer}>{icon}</div>}
+      {icon}
     </div>
   )
 }
