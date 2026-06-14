@@ -1,0 +1,20 @@
+.iconWrapper {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+}
+
+.svg {
+  position: absolute;
+  top: 6.7px;
+  left: 6.67px;
+
+  width: 10.61px;
+  height: 10.61px;
+}
