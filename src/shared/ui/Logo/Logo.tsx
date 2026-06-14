@@ -4,6 +4,7 @@ import styles from './Logo.module.scss'
 import clsx from 'clsx'
 
 interface LogoProps {
+  /** Доп. классы */
   className?: string
 }
 
