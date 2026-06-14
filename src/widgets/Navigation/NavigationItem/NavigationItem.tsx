@@ -7,8 +7,6 @@ interface NavItemProps {
   label: string
   /** состояние открытого/закрытого пункта */
   isOpen?: boolean
-  /** активное состояние пункта */
-  isActive?: boolean
   /** обработчик клика */
   onClick?: () => void
   /** наличие галочки у компонента ( По умолчанию false ) */
@@ -19,8 +17,7 @@ interface NavItemProps {
 
 export const NavItem = ({
   label,
-  isOpen,
-  isActive,
+  isOpen = false,
   onClick,
   hasArrow = false,
   className,
@@ -29,12 +26,7 @@ export const NavItem = ({
     <button
       type="button"
       onClick={onClick}
-      className={clsx(
-        className,
-        { [styles.active]: isActive },
-        { [styles.isOpen]: isOpen },
-        styles.navItem,
-      )}
+      className={clsx(className, { [styles.isOpen]: isOpen }, styles.navItem)}
     >
       <span className={styles.labelText}>{label}</span>
       {hasArrow && <ArrowIcon isOpen={isOpen} />}

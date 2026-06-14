@@ -1,4 +1,4 @@
-.navItem {
+.nav-item {
   cursor: pointer;
 
   display: flex;
@@ -9,18 +9,20 @@
   font-size: $font-size-base;
   line-height: 24px;
   color: $color-text;
-  letter-spacing: 0.32px;
-}
+  letter-spacing: 2%;
 
-.navItem:hover {
-  .labelText {
+  &:hover .label-text {
     text-decoration: underline;
     text-underline-offset: 4px;
   }
+
+  &:active {
+    color: $color-text-secondary;
+  }
 }
 
-.active {
-  color: $color-text-secondary;
+.label-text {
+  transition: color 0.2s ease;
 }
 
 .isOpen {
