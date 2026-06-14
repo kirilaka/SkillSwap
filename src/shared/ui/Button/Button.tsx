@@ -2,19 +2,25 @@ import styles from './Button.module.scss'
 import clsx from 'clsx'
 
 interface ButtonProps {
+  /** Надпись на кнопке */
   label: string
-  onClick: () => void
-  type: 'submit' | 'reset' | 'button'
-  fieldset: 'full' | 'partial' | 'none'
+  /** Обработчик клика */
+  onClick?: () => void
+  /** Тип кнопки */
+  type?: 'submit' | 'reset' | 'button'
+  /** Вид кнопки */
+  buttonType?: 'primary' | 'secondary' | 'tertiary'
+  /** Доп. классы */
   className?: string
-  disabled: boolean
+  /** Состояние отключения кнопки */
+  disabled?: boolean
 }
 
 export const Button = ({
   label,
   onClick,
   type = 'button',
-  fieldset = 'partial',
+  buttonType = 'secondary',
   className,
   disabled = false,
 }: ButtonProps) => {
@@ -23,7 +29,7 @@ export const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={clsx(styles.button, styles[fieldset], className)}
+      className={clsx(styles.button, styles[buttonType], className)}
     >
       {label}
     </button>

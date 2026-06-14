@@ -3,6 +3,7 @@ import logoSvg from '@/assets/icons/logo.svg'
 import styles from './Logo.module.scss'
 
 interface LogoProps {
+  /** Доп. классы */
   className?: string
 }
 
