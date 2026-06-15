@@ -1,0 +1,45 @@
+.userAvatar {
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.all {
+  flex-direction: row;
+}
+
+.name {
+  flex-direction: row-reverse;
+}
+
+.nameText {
+  font-family: $roboto;
+  font-size: 16px;
+  font-weight: 400;
+  color: $color-text;
+  letter-spacing: 2%;
+}
+
+.details {
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text;
+  letter-spacing: 2%;
+}
+
+.avatarLarge {
+  width: 100px;
+  height: 100px;
+}
+
+.avatarSmall {
+  width: 48px;
+  height: 48px;
+}
