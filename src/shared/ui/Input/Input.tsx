@@ -1,25 +1,25 @@
-import { ChangeEvent, ReactNode } from 'react'
-import { clsx } from 'clsx'
-import styles from './Input.module.scss'
+import { ChangeEvent, ReactNode } from 'react';
+import { clsx } from 'clsx';
+import styles from './Input.module.scss';
 
 interface InputProps {
   /** Текст-подсказка внутри поля ввода */
-  placeholder?: string
+  placeholder?: string;
   /** Обработчик изменения значения в инпуте */
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   /** Дополнительные CSS-классы для внешней стилизации */
-  className?: string
+  className?: string;
   /** Имя инпута */
-  inputName?: string
+  inputName?: string;
   /** id инпута */
-  inputId?: string
+  inputId?: string;
   /**
    * Позиция будущей иконки для настройки отступов.
    * 'none' — без иконки, 'left' — иконка будет слева, 'right' — справа.
    */
-  iconPosition?: 'none' | 'left' | 'right'
+  iconPosition?: 'none' | 'left' | 'right';
   /** Декоративная иконка в инпуте */
-  icon?: ReactNode
+  icon?: ReactNode;
 }
 
 export const Input = ({
@@ -46,5 +46,5 @@ export const Input = ({
       />
       {icon}
     </div>
-  )
-}
+  );
+};

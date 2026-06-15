@@ -6,5 +6,5 @@ export default function LoginPage() {
       <h1>LoginPage</h1>
       <p>Страница в разработке</p>
     </main>
-  )
+  );
 }

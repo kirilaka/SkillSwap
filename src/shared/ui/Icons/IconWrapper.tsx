@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
-import styles from './IconWrapper.module.scss'
-import clsx from "clsx";
-
+import { ReactNode } from 'react';
+import styles from './IconWrapper.module.scss';
+import clsx from 'clsx';
 
 interface IconWrapperProps {
   /** Компонент иконки */
@@ -10,14 +9,6 @@ interface IconWrapperProps {
   className?: string;
 }
 
-export const IconWrapper = ({
-  children,
-  className
-}: IconWrapperProps) => {
-  return(
-    <div className={clsx(
-    styles.wrapper,
-    className)}> {children}
-    </div>
-  )
-}
+export const IconWrapper = ({ children, className }: IconWrapperProps) => {
+  return <div className={clsx(styles.wrapper, className)}> {children}</div>;
+};

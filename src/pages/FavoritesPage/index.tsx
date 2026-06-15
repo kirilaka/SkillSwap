@@ -6,5 +6,5 @@ export default function FavoritesPage() {
       <h1>FavoritesPage</h1>
       <p>Страница в разработке</p>
     </main>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Header } from './Header'
+import { Header } from './Header';
 
 const meta = {
   // пояснение к следующей строчке:
@@ -23,10 +23,10 @@ const meta = {
   //пропсы компонента по умолчанию
   args: {},
   // в следующей строчке меняете Header на ваш компонент
-} satisfies Meta<typeof Header>
+} satisfies Meta<typeof Header>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 //конкретные состояния
 
@@ -37,6 +37,6 @@ export const LoggedIn: Story = {
       name: 'Jane Doe',
     },
   },
-}
+};
 
-export const LoggedOut: Story = {}
+export const LoggedOut: Story = {};
