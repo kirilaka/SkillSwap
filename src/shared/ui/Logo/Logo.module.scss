@@ -1,21 +1,22 @@
 .logo {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
+
   width: fit-content;
   height: 40px;
 }
 
 .icon {
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
-  flex-shrink: 0;
 }
 
 .text {
   font-family: $jost;
   font-size: $font-size-2xl;
   font-weight: 600;
-  color: $color-text;
+  color: $color-text-primary;
   letter-spacing: -1.1%;
 }

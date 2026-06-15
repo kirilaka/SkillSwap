@@ -1,56 +1,59 @@
 .button {
-  border-radius: $radius-lg;
-  border: 1px solid transparent;
-  padding: 12px 24px;
   cursor: pointer;
-  color: $color-text;
-  font-size: $font-size-base;
-  letter-spacing: 2%;
+
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  border-radius: $radius-lg;
+
   font-family: $roboto;
+  font-size: $font-size-base;
   font-weight: 400;
+  color: $color-text-primary;
+  letter-spacing: 2%;
+
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
 }
 
 .primary {
-  background-color: $color-accent-light;
+  background-color: $color-button-primary;
 
   &:hover {
-    background-color: #deebc5;
+    background-color: $color-button-hover;
   }
 
   &:active {
-    background-color: #508826;
-    color: $color-bg-secondary;
+    color: $color-bg-card;
+    background-color: $color-button-primary;
   }
 
   &:disabled {
-    background-color: #e4e8df;
-    color: $color-accent-dark;
+    color: $color-text-caption;
+    background-color: $color-border-default;
   }
 }
 
 .secondary {
-  border-color: $color-accent-light;
-  background-color: $color-bg-secondary;
+  border-color: $color-button-primary;
+  background-color: $color-bg-card;
 
   &:hover {
-    border-color: #deebc5;
-    color: $color-accent-dark;
+    border-color: $color-button-hover;
+    color: $color-text-caption;
   }
 
   &:active {
-    border-color: #508826;
-    color: $color-text;
+    border-color: $color-button-primary;
+    color: $color-text-primary;
   }
 
   &:disabled {
-    background-color: #e4e8df;
-    color: #9ca197;
+    color: $color-text-disabled;
+    background-color: $color-border-default;
   }
 }
 
 .tertiary {
-  background-color: $color-bg-secondary;
+  background-color: $color-bg-card;
 }
