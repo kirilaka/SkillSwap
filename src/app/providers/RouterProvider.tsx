@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
-import { ROUTES } from '@/shared/lib/constants'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { ROUTES } from '@/shared/lib/constants';
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
-const CatalogPage = lazy(() => import('@/pages/CatalogPage'))
-const SkillPage = lazy(() => import('@/pages/SkillPage'))
-const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
-const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'))
-const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'))
-const LoginPage = lazy(() => import('@/pages/LoginPage'))
-const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
+const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
+const SkillPage = lazy(() => import('@/pages/SkillPage'));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
+const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'));
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export function AppRouter() {
   return (
@@ -30,5 +30,5 @@ export function AppRouter() {
         </Routes>
       </Suspense>
     </BrowserRouter>
-  )
+  );
 }

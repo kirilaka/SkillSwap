@@ -1,16 +1,16 @@
-import styles from './ArrowIcon.module.scss'
-import ArrowSvg from './Arrow.svg?react'
-import clsx from 'clsx'
+import styles from './ArrowIcon.module.scss';
+import ArrowSvg from './Arrow.svg?react';
+import clsx from 'clsx';
 
-type Orientation = 'vertical' | 'horizontal'
+type Orientation = 'vertical' | 'horizontal';
 
 interface ArrowIconPrors {
   /** Состояние открыта/закрыта */
-  isOpen?: boolean
+  isOpen?: boolean;
   /** Ориентация, по умол. horizontal*/
-  orientation?: Orientation
+  orientation?: Orientation;
   /** Доп. классы */
-  className?: string
+  className?: string;
 }
 
 export const ArrowIcon = ({
@@ -27,5 +27,5 @@ export const ArrowIcon = ({
         className,
       )}
     />
-  )
-}
+  );
+};
