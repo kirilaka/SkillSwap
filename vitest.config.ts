@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -25,6 +25,12 @@ export default defineConfig({
       src: resolve(__dirname, './src'),
       ui: resolve(__dirname, './src/shared/ui'),
       hooks: resolve(__dirname, './src/shared/hooks'),
+      pages: resolve(__dirname, './src/pages'),
+      features: resolve(__dirname, './src/features'),
+      entities: resolve(__dirname, './src/entities'),
+      shared: resolve(__dirname, './src/shared'),
+      store: resolve(__dirname, './src/store/'),
+      widgets: resolve(__dirname, './src/widgets/'),
     },
   },
-})
+});
