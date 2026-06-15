@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { ArrowIcon } from './ArrowIcon';
 
 const meta: Meta<typeof ArrowIcon> = {
-  title: 'shared/ArrowIcon/ArrowIcon',
+  title: 'Shared/ArrowIcon/ArrowIcon',
   component: ArrowIcon,
   parameters: {
     layout: 'centered',

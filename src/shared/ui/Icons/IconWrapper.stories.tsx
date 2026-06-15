@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { IconWrapper } from './IconWrapper';
 
 const meta: Meta<typeof IconWrapper> = {
-  title: 'shared/Icons/IconWrapper',
+  title: 'Shared/IconWrapper',
   component: IconWrapper,
   parameters: {
     layout: 'centered',

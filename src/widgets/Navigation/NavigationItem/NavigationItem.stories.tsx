@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { NavItem } from './NavigationItem';
 import { fn } from 'storybook/test';
 const meta: Meta<typeof NavItem> = {
-  title: 'widgets/Navigation/NavItem',
+  title: 'Widgets/Navigation/NavItem',
   component: NavItem,
   parameters: {
     layout: 'centered',
@@ -32,12 +32,5 @@ export const WithArrowOpen: Story = {
     label: 'Навыки',
     hasArrow: true,
     isOpen: true,
-  },
-};
-
-export const WithClick: Story = {
-  args: {
-    label: 'Нажми на меня',
-    onClick: fn(),
   },
 };
