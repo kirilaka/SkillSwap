@@ -18,24 +18,24 @@ type Story = StoryObj<typeof UserAvatar>;
 
 const mockUser = {
   id: '1',
-  name: 'Иван Петров',
-  email: 'ivan@example.com',
+  name: 'Максим Максимов',
+  email: 'maxim@gmail.com',
   avatarUrl: 'https://placehold.co/100',
   createdAt: '2026-01-01',
-  city: 'Москва',
-  age: 31,
+  city: 'Санкт-Петербург',
+  age: 38,
 };
 
 export const NameFormat: Story = {
-  name: 'Формат: только имя',
+  name: 'формат юзер',
   args: {
     user: mockUser,
     infoFormat: 'name',
   },
 };
 
-export const AllFormat: Story = {
-  name: 'Формат: вся информация',
+export const AllFprmat: Story = {
+  name: 'формат: вся информация',
   args: {
     user: mockUser,
     infoFormat: 'all',

@@ -5,41 +5,31 @@
   align-items: center;
 }
 
+.name {
+  flex-direction: row-reverse;
+
+  .nameText {
+    font-family: $roboto;
+    font-size: $font-size-sm;
+    font-weight: 400;
+    letter-spacing: 2%;
+  }
+}
+
 .info {
   display: flex;
   flex-direction: column;
+  color: $color-text;
 }
 
 .all {
-  flex-direction: row;
-}
-
-.name {
-  flex-direction: row-reverse;
-}
-
-.nameText {
-  font-family: $roboto;
-  font-size: 16px;
-  font-weight: 400;
-  color: $color-text;
-  letter-spacing: 2%;
+  .nameText {
+    font-size: $font-size-xl;
+  }
 }
 
 .details {
   font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  color: $color-text;
-  letter-spacing: 2%;
-}
-
-.avatarLarge {
-  width: 100px;
-  height: 100px;
-}
-
-.avatarSmall {
-  width: 48px;
-  height: 48px;
+  font-size: $font-size-sm;
+  font-weight: 600;
 }

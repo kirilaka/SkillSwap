@@ -28,12 +28,7 @@ const getAgeLabel = (age: number): string => {
 export const UserAvatar = ({ user, infoFormat, onClick, className }: UserAvatarProps) => {
   return (
     <div className={clsx(styles.userAvatar, styles[infoFormat], className)} onClick={onClick}>
-      <Avatar
-        className={infoFormat === 'all' ? styles.avatarLarge : styles.avatarSmall}
-        src={user.avatarUrl ?? undefined}
-        alt={user.name}
-      />
-
+      <Avatar src={user.avatarUrl || undefined} alt={user.name} />
       <div className={styles.info}>
         <span className={styles.nameText}>{user.name}</span>
         {infoFormat === 'all' && user.city && (
