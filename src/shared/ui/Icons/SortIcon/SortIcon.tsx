@@ -1,4 +1,4 @@
-import { IconWrapper } from '@/shared/ui/Icons/IconWrapper/IconWrapper';
+import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
 import clsx from 'clsx';
 import sortSvg from './SortIcon.svg';
 import styles from './SortIcon.module.scss';
