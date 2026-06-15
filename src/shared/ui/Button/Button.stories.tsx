@@ -3,10 +3,14 @@ import { Button } from './Button';
 import { fn } from 'storybook/test';
 
 const meta: Meta<typeof Button> = {
-  title: 'stories/Button/Button',
+  title: 'Shared/Button/Button',
   component: Button,
   parameters: {
     layout: 'centered',
+  },
+  args: {
+    label: 'Кнопка',
+    onClick: fn(),
   },
 };
 
@@ -14,26 +18,27 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const Partial: Story = {
+export const Primary: Story = {
   args: {
-    label: 'Кнопка',
-    onClick: fn(),
     buttonType: 'primary',
   },
 };
 
-export const Full: Story = {
+export const Secondary: Story = {
   args: {
-    label: 'Кнопка',
-    onClick: fn(),
     buttonType: 'secondary',
   },
 };
 
-export const None: Story = {
+export const Tertiary: Story = {
   args: {
-    label: 'Кнопка',
-    onClick: fn(),
     buttonType: 'tertiary',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    buttonType: 'primary',
+    disabled: true,
   },
 };
