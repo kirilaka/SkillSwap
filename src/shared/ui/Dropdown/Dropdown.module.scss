@@ -1,0 +1,39 @@
+.dropdown {
+  position: absolute;
+  width: max-content;
+  z-index: 100;
+  width: max-content;
+  height: auto;
+  background-color: $color-bg-secondary;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  padding: $space-md;
+}
+
+// Начальная точка появления
+.enter {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+
+// Процесс появления
+.enterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease; // Время должно совпадать с timeout в JS!
+}
+
+// Начальная точка исчезновения
+.exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// Процесс исчезновения
+.exitActive {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
