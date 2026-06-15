@@ -17,15 +17,14 @@
 }
 
 .primary {
-  background-color: $color-button-primary;
+  background-color: $color-accent-light;
 
   &:hover {
     background-color: $color-button-hover;
   }
 
   &:active {
-    color: $color-bg-card;
-    background-color: $color-button-primary;
+    background-color: $color-accent-light;
   }
 
   &:disabled {
@@ -35,7 +34,7 @@
 }
 
 .secondary {
-  border-color: $color-button-primary;
+  border-color: $color-accent-light;
   background-color: $color-bg-card;
 
   &:hover {
@@ -44,7 +43,7 @@
   }
 
   &:active {
-    border-color: $color-button-primary;
+    border-color: $color-accent-light;
     color: $color-text-primary;
   }
 
