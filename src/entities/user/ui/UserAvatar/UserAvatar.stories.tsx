@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserAvatar } from './UserAvatar';
 import { fn } from 'storybook/test';
+import allAvatar from './image/Image.png';
+import miniAvatar from './image/mini.png';
 const meta: Meta<typeof UserAvatar> = {
-  title: 'Entities/UserAvatar/UserAvatar',
+  title: 'Entities/UserAvatar',
   component: UserAvatar,
   parameters: {
     layout: 'centered',
@@ -18,9 +20,9 @@ type Story = StoryObj<typeof UserAvatar>;
 
 const mockUser = {
   id: '1',
-  name: 'Максим Максимов',
+  name: 'Максим',
   email: 'maxim@gmail.com',
-  avatarUrl: 'https://placehold.co/100',
+  avatarUrl: allAvatar,
   createdAt: '2026-01-01',
   city: 'Санкт-Петербург',
   age: 38,
@@ -29,15 +31,15 @@ const mockUser = {
 export const NameFormat: Story = {
   name: 'формат юзер',
   args: {
-    user: mockUser,
+    user: { ...mockUser, avatarUrl: miniAvatar },
     infoFormat: 'name',
   },
 };
 
-export const AllFprmat: Story = {
+export const AllFormat: Story = {
   name: 'формат: вся информация',
   args: {
-    user: mockUser,
+    user: { ...mockUser, avatarUrl: allAvatar },
     infoFormat: 'all',
   },
 };

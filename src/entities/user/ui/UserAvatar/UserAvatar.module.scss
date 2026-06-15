@@ -1,4 +1,4 @@
-.userAvatar {
+.user-avatar {
   cursor: pointer;
   display: flex;
   gap: 12px;
@@ -8,11 +8,16 @@
 .name {
   flex-direction: row-reverse;
 
-  .nameText {
+  .name-text {
     font-family: $roboto;
     font-size: $font-size-sm;
     font-weight: 400;
     letter-spacing: 2%;
+  }
+
+  .avatar-img {
+    width: 48px;
+    height: 48px;
   }
 }
 
@@ -23,13 +28,18 @@
 }
 
 .all {
-  .nameText {
+  .name-text {
     font-size: $font-size-xl;
+  }
+
+  .avatar-img {
+    width: 100px;
+    height: 100px;
   }
 }
 
 .details {
   font-family: $roboto;
   font-size: $font-size-sm;
-  font-weight: 600;
+  font-weight: 400;
 }
