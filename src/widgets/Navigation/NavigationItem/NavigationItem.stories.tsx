@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { NavItem } from './NavigationItem';
 import { fn } from 'storybook/test';
 const meta: Meta<typeof NavItem> = {
-  title: 'Widgets/Navigation/NavItem',
+  title: 'Widgets/NavItem',
   component: NavItem,
   parameters: {
     layout: 'centered',
