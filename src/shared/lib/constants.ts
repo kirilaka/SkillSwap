@@ -6,7 +6,7 @@ export const ROUTES = {
   CREATE: '/create',
   LOGIN: '/login',
   REGISTER: '/register',
-} as const
+} as const;
 
 export const SKILL_CATEGORIES = [
   'Программирование',
@@ -18,11 +18,11 @@ export const SKILL_CATEGORIES = [
   'Фото и видео',
   'Бизнес',
   'Другое',
-] as const
+] as const;
 
 export const LOCAL_STORAGE_KEYS = {
   AUTH_USER: 'skillswap_auth_user',
   FAVORITES: 'skillswap_favorites',
   REQUESTS: 'skillswap_requests',
   THEME: 'skillswap_theme',
-} as const
+} as const;

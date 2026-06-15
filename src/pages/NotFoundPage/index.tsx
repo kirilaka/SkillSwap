@@ -6,5 +6,5 @@ export default function NotFoundPage() {
       <h1>NotFoundPage</h1>
       <p>Страница в разработке</p>
     </main>
-  )
+  );
 }

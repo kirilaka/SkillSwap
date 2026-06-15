@@ -1,19 +1,19 @@
-import styles from './Button.module.scss'
-import clsx from 'clsx'
+import styles from './Button.module.scss';
+import clsx from 'clsx';
 
 interface ButtonProps {
   /** Надпись на кнопке */
-  label: string
+  label: string;
   /** Обработчик клика */
-  onClick?: () => void
+  onClick?: () => void;
   /** Тип кнопки */
-  type?: 'submit' | 'reset' | 'button'
+  type?: 'submit' | 'reset' | 'button';
   /** Вид кнопки */
-  buttonType?: 'primary' | 'secondary' | 'tertiary'
+  buttonType?: 'primary' | 'secondary' | 'tertiary';
   /** Доп. классы */
-  className?: string
+  className?: string;
   /** Состояние отключения кнопки */
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -33,5 +33,5 @@ export const Button = ({
     >
       {label}
     </button>
-  )
-}
+  );
+};

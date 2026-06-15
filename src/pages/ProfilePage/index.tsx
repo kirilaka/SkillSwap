@@ -6,5 +6,5 @@ export default function ProfilePage() {
       <h1>ProfilePage</h1>
       <p>Страница в разработке</p>
     </main>
-  )
+  );
 }

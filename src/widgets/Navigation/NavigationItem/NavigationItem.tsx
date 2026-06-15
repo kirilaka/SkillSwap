@@ -1,18 +1,18 @@
-import clsx from 'clsx'
-import styles from './NavigationItem.module.scss'
-import { ArrowIcon } from '@/shared/ui/ArrowIcon/ArrowIcon'
+import clsx from 'clsx';
+import styles from './NavigationItem.module.scss';
+import { ArrowIcon } from '@/shared/ui/ArrowIcon/ArrowIcon';
 
 interface NavItemProps {
   /** текст пункта навигации */
-  label: string
+  label: string;
   /** состояние открытого/закрытого пункта */
-  isOpen?: boolean
+  isOpen?: boolean;
   /** обработчик клика */
-  onClick?: () => void
+  onClick?: () => void;
   /** наличие галочки у компонента ( По умолчанию false ) */
-  hasArrow?: boolean
+  hasArrow?: boolean;
   /** Доп.классы */
-  className?: string
+  className?: string;
 }
 
 export const NavItem = ({
@@ -31,5 +31,5 @@ export const NavItem = ({
       <span className={styles.labelText}>{label}</span>
       {hasArrow && <ArrowIcon isOpen={isOpen} />}
     </button>
-  )
-}
+  );
+};

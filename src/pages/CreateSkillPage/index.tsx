@@ -6,5 +6,5 @@ export default function CreateSkillPage() {
       <h1>CreateSkillPage</h1>
       <p>Страница в разработке</p>
     </main>
-  )
+  );
 }
