@@ -2,10 +2,10 @@
 
 /* Тёмная тема — добавить поддержку через data-theme="dark" */
 [data-theme='dark'] {
-  $color-bg: #0f172a;
-  $color-bg-secondary: #1e293b;
-  $color-text: #f1f5f9;
-  $color-text-secondary: #94a3b8;
+  $color-bg-primary: #f9faf7;
+  $color-bg-card: #fff;
+  $color-text-primary: #f1f5f9;
+  $color-text-primary-secondary: #94a3b8;
   $color-border: #334155;
 }
 
@@ -22,9 +22,9 @@ body {
   font-family: $roboto;
   font-size: $font-size-base;
   line-height: 1.5;
-  color: $color-text;
+  color: $color-text-primary;
 
-  background-color: $color-bg;
+  background-color: $color-bg-primary;
 
   -webkit-font-smoothing: antialiased;
 }
