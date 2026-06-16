@@ -20,7 +20,7 @@
 .enterActive {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 300ms ease; // Время должно совпадать с timeout в JS!
+  transition: opacity 300ms ease;
 }
 
 // Начальная точка исчезновения

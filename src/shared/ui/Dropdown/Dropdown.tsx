@@ -3,10 +3,18 @@ import styles from './Dropdown.module.scss';
 import { clsx } from 'clsx';
 import { CSSTransition } from 'react-transition-group';
 interface DropdownProps {
+  /** Управляет видимостью выпадающего списка (открыт/закрыт) */
   isOpen: boolean;
+  /** Дочерние компоненты для отрисовки внутри выпадающего меню */
   children: ReactNode;
+  /** Дополнительные CSS-классы для внешней стилизации и позиционирования */
   className?: string;
 }
+
+/**
+ * Универсальный компонент выпадающего меню.
+ * Плавно появляется и исчезает, подстраивая размеры под внутренний контент.
+ */
 export const Dropdown = ({ isOpen, children, className }: DropdownProps) => {
   return (
     <CSSTransition
