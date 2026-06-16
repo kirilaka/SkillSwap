@@ -1,0 +1,17 @@
+.direction {
+  &Up {
+    rotate: 90deg;
+  }
+
+  &Down {
+    rotate: -90deg;
+  }
+
+  &Left {
+    rotate: 0;
+  }
+
+  &Right {
+    rotate: 180deg;
+  }
+}
