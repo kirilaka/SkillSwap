@@ -24,8 +24,8 @@
   }
 
   &:active {
-    color: $color-text-inverted; // #FFFFFF — новая переменная!
-    background-color: $color-text-link; // #508826
+    color: $color-text-inverted;
+    background-color: $color-text-link;
   }
 
   &:disabled {
@@ -44,7 +44,7 @@
   }
 
   &:active {
-    border-color: $color-text-link; // #508826
+    border-color: $color-text-link;
     color: $color-text-primary;
   }
 
