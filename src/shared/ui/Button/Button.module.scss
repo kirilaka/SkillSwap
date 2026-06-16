@@ -24,7 +24,8 @@
   }
 
   &:active {
-    background-color: $color-accent-light;
+    color: $color-bg-card;
+    background-color: $color-text-link;
   }
 
   &:disabled {
@@ -43,7 +44,7 @@
   }
 
   &:active {
-    border-color: $color-accent-light;
+    border-color: $color-text-link;
     color: $color-text-primary;
   }
 

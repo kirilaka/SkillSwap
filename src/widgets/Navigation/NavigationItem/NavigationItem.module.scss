@@ -17,7 +17,7 @@
   }
 
   &:active {
-    color: $color-text-caption;
+    color: $color-accent-light; // #ABD27A
   }
 }
 
@@ -26,5 +26,5 @@
 }
 
 .isOpen {
-  color: $color-text-caption;
+  color: $color-accent-light; // #ABD27A
 }
