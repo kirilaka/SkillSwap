@@ -13,7 +13,6 @@ interface UserAvatarProps {
   infoFormat: 'name' | 'all';
   onClick: () => void;
   className?: string;
-  showLike: string;
 }
 
 const getAgeLabel = (age: number): string => {
@@ -26,7 +25,7 @@ const getAgeLabel = (age: number): string => {
   return 'лет';
 };
 
-export const UserAvatar = ({ user, infoFormat, onClick, className, showLike }: UserAvatarProps) => {
+export const UserAvatar = ({ user, infoFormat, onClick, className }: UserAvatarProps) => {
   return (
     <div className={clsx(styles['user-avatar'], styles[infoFormat], className)} onClick={onClick}>
       <Avatar src={user.avatarUrl || undefined} alt={user.name} className={styles['avatar-img']} />
@@ -39,7 +38,6 @@ export const UserAvatar = ({ user, infoFormat, onClick, className, showLike }: U
           </span>
         )}
       </div>
-      {showLike && <button className={styles.like}>♡</button>}
     </div>
   );
 };
