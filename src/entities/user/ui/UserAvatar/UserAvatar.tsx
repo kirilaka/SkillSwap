@@ -31,7 +31,7 @@ export const UserAvatar = ({ user, infoFormat = 'name', onClick, className }: Us
   }
   return (
     <div className={clsx(styles['user-avatar'], styles[infoFormat], className)} onClick={onClick}>
-      <Avatar src={user.avatarUrl || undefined} alt={user.name} className={styles['avatar-img']} />
+      <Avatar src={user.avatarUrl || undefined} alt={user.name} />
       <div className={styles.info}>
         <span className={styles['name-text']}>{user.name}</span>
         {infoFormat === 'all' && user.city && (

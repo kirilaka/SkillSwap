@@ -14,11 +14,6 @@
     font-weight: 400;
     letter-spacing: 2%;
   }
-
-  .avatar-img {
-    min-width: 48px;
-    min-height: 48px;
-  }
 }
 
 .info {
@@ -29,12 +24,8 @@
 
 .all {
   .name-text {
+    font-family: $open-sans;
     font-size: $font-size-xl;
-  }
-
-  .avatar-img {
-    min-width: 100px;
-    min-height: 100px;
   }
 }
 
