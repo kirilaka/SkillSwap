@@ -24,8 +24,11 @@
 
 .all {
   .name-text {
-    font-family: $open-sans;
-    font-size: $font-size-xl;
+    font-family: $jost;
+    font-size: $font-size-2xl;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 1.1%;
   }
 }
 
@@ -33,4 +36,5 @@
   font-family: $roboto;
   font-size: $font-size-sm;
   font-weight: 400;
+  letter-spacing: 2%;
 }

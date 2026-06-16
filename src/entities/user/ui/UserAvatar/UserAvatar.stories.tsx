@@ -20,7 +20,7 @@ type Story = StoryObj<typeof UserAvatar>;
 
 const mockUser = {
   id: '1',
-  name: 'Максим',
+  name: 'Иван',
   email: 'maxim@gmail.com',
   avatarUrl: allAvatar,
   createdAt: '2026-01-01',
