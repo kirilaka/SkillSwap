@@ -1,38 +1,41 @@
 .dropdown {
   position: absolute;
-  width: max-content;
   z-index: 100;
+
   width: max-content;
   height: auto;
-  background-color: $color-bg-secondary;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
   padding: $space-md;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+  box-shadow: $shadow-md;
 }
 
 // Начальная точка появления
 .enter {
-  opacity: 0;
   transform: translateY(-5px);
+  opacity: 0;
 }
 
 // Процесс появления
 .enterActive {
-  opacity: 1;
   transform: translateY(0);
-  transition: opacity 300ms ease;
+  opacity: 1;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
 }
 
 // Начальная точка исчезновения
 .exit {
-  opacity: 1;
   transform: translateY(0);
+  opacity: 1;
 }
 
 // Процесс исчезновения
 .exitActive {
-  opacity: 0;
   transform: translateY(-5px);
+  opacity: 0;
   transition:
     opacity 300ms ease,
     transform 300ms ease;

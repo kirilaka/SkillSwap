@@ -15,7 +15,7 @@ interface DropdownProps {
  * Универсальный компонент выпадающего меню.
  * Плавно появляется и исчезает, подстраивая размеры под внутренний контент.
  */
-export const Dropdown = ({ isOpen, children, className }: DropdownProps) => {
+export const Dropdown = ({ isOpen = false, children, className }: DropdownProps) => {
   return (
     <CSSTransition
       in={isOpen}

@@ -8,6 +8,9 @@ const meta: Meta<typeof Dropdown> = {
   args: {
     isOpen: true,
   },
+  parameters: {
+    layout: 'centered',
+  },
 };
 
 export default meta;
