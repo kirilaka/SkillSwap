@@ -44,6 +44,9 @@ import { UserIcon } from './UserIcon/UserIcon';
 
 const meta = {
   title: 'UI/Icons',
+  parameters: {
+    layout: 'centered',
+  },
 } satisfies Meta;
 
 export default meta;
