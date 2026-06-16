@@ -29,7 +29,7 @@ const mockUser = {
 };
 
 export const NameFormat: Story = {
-  name: 'формат юзер',
+  name: 'Format name',
   args: {
     user: { ...mockUser, avatarUrl: miniAvatar },
     infoFormat: 'name',
@@ -37,9 +37,17 @@ export const NameFormat: Story = {
 };
 
 export const AllFormat: Story = {
-  name: 'формат: вся информация',
+  name: 'Format all info',
   args: {
     user: { ...mockUser, avatarUrl: allAvatar },
     infoFormat: 'all',
+  },
+};
+
+export const NoUser: Story = {
+  name: 'Format null user',
+  args: {
+    user: null,
+    infoFormat: 'name',
   },
 };

@@ -9,9 +9,9 @@ interface UserInfo extends User {
 }
 
 interface UserAvatarProps {
-  user: UserInfo;
-  infoFormat: 'name' | 'all';
-  onClick: () => void;
+  user: UserInfo | null;
+  infoFormat?: 'name' | 'all';
+  onClick?: () => void;
   className?: string;
 }
 
@@ -25,7 +25,10 @@ const getAgeLabel = (age: number): string => {
   return 'лет';
 };
 
-export const UserAvatar = ({ user, infoFormat, onClick, className }: UserAvatarProps) => {
+export const UserAvatar = ({ user, infoFormat = 'name', onClick, className }: UserAvatarProps) => {
+  if (!user) {
+    return null;
+  }
   return (
     <div className={clsx(styles['user-avatar'], styles[infoFormat], className)} onClick={onClick}>
       <Avatar src={user.avatarUrl || undefined} alt={user.name} className={styles['avatar-img']} />
@@ -34,7 +37,9 @@ export const UserAvatar = ({ user, infoFormat, onClick, className }: UserAvatarP
         {infoFormat === 'all' && user.city && (
           <span className={styles.details}>
             {user.city}
-            {user.age ? `, ${user.age} ${getAgeLabel(user.age)}` : ''}
+            {user.age !== undefined && user.age !== null
+              ? `, ${user.age} ${getAgeLabel(user.age)}`
+              : ''}
           </span>
         )}
       </div>
