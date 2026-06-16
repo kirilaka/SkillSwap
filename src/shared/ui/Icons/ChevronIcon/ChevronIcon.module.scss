@@ -1,20 +1,19 @@
-.arrow {
-  cursor: pointer;
+.chevron {
   transition: transform 0.2s ease;
 }
 
 .horizontal {
   transform: rotate(0deg);
-}
 
-.horizontal_open {
-  transform: rotate(180deg);
+  &Open {
+    transform: rotate(180deg);
+  }
 }
 
 .vertical {
   transform: rotate(-90deg);
-}
 
-.vertical_open {
-  transform: rotate(90deg);
+  &Open {
+    transform: rotate(90deg);
+  }
 }

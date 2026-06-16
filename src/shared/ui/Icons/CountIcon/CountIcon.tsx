@@ -1,14 +1,7 @@
-import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import countLeftSvg from './CountLeftIcon.svg';
-import countRightSvg from './CountRightIcon.svg';
+import clsx from 'clsx';
+import { ChevronIcon } from '../ChevronIcon/ChevronIcon';
+import styles from './CountIcon.module.scss';
 
-/**
- * CountIcon — компонент иконки с двумя частями и отдельными обработчиками клика.
- *
- * @param {string} className — Дополнительные CSS-классы.
- * @param {() => void} onClickLeft — Обработчик клика по левой иконке.
- * @param {() => void} onClickRight — Обработчик клика по правой иконке.
- */
 interface CountIconProps {
   /** Дополнительные CSS-классы */
   className?: string;
@@ -20,17 +13,13 @@ interface CountIconProps {
 
 export const CountIcon = ({ className, onClickLeft, onClickRight }: CountIconProps) => {
   return (
-    <div className={className}>
+    <div className={clsx(styles.count, className)}>
       <button type="button" onClick={onClickLeft}>
-        <IconWrapper>
-          <img src={countLeftSvg} alt="Left" />
-        </IconWrapper>
+        <ChevronIcon className={styles.chevron} orientation="vertical" isOpen={true} />
       </button>
 
       <button type="button" onClick={onClickRight}>
-        <IconWrapper>
-          <img src={countRightSvg} alt="Right" />
-        </IconWrapper>
+        <ChevronIcon className={styles.chevron} orientation="vertical" />
       </button>
     </div>
   );
