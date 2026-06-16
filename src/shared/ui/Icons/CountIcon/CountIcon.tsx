@@ -1,8 +1,6 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import clsx from 'clsx';
 import countLeftSvg from './CountLeftIcon.svg';
 import countRightSvg from './CountRightIcon.svg';
-import styles from './CountIcon.module.scss';
 
 /**
  * CountIcon — компонент иконки с двумя частями и отдельными обработчиками клика.
@@ -22,16 +20,16 @@ interface CountIconProps {
 
 export const CountIcon = ({ className, onClickLeft, onClickRight }: CountIconProps) => {
   return (
-    <div className={clsx(className)}>
+    <div className={className}>
       <button type="button" onClick={onClickLeft}>
         <IconWrapper>
-          <img src={countLeftSvg} alt="Left" className={styles.svg} />
+          <img src={countLeftSvg} alt="Left" />
         </IconWrapper>
       </button>
 
       <button type="button" onClick={onClickRight}>
         <IconWrapper>
-          <img src={countRightSvg} alt="Right" className={styles.svg} />
+          <img src={countRightSvg} alt="Right" />
         </IconWrapper>
       </button>
     </div>

@@ -1,7 +1,5 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import clsx from 'clsx';
 import arrowSquareSvg from './ArrowSquareIcon.svg';
-import styles from './ArrowSquareIcon.module.scss';
 
 interface ArrowSquareIconProps {
   /** Дополнительные CSS-классы */
@@ -10,8 +8,8 @@ interface ArrowSquareIconProps {
 
 export const ArrowSquareIcon = ({ className }: ArrowSquareIconProps) => {
   return (
-    <IconWrapper className={clsx(className)}>
-      <img src={arrowSquareSvg} alt="" className={styles.svg} />
+    <IconWrapper className={className}>
+      <img src={arrowSquareSvg} alt="" />
     </IconWrapper>
   );
 };

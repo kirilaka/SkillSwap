@@ -1,5 +1,4 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import clsx from 'clsx';
 import likeSvg from './LikeIcon.svg';
 
 interface LikeIconProps {
@@ -9,7 +8,7 @@ interface LikeIconProps {
 
 export const LikeIcon = ({ className }: LikeIconProps) => {
   return (
-    <IconWrapper className={clsx(className)}>
+    <IconWrapper className={className}>
       <img src={likeSvg} alt="" />
     </IconWrapper>
   );
