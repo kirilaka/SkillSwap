@@ -34,3 +34,10 @@ export const WithArrowOpen: Story = {
     isOpen: true,
   },
 };
+
+export const Active: Story = {
+  args: {
+    label: 'Каталог',
+    isActive: true,
+  },
+}

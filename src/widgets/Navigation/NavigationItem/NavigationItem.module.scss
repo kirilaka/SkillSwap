@@ -17,14 +17,12 @@
   }
 
   &:active {
-    color: $color-text-link; // #508826 — по макету
+    color: $color-text-link;
   }
 }
 
-.label-text {
-  transition: color 0.2s ease;
-}
-
-.isOpen {
-  color: $color-text-link; // #508826 — по макету
+.active {
+  .label-text {
+    color: $color-text-link;
+  }
 }
