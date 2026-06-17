@@ -1,6 +1,7 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
 import notificationSvg from './NotificationIcon.svg';
 import styles from './NotificationIcon.module.scss';
+import clsx from 'clsx';
 
 interface NotificationIconProps {
   /** Дополнительные CSS-классы */
@@ -11,7 +12,7 @@ interface NotificationIconProps {
 
 export const NotificationIcon = ({ className, hasNew = false }: NotificationIconProps) => {
   return (
-    <div className={`${styles.wrapper} ${className || ''}`}>
+    <div className={clsx(styles.wrapper, className)}>
       <IconWrapper>
         <img src={notificationSvg} alt="" />
       </IconWrapper>
