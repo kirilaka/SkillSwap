@@ -1,5 +1,5 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import moonSvg from './MoonIcon.svg';
+import MoonSvg from './MoonIcon.svg?react';
 
 interface MoonIconProps {
   /** Дополнительные CSS-классы */
@@ -9,7 +9,7 @@ interface MoonIconProps {
 export const MoonIcon = ({ className }: MoonIconProps) => {
   return (
     <IconWrapper className={className}>
-      <img src={moonSvg} alt="" />
+      <MoonSvg />
     </IconWrapper>
   );
 };
