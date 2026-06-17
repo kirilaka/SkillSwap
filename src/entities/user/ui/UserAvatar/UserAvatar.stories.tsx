@@ -47,7 +47,7 @@ export const AllFormat: Story = {
 export const NoUser: Story = {
   name: 'Format null user',
   args: {
-    user: null,
+    user: undefined,
     infoFormat: 'name',
   },
 };

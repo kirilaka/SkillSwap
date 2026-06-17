@@ -9,9 +9,13 @@ interface UserInfo extends User {
 }
 
 interface UserAvatarProps {
-  user: UserInfo | null;
+  /** Пользователь для отображения */
+  user?: UserInfo;
+  /** Формат отображения информации о пользователе. По умолчанию 'name' */
   infoFormat?: 'name' | 'all';
+  /** Обработчик клика на UserAvatar. */
   onClick?: () => void;
+  /** Доп. классы для стилизации. */
   className?: string;
 }
 
@@ -19,10 +23,10 @@ const getAgeLabel = (age: number): string => {
   const lastDigit = age % 10;
   const lastTwoDigits = age % 100;
 
-  if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return 'лет';
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return ' лет';
   if (lastDigit === 1) return 'год';
-  if (lastDigit >= 2 && lastDigit <= 4) return 'года';
-  return 'лет';
+  if (lastDigit >= 2 && lastDigit <= 4) return ' года';
+  return ' лет';
 };
 
 export const UserAvatar = ({ user, infoFormat = 'name', onClick, className }: UserAvatarProps) => {
@@ -30,16 +34,19 @@ export const UserAvatar = ({ user, infoFormat = 'name', onClick, className }: Us
     return null;
   }
   return (
-    <div className={clsx(styles['user-avatar'], styles[infoFormat], className)} onClick={onClick}>
-      <Avatar src={user.avatarUrl || undefined} alt={user.name} />
+    <div className={clsx(styles.userAvatar, styles[infoFormat], className)} onClick={onClick}>
+      <Avatar src={user.avatarUrl || undefined} alt={user.name} className={styles.avatar} />
       <div className={styles.info}>
-        <span className={styles['name-text']}>{user.name}</span>
-        {infoFormat === 'all' && user.city && (
+        <span className={styles.nameTitle}>{user.name}</span>
+        {infoFormat === 'all' && (
           <span className={styles.details}>
-            {user.city}
-            {user.age !== undefined && user.age !== null
-              ? `, ${user.age} ${getAgeLabel(user.age)}`
-              : ''}
+            {user.city && user.age
+              ? `${user.city}, ` + `${user.age} ${getAgeLabel(user.age)}`
+              : user.city
+                ? user.city
+                : user.age
+                  ? `${user.age} ${getAgeLabel(user.age)}`
+                  : ''}
           </span>
         )}
       </div>
