@@ -43,7 +43,7 @@ import { UserCircleIcon } from './UserCircleIcon/UserCircleIcon';
 import { UserIcon } from './UserIcon/UserIcon';
 
 const meta = {
-  title: 'UI/Icons',
+  title: 'SHARED/Icons',
   parameters: {
     layout: 'centered',
   },

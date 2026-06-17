@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NotificationIcon } from './NotificationIcon';
 
 const meta = {
-  title: 'Icons/NotificationIcon',
+  title: 'Shared/icons/NotificationIcon',
   component: NotificationIcon,
   parameters: {
     layout: 'centered',
