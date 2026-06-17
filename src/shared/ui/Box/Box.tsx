@@ -1,10 +1,10 @@
-import React from 'react';
 import clsx from 'clsx';
 import styles from './Box.module.scss';
+import { ReactNode } from 'react';
 
 interface BoxProps {
   /** Дочерние элементы */
-  children: React.ReactNode;
+  children: ReactNode;
   /** Дополнительные CSS-классы */
   className?: string;
 }

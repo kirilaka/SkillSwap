@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Box } from './Box';
 
 const meta = {
-  title: 'UI/Box',
+  title: 'SHARED/Box',
   component: Box,
   parameters: {
     layout: 'centered',

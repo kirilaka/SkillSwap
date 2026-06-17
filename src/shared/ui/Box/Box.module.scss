@@ -1,14 +1,8 @@
-@use '@/app/styles/variables.scss' as *;
-
 .box {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-
-  width: 324px;
-  height: 368px;
+  width: fit-content;
+  height: fit-content;
   padding: $space-lg;
-  border: 1px solid $color-border-default;
+  border: 1px solid transparent;
   border-radius: $radius-lg;
 
   background-color: $color-bg-card;
