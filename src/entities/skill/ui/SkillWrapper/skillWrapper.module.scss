@@ -1,0 +1,51 @@
+.containerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 100px;
+}
+
+.containerText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: 20px;
+
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.business {
+  background-color: #eee7f7;
+}
+
+.art {
+  background-color: #f7e7f2;
+}
+
+.language {
+  background-color: #ebe5c5;
+}
+
+.education {
+  background-color: #e7f2f6;
+}
+
+.cosiness {
+  background-color: #f7ebe5;
+}
+
+.health {
+  background-color: #e9f7e7;
+}
+
+.more {
+  background-color: #f0f0f0;
+}

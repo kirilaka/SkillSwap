@@ -1,14 +1,14 @@
-import clsx from 'clsx'
-import styles from './NavigationItem.module.scss'
+import clsx from 'clsx';
+import styles from './NavigationItem.module.scss';
 import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 
 interface NavItemProps {
   /** текст пункта навигации */
   label: string;
   /** состояние открытого/закрытого пункта */
-  isOpen?: boolean
+  isOpen?: boolean;
   /** Указывает, является ли пункт навигации активным (текущий роут, выбранный элемент и т.д.) */
-  isActive?: boolean
+  isActive?: boolean;
   /** обработчик клика */
   onClick?: () => void;
   /** наличие галочки у компонента ( По умолчанию false ) */

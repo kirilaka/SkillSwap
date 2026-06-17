@@ -40,4 +40,4 @@ export const Active: Story = {
     label: 'Каталог',
     isActive: true,
   },
-}
+};
