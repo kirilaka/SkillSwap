@@ -1,0 +1,59 @@
+@use '../../../../shared/styles/variables' as *;
+
+.favoriteButton {
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: $radius-md;
+
+  background: transparent;
+
+  transition:
+    background-color 200ms ease,
+    transform 150ms ease;
+
+  &:hover {
+    background-color: $color-button-hover;
+  }
+
+  &:active {
+    background-color: $color-button-primary;
+  }
+
+  &:active .favoriteButtonIcon,
+  &:active .favoriteButtonIconIsActive {
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+}
+
+.favoriteButtonIsActive {
+  &:hover {
+    background-color: $color-button-hover;
+  }
+
+  &:active {
+    background-color: $color-button-primary;
+  }
+}
+
+.favoriteButtonIcon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) saturate(100%) invert(14%) sepia(12%) saturate(1875%) hue-rotate(58deg)
+    brightness(96%) contrast(91%);
+  transition:
+    filter 200ms ease,
+    transform 150ms ease;
+}
+
+.favoriteButtonIconIsActive {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(12%) saturate(1875%) hue-rotate(58deg)
+    brightness(96%) contrast(91%);
+}
