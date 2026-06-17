@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-import { NavItem } from './NavigationItem';
+import { ControlChip } from './ControlChip';
 import { fn } from 'storybook/test';
-const meta: Meta<typeof NavItem> = {
-  title: 'Widgets/NavItem',
-  component: NavItem,
+const meta: Meta<typeof ControlChip> = {
+  title: 'SHARED/ControlChip',
+  component: ControlChip,
   parameters: {
     layout: 'centered',
   },
@@ -11,7 +11,7 @@ const meta: Meta<typeof NavItem> = {
 
 export default meta;
 
-type Story = StoryObj<typeof NavItem>;
+type Story = StoryObj<typeof ControlChip>;
 
 export const Default: Story = {
   args: {
@@ -20,18 +20,25 @@ export const Default: Story = {
   },
 };
 
-export const WithArrow: Story = {
+export const WithChevron: Story = {
   args: {
     label: 'Навыки',
-    hasArrow: true,
+    iconVariant: 'Chevron',
   },
 };
 
-export const WithArrowOpen: Story = {
+export const WithChevronOpen: Story = {
   args: {
     label: 'Навыки',
-    hasArrow: true,
+    iconVariant: 'Chevron',
     isOpen: true,
+  },
+};
+
+export const WithCross: Story = {
+  args: {
+    label: 'Навыки',
+    iconVariant: 'Cross',
   },
 };
 
@@ -40,4 +47,4 @@ export const Active: Story = {
     label: 'Каталог',
     isActive: true,
   },
-}
+};
