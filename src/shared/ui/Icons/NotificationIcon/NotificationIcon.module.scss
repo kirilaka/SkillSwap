@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+
+  overflow: visible;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  pointer-events: none;
+
+  position: absolute;
+  z-index: 10;
+  top: -1px;
+  right: 2px;
+
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  background-color: $color-alarm;
+}
