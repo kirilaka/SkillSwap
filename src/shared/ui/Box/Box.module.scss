@@ -1,0 +1,16 @@
+@use '@/app/styles/variables.scss' as *;
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+
+  width: 324px;
+  height: 368px;
+  padding: $space-lg;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+  box-shadow: $shadow-sm;
+}
