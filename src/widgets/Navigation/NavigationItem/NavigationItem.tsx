@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import styles from './NavigationItem.module.scss';
-import { ArrowIcon } from '@/shared/ui/ArrowIcon/ArrowIcon';
+import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 
 interface NavItemProps {
   /** текст пункта навигации */
@@ -29,7 +29,7 @@ export const NavItem = ({
       className={clsx(className, { [styles.isOpen]: isOpen }, styles.navItem)}
     >
       <span className={styles.labelText}>{label}</span>
-      {hasArrow && <ArrowIcon isOpen={isOpen} />}
+      {hasArrow && <ChevronIcon isOpen={isOpen} />}
     </button>
   );
 };
