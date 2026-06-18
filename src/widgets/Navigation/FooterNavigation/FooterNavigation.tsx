@@ -3,6 +3,7 @@ import styles from './FooterNavigation.module.scss';
 import clsx from 'clsx';
 
 interface FooterNavigationProps {
+  /**Доп.классы*/
   className?: string;
 }
 

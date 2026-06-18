@@ -5,6 +5,7 @@ import { Dropdown } from '@/shared/ui/Dropdown/Dropdown';
 import { useState } from 'react';
 
 interface HeaderNavigationProps {
+  /**Доп.классы*/
   className?: string;
 }
 
