@@ -4,19 +4,15 @@ import styles from './NotificationIcon.module.scss';
 import clsx from 'clsx';
 
 interface NotificationIconProps {
-  /** Дополнительные CSS-классы */
   className?: string;
-  /** Наличие новых уведомлений */
   hasNew?: boolean;
 }
 
 export const NotificationIcon = ({ className, hasNew = false }: NotificationIconProps) => {
   return (
-    <div className={clsx(styles.wrapper, className)}>
-      <IconWrapper>
-        <img src={notificationSvg} alt="" />
-      </IconWrapper>
+    <IconWrapper className={clsx(styles.iconWrapper, className)}>
+      <img src={notificationSvg} alt="" />
       {hasNew && <span className={styles.dot} />}
-    </div>
+    </IconWrapper>
   );
 };

@@ -1,4 +1,6 @@
-.wrapper {
+@use '@/app/styles/variables.scss' as *;
+
+.iconWrapper {
   position: relative;
 
   overflow: visible;
@@ -7,16 +9,23 @@
   justify-content: center;
 }
 
+.iconWrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .dot {
   pointer-events: none;
 
   position: absolute;
   z-index: 10;
-  top: -1px;
-  right: 2px;
+  top: -2px;
+  right: -2px;
 
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
+  border: none;
   border-radius: 50%;
 
   background-color: $color-alarm;
