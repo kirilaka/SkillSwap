@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  max-width: 212px;
+  max-height: 44px;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  max-height: 28px;
+
+  font-family: $jost;
+  font-size: $font-size-2xl;
+  font-weight: 500;
+  letter-spacing: -1.1%;
+}
+
+.indicatorContainer {
+  display: flex;
+  gap: 16px;
+
+  width: 100%;
+  min-width: 212px;
+  max-height: 4px;
+}
+
+.indicator {
+  width: 100%;
+  min-height: 4px;
+  border-radius: $radius-md;
+  list-style: none;
+}
+
+.indicatorActive {
+  background-color: $color-accent-light;
+}
+
+.indicatorDisabled {
+  background-color: $color-border-default;
+}
