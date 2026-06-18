@@ -1,5 +1,3 @@
-@use '../../../../shared/styles/variables' as *;
-
 .favoriteButton {
   cursor: pointer;
 
@@ -7,8 +5,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
   border: none;
   border-radius: $radius-md;
@@ -26,11 +24,6 @@
   &:active {
     background-color: $color-button-primary;
   }
-
-  &:active .favoriteButtonIcon,
-  &:active .favoriteButtonIconIsActive {
-    filter: brightness(0) saturate(100%) invert(100%);
-  }
 }
 
 .favoriteButtonIsActive {
@@ -44,16 +37,19 @@
 }
 
 .favoriteButtonIcon {
-  width: 24px;
-  height: 24px;
-  filter: brightness(0) saturate(100%) invert(14%) sepia(12%) saturate(1875%) hue-rotate(58deg)
-    brightness(96%) contrast(91%);
+  width: 1.5rem;
+  height: 1.5rem;
+
+  color: $color-text-primary;
+
+  fill: none;
+
   transition:
-    filter 200ms ease,
+    fill 200ms ease,
+    color 200ms ease,
     transform 150ms ease;
 }
 
-.favoriteButtonIconIsActive {
-  filter: brightness(0) saturate(100%) invert(14%) sepia(12%) saturate(1875%) hue-rotate(58deg)
-    brightness(96%) contrast(91%);
+.favoriteButtonIsActive .favoriteButtonIcon {
+  fill: $color-text-primary;
 }

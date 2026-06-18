@@ -21,9 +21,7 @@ export const FavoriteButton = forwardRef<HTMLButtonElement, FavoriteButtonProps>
         aria-pressed={isFavorite}
         {...props}
       >
-        <LikeIcon
-          className={`${styles.favoriteButtonIcon} ${isFavorite ? styles.favoriteButtonIconIsActive : ''}`}
-        />
+        <LikeIcon className={styles.favoriteButtonIcon} />
       </button>
     );
   },
