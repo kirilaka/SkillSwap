@@ -80,7 +80,7 @@ export const Notification = ({
       </div>
       <span className={styles.date}>{formatDate(date)}</span>
     </div>
-    {viewState === 'new' && exchangeStatus === 'sent' && (
+    {exchangeStatus === 'sent' && (
       <div className={styles.buttonWrapper}>
         <Button label="Перейти" onClick={onClick} buttonType="primary" />
       </div>

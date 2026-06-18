@@ -20,21 +20,6 @@ const meta: Meta<typeof Notification> = {
     onClick: fn(),
     user: mockUser,
     date: new Date(),
-    viewState: 'new',
-    exchangeStatus: 'sent',
-  },
-  argTypes: {
-    viewState: {
-      control: { type: 'select' },
-      options: ['new', 'viewed'],
-    },
-    exchangeStatus: {
-      control: { type: 'select' },
-      options: ['sent', 'completed'],
-    },
-    date: {
-      control: { type: 'date' },
-    },
   },
 };
 
@@ -42,4 +27,34 @@ export default meta;
 
 type Story = StoryObj<typeof Notification>;
 
-export const NotificationDefault: Story = {};
+export const NewSent: Story = {
+  args: {
+    viewState: 'new',
+    exchangeStatus: 'sent',
+    date: new Date(),
+  },
+};
+
+export const NewCompleted: Story = {
+  args: {
+    viewState: 'new',
+    exchangeStatus: 'completed',
+    date: new Date(),
+  },
+};
+
+export const ViewedSent: Story = {
+  args: {
+    viewState: 'viewed',
+    exchangeStatus: 'sent',
+    date: new Date(),
+  },
+};
+
+export const ViewedCompleted: Story = {
+  args: {
+    viewState: 'viewed',
+    exchangeStatus: 'completed',
+    date: new Date(),
+  },
+};
