@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
 const meta: Meta<typeof CheckboxCircle> = {
-  title: 'Checkbox/CheckboxCircle',
+  title: 'Shared/CheckboxCircle',
   component: CheckboxCircle,
   parameters: {
     layout: 'centered',
