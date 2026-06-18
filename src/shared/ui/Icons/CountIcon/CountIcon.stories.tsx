@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { CountIcon } from './CountIcon';
 
 const meta: Meta<typeof CountIcon> = {
-  title: 'UI/Icons/Count',
+  title: 'Shared/icons/Count',
   component: CountIcon,
   parameters: {
     layout: 'centered',
