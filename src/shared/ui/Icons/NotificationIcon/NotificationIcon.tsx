@@ -12,11 +12,9 @@ interface NotificationIconProps {
 
 export const NotificationIcon = ({ className, hasNew = false }: NotificationIconProps) => {
   return (
-    <div className={clsx(styles.wrapper, className)}>
-      <IconWrapper>
-        <img src={notificationSvg} alt="" />
-      </IconWrapper>
+    <IconWrapper className={clsx(styles.iconWrapper, className)}>
+      <img src={notificationSvg} alt="" />
       {hasNew && <span className={styles.dot} />}
-    </div>
+    </IconWrapper>
   );
 };
