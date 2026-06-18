@@ -3,8 +3,11 @@ import { SkillWrapper } from './SkillWrapper';
 import { LifestyleIcon } from '@/shared/ui/Icons/LifestyleIcon/LifestyleIcon';
 
 const meta: Meta<typeof SkillWrapper> = {
-  title: 'UI/SkillWrapper',
+  title: 'Shared/SkillWrapper',
   component: SkillWrapper,
+  parameters: {
+    layout: 'centered',
+  },
 };
 
 export default meta;
@@ -21,7 +24,7 @@ export const Text: Story = {
 
 export const Icon: Story = {
   args: {
-    skillCategory: 'business',
+    skillCategory: 'health',
     variant: 'icon',
     children: <LifestyleIcon />,
   },
@@ -42,8 +45,8 @@ export const Categories: Story = {
       <SkillWrapper skillCategory="education" variant="text">
         Education
       </SkillWrapper>
-      <SkillWrapper skillCategory="cosiness" variant="text">
-        Cosiness
+      <SkillWrapper skillCategory="home" variant="text">
+        Home
       </SkillWrapper>
       <SkillWrapper skillCategory="health" variant="text">
         Health

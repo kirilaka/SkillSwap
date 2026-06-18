@@ -2,23 +2,31 @@ import { ReactNode } from 'react';
 import styles from './SkillWrapper.module.scss';
 import clsx from 'clsx';
 
-type SkillCategory = 'business' | 'art' | 'language' | 'education' | 'cosiness' | 'health' | 'more';
-type Tvariant = 'text' | 'icon';
+type SkillCategory = 'business' | 'art' | 'language' | 'education' | 'home' | 'health' | 'more';
+type TVariant = 'text' | 'icon';
 
 interface SkillWrapperProps {
+  /** Категория скилла */
   skillCategory: SkillCategory;
+  /** Дочерний элемент для рендера */
   children: ReactNode;
+  /** Доп. классы для стилизации */
   className?: string;
-  variant: Tvariant;
+  /** Выбор варианта рендера, для текста или иконки*/
+  variant: TVariant;
 }
 
-export const SkillWrapper = (props: SkillWrapperProps) => {
-  const { skillCategory, children, className, variant } = props;
+export const SkillWrapper = ({
+  skillCategory,
+  children,
+  className,
+  variant,
+}: SkillWrapperProps) => {
   return (
     <div
-      className={clsx(styles[skillCategory], className, {
-        [styles.containerText]: variant == 'text',
-        [styles.containerIcon]: variant == 'icon',
+      className={clsx(styles.skillWrapper, styles[skillCategory], className, {
+        [styles.skillWrapperText]: variant == 'text',
+        [styles.skillWrapperIcon]: variant == 'icon',
       })}
     >
       {children}

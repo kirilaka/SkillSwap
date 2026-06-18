@@ -1,18 +1,15 @@
-.containerIcon {
+.skillWrapper {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 8px;
-  border-radius: 100px;
 }
 
-.containerText {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.skillWrapperIcon {
+  border-radius: 50%;
+}
 
-  box-sizing: border-box;
+.skillWrapperText {
   padding: 8px 12px;
   border-radius: 20px;
 
@@ -38,7 +35,7 @@
   background-color: $color-tag-education;
 }
 
-.cosiness {
+.home {
   background-color: $color-tag-home;
 }
 
