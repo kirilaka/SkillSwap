@@ -9,7 +9,7 @@ const meta: Meta<typeof CheckboxSquare> = {
     layout: 'centered',
   },
   args: {
-    onClick: fn(),
+    onChange: fn(),
   },
 };
 
@@ -17,21 +17,14 @@ export default meta;
 
 type Story = StoryObj<typeof CheckboxSquare>;
 
-export const Check: Story = {
+export const Selected: Story = {
   args: {
     isActive: true,
     variant: 'check',
   },
 };
 
-export const Minus: Story = {
-  args: {
-    isActive: true,
-    variant: 'minus',
-  },
-};
-
-export const IsNotActive: Story = {
+export const Unselected: Story = {
   args: {
     isActive: false,
     variant: 'check',

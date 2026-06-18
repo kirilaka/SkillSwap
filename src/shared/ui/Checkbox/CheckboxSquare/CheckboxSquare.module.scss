@@ -1,17 +1,25 @@
-.button {
+.wrapper {
   cursor: pointer;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
 
-  padding: 0;
-  border: none;
+.hideInput {
+  position: absolute;
 
-  background: none;
-  outline: none;
+  overflow: hidden;
 
-  transition: 0.2s ease;
+  width: 1px;
+  height: 1px;
+
+  white-space: nowrap;
+
+  clip: (0 0 0 0);
+}
+
+.icon {
+  transition: color 0.2s ease;
 }
 
 .isActive {
@@ -27,14 +35,6 @@
 
   .checkboxMinus {
     fill: $color-bg-card;
-  }
-
-  &:hover {
-    color: $color-button-hover;
-
-    .checkboxFrame {
-      fill: $color-button-hover;
-    }
   }
 
   &:active {
@@ -55,6 +55,14 @@
 
   .checkboxMinus {
     display: none;
+  }
+
+  &:hover {
+    color: $color-button-hover;
+
+    .checkboxFrame {
+      fill: $color-button-hover;
+    }
   }
 }
 

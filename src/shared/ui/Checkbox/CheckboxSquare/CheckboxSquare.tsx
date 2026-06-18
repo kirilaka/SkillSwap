@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import styles from './CheckboxSquare.module.scss';
 import clsx from 'clsx';
 
 interface CheckboxSquareProps {
   /** Обработчик клика на CheckboxCircle */
-  onClick?: () => void;
+  onChange?: () => void;
   /**Выбор состояния кнопки, начальное значение false */
   isActive?: boolean;
   /** Вариант отображения чекбокса, начальное состояние 'check' */
@@ -17,21 +18,29 @@ interface CheckboxSquareProps {
 }
 
 export const CheckboxSquare = ({
-  onClick,
+  onChange,
   isActive = false,
   variant = 'check',
   id,
   name,
   className,
 }: CheckboxSquareProps) => {
+  const [checked, setChecked] = useState(isActive);
   return (
-    <button
-      onClick={onClick}
-      id={id}
-      name={name}
-      className={clsx(styles.button, isActive ? styles.isActive : styles.isNotActive, className)}
-    >
+    <label className={clsx(styles.wrapper, className)}>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={() => {
+          setChecked(!checked);
+          onChange?.();
+        }}
+        id={id}
+        name={name}
+        className={styles.hideInput}
+      />
       <svg
+        className={clsx(styles.icon, checked ? styles.isActive : styles.isNotActive)}
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -59,6 +68,6 @@ export const CheckboxSquare = ({
           />
         )}
       </svg>
-    </button>
+    </label>
   );
 };
