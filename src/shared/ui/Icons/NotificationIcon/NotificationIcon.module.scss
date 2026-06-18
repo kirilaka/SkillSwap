@@ -1,18 +1,6 @@
-@use '@/app/styles/variables.scss' as *;
-
 .iconWrapper {
   position: relative;
-
   overflow: visible;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.iconWrapper img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 .dot {
@@ -20,11 +8,11 @@
 
   position: absolute;
   z-index: 10;
-  top: -2px;
-  right: -2px;
+  top: 0;
+  right: 0;
 
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border: none;
   border-radius: 50%;
 

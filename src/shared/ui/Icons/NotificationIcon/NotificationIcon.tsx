@@ -4,7 +4,9 @@ import styles from './NotificationIcon.module.scss';
 import clsx from 'clsx';
 
 interface NotificationIconProps {
+  /** Дополнительные CSS-классы */
   className?: string;
+  /** Наличие новых уведомлений */
   hasNew?: boolean;
 }
 
