@@ -21,7 +21,11 @@ export const ThemeToggle = ({ colorScheme = 'light', onClick, className }: Theme
       onClick={onClick}
       className={clsx(styles.toggleButton, className)}
     >
-      {colorScheme === 'light' ? <MoonIcon /> : <SunIcon />}
+      {colorScheme === 'light' ? (
+        <MoonIcon className={styles.icon} />
+      ) : (
+        <SunIcon className={styles.icon} />
+      )}
     </button>
   );
 };
