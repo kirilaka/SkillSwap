@@ -1,0 +1,12 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1020px;
+}
