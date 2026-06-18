@@ -1,17 +1,19 @@
 import clsx from 'clsx';
 import styles from './SignUpProgress.module.scss';
 
-type stepType = 1 | 2 | 3;
+type StepType = 1 | 2 | 3;
 
 interface signUpProgressProps {
-  step: stepType;
+  /** Шаг регистрации */
+  step: StepType;
+  /** Доп. классы для стилизации */
   className?: string;
 }
 
-export const SignUpProgress = ({ step, className }: signUpProgressProps) => {
+export const SignUpProgress = ({ step = 1, className }: signUpProgressProps) => {
   return (
     <div className={clsx(styles.container, className)}>
-      <span className={styles.text}>Шаг {step} из 3</span>
+      <h2 className={styles.text}>Шаг {step} из 3</h2>
       <ul className={styles.indicatorContainer}>
         <li className={clsx(styles.indicator, styles.indicatorActive)}></li>
         <li

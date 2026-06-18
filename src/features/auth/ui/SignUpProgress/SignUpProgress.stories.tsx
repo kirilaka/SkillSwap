@@ -2,8 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SignUpProgress } from './SignUpProgress';
 
 const meta: Meta<typeof SignUpProgress> = {
-  title: 'Features/SignUpProgress',
+  title: 'Features/auth/SignUpProgress',
   component: SignUpProgress,
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     step: {
       control: 'radio',
