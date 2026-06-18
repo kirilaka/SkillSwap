@@ -1,0 +1,30 @@
+.toggleButton {
+  cursor: pointer;
+
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  border: none;
+
+  background: none;
+}
+
+.icon {
+  color: $color-text-primary;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: $color-button-hover;
+  }
+
+  &:active {
+    color: $color-button-primary;
+  }
+
+  &:focus-visible {
+    border-radius: $radius-sm;
+    outline: 2px solid $color-button-primary;
+    outline-offset: 2px;
+  }
+}
