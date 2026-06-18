@@ -9,19 +9,22 @@ export interface FavoriteButtonProps extends ButtonHTMLAttributes<HTMLButtonElem
   onClick?: () => void;
 }
 
+/** Кнопка добавления в избранное (toggle button) */
 export const FavoriteButton = forwardRef<HTMLButtonElement, FavoriteButtonProps>(
   function FavoriteButton({ isFavorite = false, onClick, className = '', ...props }, ref) {
     return (
       <button
         ref={ref}
         type="button"
-        className={`${styles.favoriteButton} ${isFavorite ? styles.favoriteButtonIsActive : ''} ${className}`}
+        aria-pressed={isFavorite}
+        className={`${styles.favoriteButton} ${className}`}
         onClick={onClick}
         aria-label={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
-        aria-pressed={isFavorite}
         {...props}
       >
-        <LikeIcon className={styles.favoriteButtonIcon} />
+        <LikeIcon
+          className={`${styles.favoriteButtonIcon} ${isFavorite ? styles.favoriteButtonIconIsActive : ''}`}
+        />
       </button>
     );
   },

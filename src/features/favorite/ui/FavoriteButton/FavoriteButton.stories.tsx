@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FavoriteButton } from './FavoriteButton';
 
@@ -6,6 +5,9 @@ const meta: Meta<typeof FavoriteButton> = {
   title: 'Features/Favorite/FavoriteButton',
   component: FavoriteButton,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     isFavorite: {
       control: 'boolean',
@@ -25,24 +27,16 @@ const meta: Meta<typeof FavoriteButton> = {
 export default meta;
 type Story = StoryObj<typeof FavoriteButton>;
 
+/** Не в избранном — контурное сердечко */
 export const Default: Story = {
   args: {
     isFavorite: false,
   },
 };
 
+/** В избранном — залитое сердечко */
 export const Favorite: Story = {
   args: {
     isFavorite: true,
-  },
-};
-
-export const Interactive: Story = {
-  args: {
-    isFavorite: false,
-  },
-  render: function Render(args) {
-    const [isFav, setIsFav] = useState(args.isFavorite);
-    return <FavoriteButton {...args} isFavorite={isFav} onClick={() => setIsFav(!isFav)} />;
   },
 };
