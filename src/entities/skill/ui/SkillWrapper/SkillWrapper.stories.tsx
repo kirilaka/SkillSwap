@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SkillWrapper } from './SkillWrapper';
+import { LifestyleIcon } from '@/shared/ui/Icons/LifestyleIcon/LifestyleIcon';
 
 const meta: Meta<typeof SkillWrapper> = {
   title: 'UI/SkillWrapper',
@@ -22,7 +23,7 @@ export const Icon: Story = {
   args: {
     skillCategory: 'business',
     variant: 'icon',
-    children: '💼',
+    children: <LifestyleIcon />,
   },
 };
 

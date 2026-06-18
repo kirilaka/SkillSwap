@@ -1,10 +1,8 @@
 .containerIcon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
   padding: 8px;
   border-radius: 100px;
 }
@@ -18,34 +16,36 @@
   padding: 8px 12px;
   border-radius: 20px;
 
-  font-size: 12px;
+  font-family: $roboto;
+  font-size: $font-size-xs;
   line-height: 16px;
+  color: $color-text-primary;
 }
 
 .business {
-  background-color: #eee7f7;
+  background-color: $color-tag-business;
 }
 
 .art {
-  background-color: #f7e7f2;
+  background-color: $color-tag-art;
 }
 
 .language {
-  background-color: #ebe5c5;
+  background-color: $color-tag-language;
 }
 
 .education {
-  background-color: #e7f2f6;
+  background-color: $color-tag-education;
 }
 
 .cosiness {
-  background-color: #f7ebe5;
+  background-color: $color-tag-home;
 }
 
 .health {
-  background-color: #e9f7e7;
+  background-color: $color-tag-health;
 }
 
 .more {
-  background-color: #f0f0f0;
+  background-color: $color-tag-other;
 }

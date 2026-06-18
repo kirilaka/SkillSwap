@@ -1,25 +1,18 @@
 import { ReactNode } from 'react';
-import styles from './skillWrapper.module.scss';
+import styles from './SkillWrapper.module.scss';
 import clsx from 'clsx';
 
-type TskillCategory =
-  | 'business'
-  | 'art'
-  | 'language'
-  | 'education'
-  | 'cosiness'
-  | 'health'
-  | 'more';
+type SkillCategory = 'business' | 'art' | 'language' | 'education' | 'cosiness' | 'health' | 'more';
 type Tvariant = 'text' | 'icon';
 
-interface IskillWrapper {
-  skillCategory: TskillCategory;
+interface SkillWrapperProps {
+  skillCategory: SkillCategory;
   children: ReactNode;
   className?: string;
   variant: Tvariant;
 }
 
-export const SkillWrapper = (props: IskillWrapper) => {
+export const SkillWrapper = (props: SkillWrapperProps) => {
   const { skillCategory, children, className, variant } = props;
   return (
     <div
