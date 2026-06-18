@@ -1,0 +1,51 @@
+.notification {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  width: 436px;
+
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text-primary;
+
+  .icon {
+    width: 40px;
+    height: 40px;
+
+    img {
+      width: (100px / 3);
+    }
+  }
+}
+
+.topRow {
+  position: relative;
+
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: flex-start;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    .description {
+      font-size: $font-size-xs;
+      line-height: $font-size-base;
+    }
+  }
+
+  .date {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $color-text-caption;
+  }
+}
+
+.button {
+  width: 114px;
+}
