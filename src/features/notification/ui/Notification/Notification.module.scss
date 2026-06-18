@@ -1,69 +1,51 @@
-@use '@/app/styles/variables.scss' as *;
-
 .notification {
   display: flex;
   flex-direction: column;
-  min-width: 27.25rem; /* 436px ÷ 16 = 27.25rem */
+  gap: $space-md;
+
+  width: 436px;
+
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text-primary;
+
+  .icon {
+    width: 40px;
+    height: 40px;
+
+    img {
+      width: (100px / 3);
+    }
+  }
 }
 
 .topRow {
   position: relative;
 
   display: flex;
-  column-gap: $space-sm;
+  gap: $space-sm;
   align-items: center;
   justify-content: flex-start;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    .description {
+      font-size: $font-size-xs;
+      line-height: $font-size-base;
+    }
+  }
+
+  .date {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $color-text-caption;
+  }
 }
 
-.notification .topRow .iconWrapper {
-  min-width: 2.5rem;
-  min-height: 2.5rem;
-}
-
-.icon {
-  transform-origin: center;
-  transform: scale(1.666);
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-}
-
-.title {
-  margin: 0;
-
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  line-height: 24px;
-  color: $color-text-primary;
-}
-
-.description {
-  margin: 0;
-
-  font-family: $roboto;
-  font-size: $font-size-xs;
-  font-weight: 400;
-  line-height: 16px;
-  color: $color-text-primary;
-}
-
-.date {
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  margin: 0;
-
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  line-height: 24px;
-  color: $color-text-caption;
-}
-
-.buttonWrapper {
-  margin-top: $space-md;
+.button {
+  width: 114px;
 }

@@ -1,6 +1,5 @@
 import styles from './Notification.module.scss';
 import clsx from 'clsx';
-import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
 import { IdeaIcon } from '@/shared/ui/Icons/IdeaIcon/IdeaIcon';
 import { Button } from '@/shared/ui/Button/Button';
 import type { User } from '@/shared/types';
@@ -11,7 +10,7 @@ interface NotificationProps {
   /** Состояние обмена: отправлен или завершён */
   exchangeStatus: 'sent' | 'completed';
   /** Обработчик клика */
-  onClick: () => void;
+  onClick?: () => void;
   /** Дата уведомления */
   date: Date;
   /** Пользователь */
@@ -71,19 +70,15 @@ export const Notification = ({
 }: NotificationProps) => (
   <div className={clsx(styles.notification, styles[viewState], className)}>
     <div className={styles.topRow}>
-      <IconWrapper className={styles.iconWrapper}>
-        <IdeaIcon className={styles.icon} />
-      </IconWrapper>
+      <IdeaIcon className={styles.icon} />
       <div className={styles.content}>
         <p className={styles.title}>{getTitle(user, exchangeStatus)}</p>
         <p className={styles.description}>{getDescription(exchangeStatus)}</p>
       </div>
       <span className={styles.date}>{formatDate(date)}</span>
     </div>
-    {exchangeStatus === 'sent' && (
-      <div className={styles.buttonWrapper}>
-        <Button label="Перейти" onClick={onClick} buttonType="primary" />
-      </div>
+    {viewState === 'new' && (
+      <Button label="Перейти" onClick={onClick} buttonType="primary" className={styles.button} />
     )}
   </div>
 );
