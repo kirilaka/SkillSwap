@@ -9,7 +9,7 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   args: {
-    label: 'Кнопка',
+    children: 'Кнопка',
     onClick: fn(),
   },
 };
