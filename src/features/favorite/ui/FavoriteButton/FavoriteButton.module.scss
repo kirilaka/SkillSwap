@@ -1,0 +1,51 @@
+.favoriteButton {
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  border-radius: $radius-md;
+
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text-primary;
+  letter-spacing: 2%;
+
+  background: transparent;
+
+  transition: transform 150ms ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.favoriteButtonIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+
+  color: $color-text-primary;
+
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+
+  transition:
+    fill 200ms ease,
+    color 200ms ease;
+}
+
+.favoriteButtonIconIsActive {
+  color: $color-accent-light;
+  fill: currentcolor;
+}
