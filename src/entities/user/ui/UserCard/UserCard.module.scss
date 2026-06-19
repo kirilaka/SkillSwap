@@ -1,0 +1,40 @@
+.containerUserCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  width: 324px;
+  padding: 32px;
+}
+
+.buttonMore {
+  width: 100%;
+  padding: 12px 24px;
+}
+
+.topRowIcon {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.status {
+  width: 100%;
+
+  font-family: $roboto;
+  font-size: $space-md;
+  font-weight: 400;
+  color: $color-text-primary;
+  letter-spacing: 2%;
+}
+
+.skills {
+  width: 100%;
+
+  font-family: $roboto;
+  font-size: $space-md;
+  font-weight: 500;
+  letter-spacing: 2%;
+}

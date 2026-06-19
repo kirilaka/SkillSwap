@@ -22,6 +22,11 @@ export interface User {
   createdAt: string;
 }
 
+export interface UserInfo extends User {
+  description: string;
+  skills: Skill[];
+}
+
 // ─── Request ─────────────────────────────────────────────
 export type RequestStatus = 'pending' | 'accepted' | 'rejected' | 'inProgress' | 'done';
 
