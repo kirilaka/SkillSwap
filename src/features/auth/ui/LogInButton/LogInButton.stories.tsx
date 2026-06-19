@@ -26,6 +26,6 @@ type Story = StoryObj<typeof LogInButton>;
 /** Кнопка входа по умолчанию */
 export const Default: Story = {
   args: {
-    onClick: () => {},
+    // НЕ передаём onClick здесь — пусть Storybook подставит action сам
   },
 };

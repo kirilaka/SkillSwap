@@ -26,6 +26,6 @@ type Story = StoryObj<typeof SignUpButton>;
 /** Кнопка регистрации по умолчанию */
 export const Default: Story = {
   args: {
-    onClick: () => {},
+    // НЕ передаём onClick здесь — пусть Storybook подставит action сам
   },
 };
