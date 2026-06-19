@@ -5,6 +5,9 @@ const meta: Meta<typeof FooterNavigation> = {
   title: 'widgets/FooterNavigation',
   component: FooterNavigation,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
 };
 
 export default meta;

@@ -5,6 +5,9 @@ const meta: Meta<typeof HeaderNavigation> = {
   title: 'widgets/HeaderNavigation',
   component: HeaderNavigation,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
 };
 
 export default meta;
