@@ -10,23 +10,19 @@ interface FooterNavigationProps {
 export const FooterNavigation = ({ className }: FooterNavigationProps) => {
   return (
     <nav className={clsx(className, styles.navigation)}>
-      <ul className={styles.column}>
+      <ul className={styles.list}>
         <li>
           <ControlChip label="О проекте" />
         </li>
         <li>
           <ControlChip label="Все навыки" />
         </li>
-      </ul>
-      <ul className={styles.column}>
         <li>
           <ControlChip label="Контакты" />
         </li>
         <li>
           <ControlChip label="Блог" />
         </li>
-      </ul>
-      <ul className={styles.column}>
         <li>
           <ControlChip label="Политика конфиденциальности" />
         </li>

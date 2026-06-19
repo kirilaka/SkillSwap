@@ -1,4 +1,15 @@
 .navigation {
   display: flex;
   gap: 24px;
+  list-style: none;
+}
+
+.projectDropdown {
+  padding: 0;
+}
+
+.skillsDropdown {
+  display: flex;
+  align-items: center;
+  padding: 60px;
 }

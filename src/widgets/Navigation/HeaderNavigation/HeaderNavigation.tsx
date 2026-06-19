@@ -24,26 +24,32 @@ export const HeaderNavigation = ({ className }: HeaderNavigationProps) => {
   };
   return (
     <>
-      <nav className={clsx(className, styles.navigation)}>
-        <ControlChip
-          label="О проекте"
-          iconVariant="Chevron"
-          isOpen={isProjectOpen}
-          onClick={handleProjectClick}
-        />
-        <ControlChip
-          label="Все навыки"
-          iconVariant="Chevron"
-          isOpen={isSkillOpen}
-          onClick={handleSlillClick}
-        />
+      <nav className={clsx(className)}>
+        <ul className={styles.navigation}>
+          <li>
+            <ControlChip
+              label="О проекте"
+              iconVariant="Chevron"
+              isOpen={isProjectOpen}
+              onClick={handleProjectClick}
+            />
+            <Dropdown isOpen={isProjectOpen} className={styles.projectDropdown}>
+              <span>about</span>
+            </Dropdown>
+          </li>
+          <li>
+            <ControlChip
+              label="Все навыки"
+              iconVariant="Chevron"
+              isOpen={isSkillOpen}
+              onClick={handleSlillClick}
+            />
+            <Dropdown isOpen={isSkillOpen} className={styles.skillsDropdown}>
+              <span>skils</span>
+            </Dropdown>
+          </li>
+        </ul>
       </nav>
-      <Dropdown isOpen={isSkillOpen}>
-        <span>skils</span>
-      </Dropdown>
-      <Dropdown isOpen={isProjectOpen}>
-        <span>about</span>
-      </Dropdown>
     </>
   );
 };
