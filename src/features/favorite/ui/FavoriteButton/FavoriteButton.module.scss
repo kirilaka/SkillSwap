@@ -11,22 +11,28 @@
   border: none;
   border-radius: $radius-md;
 
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  color: $color-text-primary;
-  letter-spacing: 2%;
-
   background: transparent;
 
-  transition: transform 150ms ease;
+  transition:
+    background-color 200ms ease,
+    transform 150ms ease;
 
   &:hover {
-    transform: scale(1.1);
+    background-color: $color-button-hover;
   }
 
   &:active {
-    transform: scale(0.95);
+    background-color: $color-button-primary;
+  }
+}
+
+.favoriteButtonIsActive {
+  &:hover {
+    background-color: $color-button-hover;
+  }
+
+  &:active {
+    background-color: $color-button-primary;
   }
 }
 
@@ -37,15 +43,13 @@
   color: $color-text-primary;
 
   fill: none;
-  stroke: currentcolor;
-  stroke-width: 2;
 
   transition:
     fill 200ms ease,
-    color 200ms ease;
+    color 200ms ease,
+    transform 150ms ease;
 }
 
-.favoriteButtonIconIsActive {
-  color: $color-accent-light;
-  fill: currentcolor;
+.favoriteButtonIsActive .favoriteButtonIcon {
+  fill: $color-text-primary;
 }
