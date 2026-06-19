@@ -12,10 +12,11 @@ export interface LogInButtonProps {
 export const LogInButton = ({ onClick, className = '' }: LogInButtonProps) => {
   return (
     <Button
-      label="Войти"
       buttonType="secondary"
       onClick={onClick}
       className={`${styles.logInButton} ${className}`}
-    />
+    >
+      Войти
+    </Button>
   );
 };

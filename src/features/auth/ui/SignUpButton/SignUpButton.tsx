@@ -12,10 +12,11 @@ export interface SignUpButtonProps {
 export const SignUpButton = ({ onClick, className = '' }: SignUpButtonProps) => {
   return (
     <Button
-      label="Зарегистрироваться"
       buttonType="primary"
       onClick={onClick}
       className={`${styles.signUpButton} ${className}`}
-    />
+    >
+      Зарегистрироваться
+    </Button>
   );
 };
