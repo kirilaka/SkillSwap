@@ -8,6 +8,16 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    disabled: {
+      control: 'boolean',
+      description: 'Блокировка инпута',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Плейсхолдер',
+    },
+  },
 } satisfies Meta<typeof Input>;
 
 export default meta;

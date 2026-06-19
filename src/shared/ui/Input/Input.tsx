@@ -12,9 +12,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   iconPosition?: 'none' | 'left' | 'right';
   /** Декоративная иконка в инпуте */
   icon?: ReactNode;
+  /** Стили для обертки инпута */
+  className?: string;
 }
 /** Кастомный компонент инпута.
- * Принимает пропсы - className: стили для обертки, iconPosition, icon, и все пропсы html инпута */
+ * Принимает пропсы - className: стили для обертки, iconPosition, icon, onChange и все пропсы html инпута */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { onChange, className, iconPosition = 'none', icon, ...props },
   ref,
