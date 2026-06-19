@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { ArrowSquareIcon } from './ArrowSquareIcon';
 
 const meta = {
-  title: 'UI/Icons/ArrowSquare',
+  title: 'Shared/icons/ArrowSquare',
   component: ArrowSquareIcon,
   parameters: {
     layout: 'centered',

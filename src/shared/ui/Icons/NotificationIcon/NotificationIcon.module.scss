@@ -1,0 +1,20 @@
+.iconWrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.dot {
+  pointer-events: none;
+
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+
+  background-color: $color-alarm;
+}

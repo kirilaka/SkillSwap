@@ -1,5 +1,5 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import sunSvg from './SunIcon.svg';
+import SunSvg from './SunIcon.svg?react';
 
 interface SunIconProps {
   /** Дополнительные CSS-классы */
@@ -9,7 +9,7 @@ interface SunIconProps {
 export const SunIcon = ({ className }: SunIconProps) => {
   return (
     <IconWrapper className={className}>
-      <img src={sunSvg} alt="" />
+      <SunSvg />
     </IconWrapper>
   );
 };

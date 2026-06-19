@@ -1,0 +1,71 @@
+.wrapper {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hideInput {
+  position: absolute;
+
+  overflow: hidden;
+
+  width: 1px;
+  height: 1px;
+
+  white-space: nowrap;
+
+  clip: rect(0 0 0 0);
+}
+
+.icon {
+  transition: color 0.2s ease;
+}
+
+.isActive {
+  color: $color-accent-light;
+
+  .checkboxFrame {
+    fill: $color-accent-light;
+  }
+
+  .checkboxCheck {
+    fill: $color-bg-card;
+  }
+
+  .checkboxMinus {
+    fill: $color-bg-card;
+  }
+
+  &:active {
+    color: $color-button-primary;
+
+    .checkboxFrame {
+      fill: $color-button-primary;
+    }
+  }
+}
+
+.isNotActive {
+  color: #000;
+
+  .checkboxCheck {
+    display: none;
+  }
+
+  .checkboxMinus {
+    display: none;
+  }
+
+  &:hover {
+    color: $color-button-hover;
+
+    .checkboxFrame {
+      fill: $color-button-hover;
+    }
+  }
+}
+
+.isFavorite {
+  fill: $color-accent-light;
+}
