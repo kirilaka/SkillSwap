@@ -78,7 +78,9 @@ export const Notification = ({
       <span className={styles.date}>{formatDate(date)}</span>
     </div>
     {viewState === 'new' && (
-      <Button label="Перейти" onClick={onClick} buttonType="primary" className={styles.button} />
+      <Button onClick={onClick} buttonType="primary" className={styles.button}>
+        Перейти
+      </Button>
     )}
   </div>
 );
