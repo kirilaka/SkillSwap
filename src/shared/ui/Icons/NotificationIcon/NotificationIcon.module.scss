@@ -1,10 +1,6 @@
-.wrapper {
+.iconWrapper {
   position: relative;
-
   overflow: visible;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .dot {
@@ -12,11 +8,12 @@
 
   position: absolute;
   z-index: 10;
-  top: -1px;
-  right: 2px;
+  top: 0;
+  right: 0;
 
   width: 12px;
   height: 12px;
+  border: none;
   border-radius: 50%;
 
   background-color: $color-alarm;
