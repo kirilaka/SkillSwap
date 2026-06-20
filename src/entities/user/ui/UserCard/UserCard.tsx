@@ -62,12 +62,9 @@ export const UserCard = ({
           </SkillWrapper>
         )}
       </div>
-      <Button
-        label={'Подробнее'}
-        onClick={onButtonClick}
-        className={styles.buttonMore}
-        buttonType="primary"
-      />
+      <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
+        Подробнее
+      </Button>
     </div>
   );
 };
