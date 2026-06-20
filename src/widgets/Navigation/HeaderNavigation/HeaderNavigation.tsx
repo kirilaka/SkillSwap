@@ -10,18 +10,25 @@ interface HeaderNavigationProps {
 }
 
 export const HeaderNavigation = ({ className }: HeaderNavigationProps) => {
-  const [isSkillOpen, setIsSkillOpen] = useState(false);
-  const [isProjectOpen, setIsProjectOpen] = useState(false);
+  const [isSkillDropdownOpen, setIsSkillDropdownOpen] = useState(false);
+  const [isProjectDropdownOpen, setIsProjectDropdownOpen] = useState(false);
 
-  const handleSlillClick = () => {
-    setIsSkillOpen((prev) => !prev);
-    setIsProjectOpen(false);
+  const handleSkillClick = () => {
+    setIsSkillDropdownOpen(true);
   };
 
   const handleProjectClick = () => {
-    setIsProjectOpen((prev) => !prev);
-    setIsSkillOpen(false);
+    setIsProjectDropdownOpen(true);
   };
+
+  const handleSkillDropdownClose = () => {
+    setIsSkillDropdownOpen(false);
+  };
+
+  const handleProjectDropdownClose = () => {
+    setIsProjectDropdownOpen(false);
+  };
+
   return (
     <>
       <nav className={clsx(className)}>
@@ -30,10 +37,14 @@ export const HeaderNavigation = ({ className }: HeaderNavigationProps) => {
             <ControlChip
               label="О проекте"
               iconVariant="Chevron"
-              isOpen={isProjectOpen}
+              isOpen={isProjectDropdownOpen}
               onClick={handleProjectClick}
             />
-            <Dropdown isOpen={isProjectOpen} className={styles.projectDropdown}>
+            <Dropdown
+              isOpen={isProjectDropdownOpen}
+              onClose={handleProjectDropdownClose}
+              className={styles.projectDropdown}
+            >
               <span>about</span>
             </Dropdown>
           </li>
@@ -41,10 +52,14 @@ export const HeaderNavigation = ({ className }: HeaderNavigationProps) => {
             <ControlChip
               label="Все навыки"
               iconVariant="Chevron"
-              isOpen={isSkillOpen}
-              onClick={handleSlillClick}
+              isOpen={isSkillDropdownOpen}
+              onClick={handleSkillClick}
             />
-            <Dropdown isOpen={isSkillOpen} className={styles.skillsDropdown}>
+            <Dropdown
+              isOpen={isSkillDropdownOpen}
+              onClose={handleSkillDropdownClose}
+              className={styles.skillsDropdown}
+            >
               <span>skils</span>
             </Dropdown>
           </li>
