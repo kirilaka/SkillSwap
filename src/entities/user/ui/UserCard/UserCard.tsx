@@ -4,6 +4,7 @@ import { LikeIcon } from '@/shared/ui/Icons/LikeIcon/LikeIcon';
 import { Button } from '@/shared/ui/Button/Button';
 import { UserInfo } from '@/shared/types';
 import { SkillWrapper } from '@/entities/skill/ui/SkillWrapper/SkillWrapper';
+import { Box } from '@/shared/ui/Box/Box';
 import clsx from 'clsx';
 interface UserCardProps {
   /** Пользователь для отображения */
@@ -29,42 +30,79 @@ export const UserCard = ({
     return null;
   }
 
+  const teachSkills = user.skills?.filter((s) => s.type === 'teach') ?? [];
+  const learnSkills = user.skills?.filter((s) => s.type === 'learn') ?? [];
+
   return (
-    <div className={clsx(styles.containerUserCard, className)}>
-      <div className={styles.topRowIcon}>
-        <UserAvatar user={user} infoFormat="all" />
-        {!hasStatus && (
-          <button onClick={onFavoriteClick}>
-            <LikeIcon className={styles.likeIcon} />
-          </button>
+    <Box
+      className={clsx(
+        styles.containerUserCard,
+        hasStatus ? styles.withStatus : styles.withoutStatus,
+        className,
+      )}
+    >
+      <div className={styles.header}>
+        <div className={styles.topRowIcon}>
+          <UserAvatar user={user} infoFormat="all" />
+          {!hasStatus && (
+            <button onClick={onFavoriteClick}>
+              <LikeIcon className={styles.likeIcon} />
+            </button>
+          )}
+        </div>
+        {hasStatus && (
+          <span className={styles.status}>
+            Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое
+          </span>
         )}
       </div>
-      {hasStatus && (
-        <span className={styles.status}>
-          Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое
-        </span>
-      )}
       <div className={styles.skills}>
-        <p>Может научить:</p>
-        <SkillWrapper variant="text" skillCategory="education">
-          Английский язык{' '}
-        </SkillWrapper>
-        <p>Хочет научиться:</p>
-        <SkillWrapper variant="text" skillCategory="education">
-          Английский язык
-        </SkillWrapper>
-        <SkillWrapper variant="text" skillCategory="education">
-          Танцевать
-        </SkillWrapper>
-        {!hasStatus && (
-          <SkillWrapper variant="text" skillCategory="education">
-            +2
-          </SkillWrapper>
-        )}
+        <div className={styles.skillGroup}>
+          <p>Может научить:</p>
+          <div className={styles.skillList}>
+            {teachSkills.length === 0 ? (
+              <div className={styles.emptySkills} />
+            ) : (
+              <>
+                {teachSkills.slice(0, 2).map((skill) => (
+                  <SkillWrapper key={skill.id} variant="text" skillCategory="education">
+                    {skill.title}
+                  </SkillWrapper>
+                ))}
+                {teachSkills.length > 2 && (
+                  <SkillWrapper variant="text" skillCategory="education">
+                    +{teachSkills.length - 2}
+                  </SkillWrapper>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <div className={styles.skillGroup}>
+          <p>Хочет научиться:</p>
+          <div className={styles.skillList}>
+            {learnSkills.length === 0 ? (
+              <div className={styles.emptySkills} />
+            ) : (
+              <>
+                {learnSkills.slice(0, 2).map((skill) => (
+                  <SkillWrapper key={skill.id} variant="text" skillCategory="education">
+                    {skill.title}
+                  </SkillWrapper>
+                ))}
+                {learnSkills.length > 2 && (
+                  <SkillWrapper variant="text" skillCategory="education">
+                    +{learnSkills.length - 2}
+                  </SkillWrapper>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
       <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
         Подробнее
       </Button>
-    </div>
+    </Box>
   );
 };

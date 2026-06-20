@@ -26,7 +26,13 @@ const mockUser = {
   city: 'Санкт-Петербург',
   age: 38,
   description: '',
-  skills: [],
+  skills: [
+    { title: 'Английский язык', type: 'teach' },
+    { title: 'React', type: 'teach' },
+    { title: 'Танцевать', type: 'learn' },
+    { title: 'Python', type: 'learn' },
+    { title: 'Figma', type: 'learn' },
+  ],
 };
 
 export const StatusFalse: Story = {
