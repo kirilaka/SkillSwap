@@ -63,7 +63,7 @@ export const UserCard = ({
         )}
       </div>
       <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
-        Подробнее123
+        Подробнее
       </Button>
     </div>
   );
