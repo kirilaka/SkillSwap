@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { UserCard } from './UserCard';
-
+import { Skill } from '@/shared/types';
 const meta: Meta<typeof UserCard> = {
   title: 'Entities/UserCard',
   component: UserCard,
@@ -32,7 +32,7 @@ const mockUser = {
     { title: 'Танцевать', type: 'learn' },
     { title: 'Python', type: 'learn' },
     { title: 'Figma', type: 'learn' },
-  ],
+  ] as Skill[],
 };
 
 export const StatusFalse: Story = {
