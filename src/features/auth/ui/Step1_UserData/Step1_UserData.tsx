@@ -1,13 +1,13 @@
 import styles from './Step1_UserData.module.scss';
 import { Button } from '@/shared/ui/Button/Button';
 import { Input } from '@/shared/ui/Input/Input';
-import GoogleIcon from './Google.svg?react';
-import AppleIcon from './Apple.svg?react';
-import LightBulb from './light-bulb.svg?react';
+import GoogleIcon from 'shared/assets/images/Google.svg';
+import AppleIcon from 'shared/assets/images/Apple.svg';
+import LightBulb from 'shared/assets/images/light-bulb.svg';
 import { EyeIcon } from '@/shared/ui/Icons/EyeIcon/EyeIcon';
 import { EyeSlashIcon } from '@/shared/ui/Icons/EyeSlashIcon/EyeSlashIcon';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 interface Step1_UserDataProps {
   /**Сабмит при клике на кнопку*/
@@ -20,15 +20,15 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     /**Добавить валидацию */
     setPassword(e.target.value);
   };
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     /** Добавить валидацию */
     setEmail(e.target.value);
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     /** Добавить валидацию */
     onSubmit();
@@ -42,11 +42,11 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
       <form onSubmit={handleSubmit} className={clsx(className, styles.form)}>
         <div className={styles.authButtons}>
           <Button type="button" className={styles.socialButton}>
-            <GoogleIcon />
+            <img src={GoogleIcon} alt="" aria-hidden={true} />
             <span>Продолжить с Google</span>
           </Button>
           <Button type="button" className={styles.socialButton}>
-            <AppleIcon />
+            <img src={AppleIcon} alt="" aria-hidden={true} />
             <span>Продолжить с Apple</span>
           </Button>
         </div>
@@ -58,7 +58,7 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
         </div>
 
         <div className={styles.inputs}>
-          <label>
+          <label className={styles.inputLabel}>
             Email
             <Input
               onChange={handleEmailChange}
@@ -68,7 +68,7 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
               placeholder="Введите email"
             />
           </label>
-          <label>
+          <label className={styles.inputLabel}>
             Пароль
             <Input
               iconPosition="right"
@@ -90,7 +90,7 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
         </Button>
       </form>
       <section className={styles.infoSection}>
-        <LightBulb />
+        <img src={LightBulb} alt="" aria-hidden={true} />
         <div className={styles.heroContent}>
           <h2 className={styles.title}>Добро пожаловать в SkillSwap!</h2>
           <p className={styles.description}>

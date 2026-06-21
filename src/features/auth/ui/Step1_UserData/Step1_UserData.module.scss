@@ -4,8 +4,9 @@
 }
 
 .form {
-  width: 100%;
+  width: 556px;
   max-width: 556px;
+  height: fit-content;
   padding: 121.5px 60px;
   border-radius: $radius-lg;
 
@@ -49,10 +50,10 @@
   flex-direction: column;
   gap: $space-md;
   margin-bottom: 32px;
-}
 
-.input {
-  padding-right: 20px;
+  .inputLabel {
+    margin-bottom: 4px;
+  }
 }
 
 .primaryButton {
@@ -79,4 +80,8 @@
   flex-direction: column;
   gap: 12px;
   text-align: center;
+
+  .title {
+    line-height: 28px;
+  }
 }
