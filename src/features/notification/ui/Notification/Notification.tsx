@@ -4,7 +4,9 @@ import { IdeaIcon } from '@/shared/ui/Icons/IdeaIcon/IdeaIcon';
 import { Button } from '@/shared/ui/Button/Button';
 import type { User } from '@/shared/types';
 
-interface NotificationProps {
+export interface NotificationProps {
+  /** Уникальный идентификатор уведомления */
+  id: string;
   /** Состояние: новое или просмотренное */
   viewState: 'new' | 'viewed';
   /** Состояние обмена: отправлен или завершён */
@@ -61,6 +63,7 @@ const getDescription = (exchangeStatus: 'sent' | 'completed'): string =>
     : 'Примите обмен, чтобы обсудить детали';
 
 export const Notification = ({
+  id,
   viewState,
   exchangeStatus,
   onClick,
@@ -68,7 +71,7 @@ export const Notification = ({
   user,
   className,
 }: NotificationProps) => (
-  <div className={clsx(styles.notification, styles[viewState], className)}>
+  <div className={clsx(styles.notification, styles[viewState], className)} id={id}>
     <div className={styles.topRow}>
       <IdeaIcon className={styles.icon} />
       <div className={styles.content}>

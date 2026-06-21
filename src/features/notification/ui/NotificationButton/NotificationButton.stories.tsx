@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NotificationButton } from './NotificationButton';
-import type { NotificationType } from './NotificationButton';
+import type { NotificationProps } from '../Notification/Notification';
 import { User } from '@/shared/types';
 
 // --- Mock Data ---
@@ -23,7 +23,7 @@ const mockUser2: User = {
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-const mockNotificationNew1: NotificationType = {
+const mockNotificationNew1: NotificationProps = {
   id: '1',
   viewState: 'new',
   exchangeStatus: 'completed',
@@ -31,7 +31,7 @@ const mockNotificationNew1: NotificationType = {
   user: mockUser,
 };
 
-const mockNotificationNew2: NotificationType = {
+const mockNotificationNew2: NotificationProps = {
   id: '2',
   viewState: 'new',
   exchangeStatus: 'sent',
@@ -39,7 +39,7 @@ const mockNotificationNew2: NotificationType = {
   user: mockUser2,
 };
 
-const mockNotificationOld1: NotificationType = {
+const mockNotificationOld1: NotificationProps = {
   id: '3',
   viewState: 'viewed',
   exchangeStatus: 'sent',
@@ -47,7 +47,7 @@ const mockNotificationOld1: NotificationType = {
   user: mockUser,
 };
 
-const mockNotificationOld2: NotificationType = {
+const mockNotificationOld2: NotificationProps = {
   id: '4',
   viewState: 'viewed',
   exchangeStatus: 'completed',
@@ -90,8 +90,8 @@ export default meta;
 
 type Story = StoryObj<{
   hasNew?: boolean;
-  notificationsNew?: NotificationType[] | null;
-  notificationsOld?: NotificationType[] | null;
+  notificationsNew?: NotificationProps[] | null;
+  notificationsOld?: NotificationProps[] | null;
   className?: string;
   isAuthorized?: boolean;
 }>;

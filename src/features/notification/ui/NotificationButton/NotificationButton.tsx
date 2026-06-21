@@ -1,27 +1,15 @@
 import { useState, useCallback } from 'react';
+import { clsx } from 'clsx';
 import { NotificationIcon } from '@/shared/ui/Icons/NotificationIcon/NotificationIcon';
 import { Dropdown } from '@/shared/ui/Dropdown/Dropdown';
 import styles from './NotificationButton.module.scss';
-import { Notification } from '../Notification/Notification';
-import type { User } from '@/shared/types';
-
-export interface NotificationType {
-  // Уникальный идентификатор уведомления
-  id: string;
-  // Состояние уведомления:  new — не прочитано, viewed — прочитано
-  viewState: 'new' | 'viewed';
-  // Статус обмена: 'sent' — запрос/предложение отправлен; 'completed' — обмен завершён.
-  exchangeStatus: 'sent' | 'completed';
-  // Дата создания уведомления.
-  date: Date;
-  // Пользователь, создавший уведомление.
-  user: User | null;
-}
+import { Notification, NotificationProps } from '../Notification/Notification';
+import { Box } from '@/shared/ui/Box/Box';
 
 interface NotificationButtonProps {
   hasNew?: boolean;
-  notificationsNew?: NotificationType[] | null;
-  notificationsOld?: NotificationType[] | null;
+  notificationsNew?: NotificationProps[] | null;
+  notificationsOld?: NotificationProps[] | null;
   className?: string;
 }
 
@@ -44,54 +32,40 @@ export const NotificationButton = ({
   return (
     <button
       type="button"
-      className={`${styles.button} ${className}`}
+      className={clsx(styles.button, className)}
       onClick={handleClick}
       aria-label="Уведомления"
     >
       <NotificationIcon hasNew={hasNew} className={styles.icon} />
       <Dropdown isOpen={isOpen} className={styles.dropdown}>
-        <div>
+        <Box className={styles.box}>
           {!hasNotifications ? (
-            <p className={styles.empty}>Тут пока что пусто</p>
+            <h2 className={styles.empty}>Тут пока что пусто</h2>
           ) : (
             <div className={styles.dropdownContent}>
               {notificationsNew && notificationsNew.length > 0 && (
                 <div className={styles.section}>
-                  <h3 className={styles.sectionTitle}>Новые уведомления</h3>
+                  <h2 className={styles.sectionTitle}>Новые уведомления</h2>
                   <div className={styles.list}>
                     {notificationsNew.map((notification) => (
-                      <Notification
-                        className={styles.notification}
-                        key={notification.id}
-                        viewState={notification.viewState}
-                        exchangeStatus={notification.exchangeStatus}
-                        date={notification.date}
-                        user={notification.user}
-                      />
+                      <Notification key={notification.id} {...notification} />
                     ))}
                   </div>
                 </div>
               )}
               {notificationsOld && notificationsOld.length > 0 && (
                 <div className={styles.section}>
-                  <h3 className={styles.sectionTitle}>Просмотренные</h3>
+                  <h2 className={styles.sectionTitle}>Просмотренные</h2>
                   <div className={styles.list}>
                     {notificationsOld.map((notification) => (
-                      <Notification
-                        className={styles.notification}
-                        key={notification.id}
-                        viewState={notification.viewState}
-                        exchangeStatus={notification.exchangeStatus}
-                        date={notification.date}
-                        user={notification.user}
-                      />
+                      <Notification key={notification.id} {...notification} />
                     ))}
                   </div>
                 </div>
               )}
             </div>
           )}
-        </div>
+        </Box>
       </Dropdown>
     </button>
   );

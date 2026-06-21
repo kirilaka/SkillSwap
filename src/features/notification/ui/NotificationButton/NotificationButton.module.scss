@@ -2,15 +2,6 @@
   top: calc(100% + 32px);
   left: 50%;
   transform: translateX(-65%);
-
-  overflow-y: hidden;
-
-  width: 556px;
-  max-height: 616px;
-  padding: 60px;
-  border: 1px solid $color-accent-dark;
-  border-radius: $radius-lg;
-
   background-color: $color-bg-card;
 }
 
@@ -20,15 +11,14 @@
   gap: 40px;
 }
 
+.box {
+  text-align: left;
+}
+
 .list {
   display: flex;
   flex-direction: column;
   gap: $space-lg;
-}
-
-.notification {
-  display: flex;
-  text-align: left;
 }
 
 .section {
@@ -39,24 +29,16 @@
 }
 
 .sectionTitle {
-  margin: 0;
-
-  font-family: $jost;
   font-size: $font-size-2xl;
   font-weight: 500;
   color: $color-text-primary;
-  text-align: left;
 }
 
 .empty {
-  margin: 0;
-
   font-family: $roboto;
   font-size: $font-size-base;
   color: $color-text-caption;
   text-align: center;
-
-  background-color: $color-bg-card;
 }
 
 .button {
