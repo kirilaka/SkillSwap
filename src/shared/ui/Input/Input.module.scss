@@ -1,4 +1,4 @@
-.custom-input-wrapper {
+.customInputWrapper {
   cursor: pointer;
 
   position: relative;
@@ -30,7 +30,7 @@
   }
 }
 
-.custom-input-field {
+.customInputField {
   cursor: inherit;
 
   flex: 1;
@@ -48,16 +48,30 @@
   background: transparent;
   outline: none;
 
-  &__with-icon-left {
+  &WithIconLeft {
     padding-left: 44px;
+
+    + * {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+    }
   }
 
-  &__with-icon-right {
+  &WithIconRight {
     padding-right: 52px;
+
+    + * {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+    }
   }
 }
 
-.custom-input-field::placeholder {
+.customInputField::placeholder {
   color: $color-accent-dark;
   opacity: 1;
 }
