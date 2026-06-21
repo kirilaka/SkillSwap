@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 import styles from './SkillWrapper.module.scss';
 import clsx from 'clsx';
+import { SKILL_CATEGORIES } from '@/shared/lib/constants';
 
-type SkillCategory = 'business' | 'art' | 'language' | 'education' | 'home' | 'health' | 'more';
 type TVariant = 'text' | 'icon';
 
 interface SkillWrapperProps {
   /** Категория скилла */
-  skillCategory: SkillCategory;
+  skillCategory: SKILL_CATEGORIES;
   /** Дочерний элемент для рендера */
   children: ReactNode;
   /** Доп. классы для стилизации */

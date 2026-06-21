@@ -1,0 +1,90 @@
+.containerUserCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  width: 324px;
+  border: none;
+
+  font-family: $roboto;
+
+  &.withDescription {
+    gap: 24px;
+    padding: 32px;
+
+    .skills {
+      gap: 24px;
+    }
+
+    .skillGroup {
+      gap: 14px;
+    }
+  }
+
+  &.withoutDescription {
+    padding: 20px;
+
+    .skills {
+      gap: 12px;
+    }
+
+    .skillGroup {
+      gap: 8px;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skillGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.skillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.buttonMore {
+  width: 100%;
+}
+
+.topRowIcon {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.description {
+  width: 100%;
+
+  font-size: $space-md;
+  font-weight: 400;
+  color: $color-text-primary;
+  letter-spacing: 2%;
+}
+
+.skills {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  font-size: $space-md;
+  font-weight: 500;
+  letter-spacing: 2%;
+}
+
+.emptySkills {
+  height: 40px;
+}
