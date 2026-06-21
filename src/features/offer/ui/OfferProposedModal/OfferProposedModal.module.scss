@@ -1,0 +1,43 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 556px;
+  height: auto;
+  padding: 80px 60px;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 52px;
+
+  & img {
+    height: 75px;
+  }
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+
+  margin-bottom: 32px;
+
+  text-align: center;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  line-height: 28px;
+}
+
+.btn {
+  width: 100%;
+}
