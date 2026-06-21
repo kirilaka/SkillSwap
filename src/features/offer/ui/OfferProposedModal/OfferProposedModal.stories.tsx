@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OfferProposedModal } from './OfferProposedModal';
+import { fn } from 'storybook/test';
 
 const meta: Meta<typeof OfferProposedModal> = {
   title: 'features/offer/OfferProposedModal',
@@ -7,7 +8,7 @@ const meta: Meta<typeof OfferProposedModal> = {
   tags: ['autodocs'],
   args: {
     isOpen: true,
-    onClose: () => {},
+    onClose: fn(),
   },
 };
 
