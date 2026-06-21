@@ -1,0 +1,35 @@
+.categoryBranch {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.subCategoryList {
+  pointer-events: none;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  max-height: 0;
+  margin-top: 0;
+  padding-left: 20px;
+
+  opacity: 0;
+
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.2s ease-in-out,
+    margin-top 0.2s ease-in-out;
+
+  &.isOpen {
+    pointer-events: auto;
+
+    overflow: visible;
+
+    max-height: 1000px;
+    margin-top: 12px;
+
+    opacity: 1;
+  }
+}
