@@ -1,8 +1,12 @@
+.wrapper {
+  position: relative;
+}
+
 .dropdown {
   top: calc(100% + 32px);
   left: 50%;
   transform: translateX(-65%);
-  background-color: $color-bg-card;
+  box-shadow: $shadow-md;
 }
 
 .dropdownContent {
@@ -12,7 +16,9 @@
 }
 
 .box {
+  padding: 60px;
   text-align: left;
+  box-shadow: none;
 }
 
 .list {
@@ -39,8 +45,4 @@
   font-size: $font-size-base;
   color: $color-text-caption;
   text-align: center;
-}
-
-.button {
-  position: relative;
 }

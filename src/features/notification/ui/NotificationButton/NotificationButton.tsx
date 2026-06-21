@@ -35,13 +35,15 @@ export const NotificationButton = ({
     (notificationsOld && notificationsOld.length > 0);
 
   return (
-    <button
-      type="button"
-      className={clsx(styles.button, className)}
-      onClick={handleClick}
-      aria-label="Уведомления"
-    >
-      <NotificationIcon hasNew={hasNew} className={styles.icon} />
+    <div className={styles.wrapper}>
+      <button
+        type="button"
+        className={clsx(styles.button, className)}
+        onClick={handleClick}
+        aria-label="Уведомления"
+      >
+        <NotificationIcon hasNew={hasNew} className={styles.icon} />
+      </button>
       <Dropdown isOpen={isOpen} onClose={handleClose} className={styles.dropdown}>
         <Box className={styles.box}>
           {!hasNotifications ? (
@@ -72,6 +74,6 @@ export const NotificationButton = ({
           )}
         </Box>
       </Dropdown>
-    </button>
+    </div>
   );
 };
