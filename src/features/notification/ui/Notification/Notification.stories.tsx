@@ -17,6 +17,7 @@ const meta: Meta<typeof Notification> = {
     layout: 'centered',
   },
   args: {
+    id: '1',
     onClick: fn(),
     user: mockUser,
     date: new Date(),

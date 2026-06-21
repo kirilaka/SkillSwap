@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NotificationButton } from './NotificationButton';
 import type { NotificationProps } from '../Notification/Notification';
-import { User } from '@/shared/types';
 
 // --- Mock Data ---
-const mockUser: User = {
+const mockUser = {
   id: '123',
   name: 'Анна',
   email: 'anna@example.com',
@@ -12,7 +11,7 @@ const mockUser: User = {
   createdAt: new Date().toISOString(),
 };
 
-const mockUser2: User = {
+const mockUser2 = {
   id: '456',
   name: 'Мария',
   email: 'maria@example.com',
@@ -93,7 +92,6 @@ type Story = StoryObj<{
   notificationsNew?: NotificationProps[] | null;
   notificationsOld?: NotificationProps[] | null;
   className?: string;
-  isAuthorized?: boolean;
 }>;
 
 // --- Stories ---
