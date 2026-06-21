@@ -1,8 +1,12 @@
 .userAvatar {
-  cursor: pointer;
   display: flex;
   gap: 12px;
   align-items: center;
+
+  .avatar,
+  .info {
+    cursor: pointer;
+  }
 }
 
 .name {
