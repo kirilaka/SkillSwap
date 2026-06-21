@@ -1,3 +1,5 @@
+import { SKILL_CATEGORIES } from '../lib/constants';
+
 // ─── Skill ───────────────────────────────────────────────
 export type SkillType = 'teach' | 'learn';
 
@@ -6,7 +8,7 @@ export interface Skill {
   title: string;
   description: string;
   type: SkillType;
-  category: string;
+  category: SKILL_CATEGORIES;
   tags: string[];
   imageUrl: string | null;
   authorId: string;
@@ -23,8 +25,8 @@ export interface User {
 }
 
 export interface UserInfo extends User {
-  description: string;
-  skills: Skill[];
+  description?: string;
+  skills?: Skill[];
 }
 
 // ─── Request ─────────────────────────────────────────────

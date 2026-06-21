@@ -4,9 +4,35 @@
   gap: 20px;
   align-items: center;
 
-  max-width: 324px;
+  width: 324px;
+  border: none;
 
   font-family: $roboto;
+
+  &.withDescription {
+    gap: 24px;
+    padding: 32px;
+
+    .skills {
+      gap: 24px;
+    }
+
+    .skillGroup {
+      gap: 14px;
+    }
+  }
+
+  &.withoutDescription {
+    padding: 20px;
+
+    .skills {
+      gap: 12px;
+    }
+
+    .skillGroup {
+      gap: 8px;
+    }
+  }
 }
 
 .header {
@@ -28,14 +54,6 @@
   gap: 4px;
 }
 
-.withStatus {
-  padding: 32px;
-}
-
-.withoutStatus {
-  padding: 20px;
-}
-
 .buttonMore {
   width: 100%;
 }
@@ -47,7 +65,7 @@
   width: 100%;
 }
 
-.status {
+.description {
   width: 100%;
 
   font-size: $space-md;
@@ -59,7 +77,6 @@
 .skills {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 
   width: 100%;
 

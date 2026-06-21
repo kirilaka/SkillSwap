@@ -10,7 +10,7 @@ interface UserCardProps {
   /** Пользователь для отображения */
   user: UserInfo | null;
   /** Отображение карточки со статусом или без */
-  hasStatus?: boolean;
+  hasDescription?: boolean;
   /** Обработчик клика на кнопку */
   onButtonClick?: () => void;
   /** Обработчик клика на favorite */
@@ -21,7 +21,7 @@ interface UserCardProps {
 
 export const UserCard = ({
   user,
-  hasStatus,
+  hasDescription,
   onButtonClick,
   onFavoriteClick,
   className,
@@ -36,41 +36,41 @@ export const UserCard = ({
   return (
     <Box
       className={clsx(
-        styles.containerUserCard,
-        hasStatus ? styles.withStatus : styles.withoutStatus,
         className,
+        styles.containerUserCard,
+        hasDescription ? styles.withDescription : styles.withoutDescription,
       )}
     >
       <div className={styles.header}>
         <div className={styles.topRowIcon}>
           <UserAvatar user={user} infoFormat="all" />
-          {!hasStatus && (
+          {!hasDescription && (
             <button onClick={onFavoriteClick}>
               <LikeIcon className={styles.likeIcon} />
             </button>
           )}
         </div>
-        {hasStatus && (
-          <span className={styles.status}>
-            Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое
-          </span>
-        )}
+        {hasDescription && <span className={styles.description}>{user.description}</span>}
       </div>
       <div className={styles.skills}>
         <div className={styles.skillGroup}>
-          <p>Может научить:</p>
+          <h4>Может научить:</h4>
           <div className={styles.skillList}>
             {teachSkills.length === 0 ? (
               <div className={styles.emptySkills} />
             ) : (
               <>
                 {teachSkills.slice(0, 2).map((skill) => (
-                  <SkillWrapper key={skill.id} variant="text" skillCategory="education">
+                  <SkillWrapper
+                    key={skill.id}
+                    variant="text"
+                    skillCategory={skill.category || 'more'}
+                  >
                     {skill.title}
                   </SkillWrapper>
                 ))}
                 {teachSkills.length > 2 && (
-                  <SkillWrapper variant="text" skillCategory="education">
+                  <SkillWrapper variant="text" skillCategory="more">
                     +{teachSkills.length - 2}
                   </SkillWrapper>
                 )}
@@ -79,19 +79,23 @@ export const UserCard = ({
           </div>
         </div>
         <div className={styles.skillGroup}>
-          <p>Хочет научиться:</p>
+          <h4>Хочет научиться:</h4>
           <div className={styles.skillList}>
             {learnSkills.length === 0 ? (
               <div className={styles.emptySkills} />
             ) : (
               <>
                 {learnSkills.slice(0, 2).map((skill) => (
-                  <SkillWrapper key={skill.id} variant="text" skillCategory="education">
+                  <SkillWrapper
+                    key={skill.id}
+                    variant="text"
+                    skillCategory={skill.category || 'more'}
+                  >
                     {skill.title}
                   </SkillWrapper>
                 ))}
                 {learnSkills.length > 2 && (
-                  <SkillWrapper variant="text" skillCategory="education">
+                  <SkillWrapper variant="text" skillCategory="more">
                     +{learnSkills.length - 2}
                   </SkillWrapper>
                 )}
@@ -100,9 +104,11 @@ export const UserCard = ({
           </div>
         </div>
       </div>
-      <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
-        Подробнее
-      </Button>
+      {!hasDescription && (
+        <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
+          Подробнее
+        </Button>
+      )}
     </Box>
   );
 };
