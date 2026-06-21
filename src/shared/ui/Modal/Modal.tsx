@@ -6,9 +6,13 @@ import styles from './Modal.module.scss';
 import { Box } from '../Box/Box';
 
 interface ModalProps {
+  /** Состояние модального окна: открыто/закрыто */
   isOpen?: boolean;
+  /** Обработчик закрытия модального окна */
   onClose?: () => void;
+  /** Дочерние элементы */
   children: ReactNode;
+  /** Дополнительные CSS-классы для внешней стилизации */
   className?: string;
 }
 
