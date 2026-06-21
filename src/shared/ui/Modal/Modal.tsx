@@ -1,8 +1,9 @@
 import { clsx } from 'clsx';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
-import cls from './Modal.module.scss';
+import styles from './Modal.module.scss';
+import { Box } from '../Box/Box';
 
 interface ModalProps {
   isOpen?: boolean;
@@ -14,39 +15,59 @@ interface ModalProps {
 export const Modal = ({ isOpen = false, onClose, children, className }: ModalProps) => {
   const nodeRef = useRef<HTMLDivElement>(null);
 
-  // Блокировка прокрутки страницы при isOpen: true
+  const handleOverlayClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose?.();
+    }
+  };
+
   useEffect(() => {
+    const getScrollbarWidth = () => {
+      return window.innerWidth - document.documentElement.clientWidth;
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+      }
+    };
+
     if (isOpen) {
+      const scrollbarWidth = getScrollbarWidth();
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
+      window.addEventListener('keydown', handleKeyDown);
     } else {
+      document.body.style.paddingInlineEnd = '';
       document.body.style.overflow = '';
     }
 
     return () => {
       document.body.style.overflow = '';
+      document.body.style.paddingInlineEnd = '';
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   const modalRoot = document.getElementById('modal-root');
-
-  if (!modalRoot) {
-    return null;
-  }
 
   return createPortal(
     <CSSTransition
       in={isOpen}
       timeout={300}
-      classNames="modal-anim"
+      classNames={{
+        enter: styles.enter,
+        enterActive: styles.enterActive,
+        enterDone: styles.enterDone,
+        exit: styles.exit,
+        exitActive: styles.exitActive,
+      }}
       unmountOnExit
       nodeRef={nodeRef}
     >
-      <div className={cls.Modal} onClick={onClose} ref={nodeRef}>
-        <div className={clsx(cls.content, className)} onClick={(e) => e.stopPropagation()}>
-          {children}
-        </div>
+      <div className={styles.Modal} onClick={handleOverlayClick} ref={nodeRef}>
+        <Box className={clsx(styles.content, className)}>{children}</Box>
       </div>
     </CSSTransition>,
-    modalRoot,
+    modalRoot ?? document.body,
   );
 };
