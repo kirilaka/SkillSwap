@@ -21,8 +21,13 @@ export const NotificationButton = ({
 }: NotificationButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsOpen((prev) => !prev);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
   }, []);
 
   const hasNotifications =
@@ -37,7 +42,7 @@ export const NotificationButton = ({
       aria-label="Уведомления"
     >
       <NotificationIcon hasNew={hasNew} className={styles.icon} />
-      <Dropdown isOpen={isOpen} className={styles.dropdown}>
+      <Dropdown isOpen={isOpen} onClose={handleClose} className={styles.dropdown}>
         <Box className={styles.box}>
           {!hasNotifications ? (
             <h2 className={styles.empty}>Тут пока что пусто</h2>
