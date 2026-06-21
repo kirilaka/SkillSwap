@@ -1,29 +1,16 @@
-import { SVGProps, memo } from 'react';
+import { IconWrapper } from '../IconWrapper';
+import LikeSvg from './LikeIcon.svg?react';
 
-export interface LikeIconProps extends SVGProps<SVGSVGElement> {
+export interface LikeIconProps {
   /** Дополнительные CSS-классы */
   className?: string;
 }
 
 /** Heart icon for favorite button */
-export const LikeIcon = memo(function LikeIcon({ className, ...props }: LikeIconProps) {
+export const LikeIcon = ({ className }: LikeIconProps) => {
   return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      {...props}
-    >
-      <path
-        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <IconWrapper className={className}>
+      <LikeSvg />
+    </IconWrapper>
   );
-});
+};

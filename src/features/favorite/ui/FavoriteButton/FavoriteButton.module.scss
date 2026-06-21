@@ -1,51 +1,39 @@
 .favoriteButton {
   cursor: pointer;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 2.5rem;
-  height: 2.5rem;
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
   padding: 0;
   border: none;
-  border-radius: $radius-md;
 
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  color: $color-text-primary;
-  letter-spacing: 2%;
+  background: none;
 
-  background: transparent;
-
-  transition: transform 150ms ease;
-
-  &:hover {
-    transform: scale(1.1);
+  &:focus-visible {
+    border-radius: $radius-sm;
+    outline: 2px solid $color-button-primary;
+    outline-offset: 2px;
   }
 
-  &:active {
-    transform: scale(0.95);
+  & .favoriteButtonIcon path {
+    color: $color-text-primary;
+    transition:
+      fill 0.2s ease-in-out,
+      color 0.2s ease-in-out;
   }
-}
 
-.favoriteButtonIcon {
-  width: 1.5rem;
-  height: 1.5rem;
+  &:hover .favoriteButtonIcon path {
+    color: $color-button-hover;
+    fill: $color-button-hover;
+  }
 
-  color: $color-text-primary;
+  &:active .favoriteButtonIcon path {
+    color: $color-button-primary;
+    fill: $color-button-primary;
+  }
 
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 2;
-
-  transition:
-    fill 200ms ease,
-    color 200ms ease;
-}
-
-.favoriteButtonIconIsActive {
-  color: $color-accent-light;
-  fill: currentcolor;
+  & .favoriteButtonIconIsActive path {
+    color: $color-accent-light;
+    fill: $color-accent-light;
+  }
 }
