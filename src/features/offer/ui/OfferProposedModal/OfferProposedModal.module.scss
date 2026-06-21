@@ -1,0 +1,50 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 556px;
+  height: auto;
+  padding: 80px 60px;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 71.25px;
+  height: 75px;
+  margin-bottom: 52px;
+
+  & img {
+    width: auto;
+    height: 100%;
+  }
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 52px;
+
+  text-align: center;
+}
+
+.title {
+  margin-bottom: $space-sm;
+  font-family: $jost;
+  font-size: $font-size-2xl;
+  font-weight: 500;
+}
+
+.description {
+  line-height: 1.5;
+}
+
+.btn {
+  width: 100%;
+}
