@@ -1,11 +1,14 @@
 .wrapper {
   cursor: pointer;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  clip-path: circle(50%);
 }
 
-.hideInput {
+.checkbox {
   position: absolute;
 
   overflow: hidden;

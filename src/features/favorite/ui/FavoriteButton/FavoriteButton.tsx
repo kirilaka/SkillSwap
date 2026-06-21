@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { LikeIcon } from '@/shared/ui/Icons/LikeIcon/LikeIcon';
 import styles from './FavoriteButton.module.scss';
+import clsx from 'clsx';
 
 export interface FavoriteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Состояние добавлен в избранное или нет */
@@ -11,19 +12,22 @@ export interface FavoriteButtonProps extends ButtonHTMLAttributes<HTMLButtonElem
 
 /** Кнопка добавления в избранное (toggle button) */
 export const FavoriteButton = forwardRef<HTMLButtonElement, FavoriteButtonProps>(
-  function FavoriteButton({ isFavorite = false, onClick, className = '', ...props }, ref) {
+  function FavoriteButton({ isFavorite = false, onClick, className, ...props }, ref) {
     return (
       <button
         ref={ref}
         type="button"
         aria-pressed={isFavorite}
-        className={`${styles.favoriteButton} ${className}`}
+        className={clsx(styles.favoriteButton, className)}
         onClick={onClick}
         aria-label={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
         {...props}
       >
         <LikeIcon
-          className={`${styles.favoriteButtonIcon} ${isFavorite ? styles.favoriteButtonIconIsActive : ''}`}
+          className={clsx(
+            styles.favoriteButtonIcon,
+            isFavorite && styles.favoriteButtonIconIsActive,
+          )}
         />
       </button>
     );

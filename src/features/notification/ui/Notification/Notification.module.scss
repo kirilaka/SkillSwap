@@ -15,7 +15,7 @@
     height: 40px;
 
     img {
-      width: (100px / 3);
+      width: calc(100px / 3);
     }
   }
 }

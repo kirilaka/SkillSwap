@@ -1,48 +1,22 @@
-import { useState } from 'react';
+import { forwardRef } from 'react';
 import styles from './CheckboxCircle.module.scss';
 import clsx from 'clsx';
+import { CheckboxProps } from '../index';
 
-interface CheckboxCircleProps {
-  /** Обработчик клика на CheckboxCircle */
-  onChange?: () => void;
-  /**Выбор состояния кнопки, начальное значение false */
-  isActive?: boolean;
-  /**Ид выбранного чекбокса */
-  id?: string;
-  /**Имя чекбокса */
-  name?: string;
-  /**Доп. классы для стилизации. */
-  className?: string;
-}
-
-export const CheckboxCircle = ({
-  onChange,
-  isActive = false,
-  id,
-  name,
-  className,
-}: CheckboxCircleProps) => {
-  const [checked, setChecked] = useState(isActive);
+export const CheckboxCircle = forwardRef<HTMLInputElement, CheckboxProps>(function CheckboxCircle(
+  { isActive = false, className, ...props },
+  ref,
+) {
   return (
     <label className={clsx(styles.wrapper, className)}>
-      <input
-        type="checkbox"
-        onChange={() => {
-          setChecked(!checked);
-          onChange?.();
-        }}
-        id={id}
-        name={name}
-        className={styles.hideInput}
-        checked={checked}
-      />
+      <input ref={ref} type="checkbox" className={styles.checkbox} checked={isActive} {...props} />
       <svg
         width="24"
         height="24"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={clsx(styles.icon, checked ? styles.isActive : styles.isNotActive)}
+        className={clsx(styles.icon, isActive ? styles.isActive : styles.isNotActive)}
       >
         <path
           d="M12 22C6.48372 22 2 17.5163 2 12C2 6.48372 6.48372 2 12 2C17.5163 2 22 6.48372 22 12C22 17.5163 17.5163 22 12 22ZM12 3.39535C7.25581 3.39535 3.39535 7.25581 3.39535 12C3.39535 16.7442 7.25581 20.6047 12 20.6047C16.7442 20.6047 20.6047 16.7442 20.6047 12C20.6047 7.25581 16.7442 3.39535 12 3.39535Z"
@@ -52,4 +26,4 @@ export const CheckboxCircle = ({
       </svg>
     </label>
   );
-};
+});
