@@ -53,6 +53,6 @@ export const NoUser: Story = {
 export const AvatarOnly: Story = {
   args: {
     user: mockUser,
-    infoFormat: 'avatar',
+    infoFormat: 'avatarOnly',
   },
 };

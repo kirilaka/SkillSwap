@@ -12,7 +12,7 @@ interface UserAvatarProps {
   /** Пользователь для отображения */
   user?: UserInfo;
   /** Формат отображения информации о пользователе. По умолчанию 'name' */
-  infoFormat?: 'name' | 'all' | 'avatar';
+  infoFormat?: 'name' | 'all' | 'avatarOnly';
   /** Обработчик клика на UserAvatar. */
   onClick?: () => void;
   /** Доп. классы для стилизации. */
@@ -36,15 +36,18 @@ export const UserAvatar = ({ user, infoFormat = 'name', onClick, className }: Us
   return (
     <div className={clsx(styles.userAvatar, styles[infoFormat], className)} onClick={onClick}>
       <Avatar src={user.avatarUrl || undefined} alt={user.name} className={styles.avatar} />
-      {infoFormat !== 'avatar' && (
+      {infoFormat !== 'avatarOnly' && (
         <div className={styles.info}>
-          <span className={styles['name-text']}>{user.name}</span>
-          {infoFormat === 'all' && user.city && (
+          <span className={styles.nameTitle}>{user.name}</span>
+          {infoFormat === 'all' && (
             <span className={styles.details}>
-              {user.city}
-              {user.age !== undefined && user.age !== null
-                ? `, ${user.age} ${getAgeLabel(user.age)}`
-                : ''}
+              {user.city && user.age
+                ? `${user.city}, ` + `${user.age} ${getAgeLabel(user.age)}`
+                : user.city
+                  ? user.city
+                  : user.age
+                    ? `${user.age} ${getAgeLabel(user.age)}`
+                    : ''}
             </span>
           )}
         </div>
