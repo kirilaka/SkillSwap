@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { OfferProposedModal } from './OfferProposedModal';
-import { fn } from 'storybook/test';
+import { OfferCreatedModal } from './OfferCreatedModal';
 import { useArgs } from 'storybook/internal/preview-api';
+import { fn } from 'storybook/test';
 
-const meta: Meta<typeof OfferProposedModal> = {
-  title: 'features/offer/OfferProposedModal',
-  component: OfferProposedModal,
+const meta: Meta<typeof OfferCreatedModal> = {
+  title: 'features/offer/OfferCreatedModal',
+  component: OfferCreatedModal,
   tags: ['autodocs'],
   args: {
     isOpen: true,
@@ -14,7 +14,7 @@ const meta: Meta<typeof OfferProposedModal> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof OfferProposedModal>;
+type Story = StoryObj<typeof OfferCreatedModal>;
 
 export const Normal: Story = {
   render: (args) => {
@@ -25,6 +25,6 @@ export const Normal: Story = {
       updateArgs({ isOpen: false });
     };
 
-    return <OfferProposedModal {...args} isOpen={isOpen} onClose={handleClose} />;
+    return <OfferCreatedModal {...args} isOpen={isOpen} onClose={handleClose} />;
   },
 };
