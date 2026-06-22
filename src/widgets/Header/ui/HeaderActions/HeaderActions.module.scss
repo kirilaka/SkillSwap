@@ -1,0 +1,90 @@
+.headerActions {
+  display: flex;
+  gap: $space-md;
+  align-items: center;
+}
+
+.iconsSection {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+}
+
+.authSection {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+}
+
+/* Выравниваем все кнопки/иконки по центру */
+.iconsSection > *,
+.authSection > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileWrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + $space-xs);
+  right: 0;
+
+  min-width: 220px;
+  border-radius: $radius-lg;
+
+  background: $color-bg-card;
+  box-shadow: $shadow-md;
+}
+
+.dropdownBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: $space-sm 0;
+}
+
+.dropdownItem {
+  cursor: pointer;
+
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: $space-sm $space-md;
+  border: none;
+
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $color-text-primary;
+  text-align: left;
+  text-decoration: none;
+
+  background: transparent;
+
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: $color-button-hover;
+  }
+}
+
+.logoutButton {
+  border: none;
+  background: transparent;
+}
+
+.logoutIcon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: $color-text-primary;
+}
