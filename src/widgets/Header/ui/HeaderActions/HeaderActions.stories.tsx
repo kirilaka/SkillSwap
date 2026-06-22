@@ -14,8 +14,6 @@ const meta: Meta<typeof HeaderActions> = {
       options: ['light', 'dark'],
       description: 'Текущая цветовая схема',
     },
-    onThemeToggle: { action: 'theme toggled' },
-    onFavoriteClick: { action: 'favorite clicked' },
     hasNewNotifications: { control: 'boolean' },
     user: { control: 'object', description: 'Текущий пользователь (для Storybook)' },
     className: { control: 'text' },
