@@ -43,8 +43,8 @@ export const SkillUploader = ({ className = '' }: SkillUploaderProps) => {
         {isDragActive ? 'Отпустите файлы здесь' : 'Перетащите или выберите изображения навыка'}
       </p>
       <div className={styles.skillUploaderAction}>
-        <GalleryAddIcon className={styles.skillUploaderIcon} />
-        <span className={styles.skillUploaderActionText}>Выбрать изображения</span>
+        <GalleryAddIcon />
+        <span>Выбрать изображения</span>
       </div>
       {hasErrors && (
         <p className={styles.skillUploaderError}>

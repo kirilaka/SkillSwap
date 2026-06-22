@@ -14,6 +14,11 @@
   border: 1px dashed $color-text-caption;
   border-radius: $radius-lg;
 
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  text-align: center;
+
   background: $color-bg-card;
 
   transition:
@@ -38,19 +43,11 @@
 .skillUploaderText {
   width: 100%;
   height: 24px;
-
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  line-height: 24px;
   color: $color-text-caption;
-  text-align: center;
-  letter-spacing: 0.02em;
 }
 
 .skillUploaderAction {
   display: flex;
-  flex-direction: row;
   gap: $space-xs;
   align-items: center;
   justify-content: center;
@@ -58,33 +55,13 @@
   width: 100%;
   height: 24px;
   padding: 0;
-}
 
-.skillUploaderIcon {
-  width: 24px;
-  height: 24px;
-
-  // Перекрашиваем в $color-text-link (#508826)
-  filter: brightness(0) saturate(100%) invert(35%) sepia(96%) saturate(560%) hue-rotate(62deg)
-    brightness(96%) contrast(85%);
-}
-
-.skillUploaderActionText {
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  line-height: 24px;
   color: $color-text-link;
-  letter-spacing: 0.02em;
 }
 
 .skillUploaderError {
   width: 100%;
   margin-top: $space-xs;
-
-  font-family: $roboto;
   font-size: $font-size-sm;
-  line-height: 24px;
   color: $color-error;
-  text-align: center;
 }

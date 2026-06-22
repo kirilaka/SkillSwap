@@ -1,5 +1,5 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import galleryAddSvg from './GalleryAddIcon.svg';
+import GalleryAddSvg from './GalleryAddIcon.svg?react';
 
 interface GalleryAddIconProps {
   /** Дополнительные CSS-классы */
@@ -9,7 +9,7 @@ interface GalleryAddIconProps {
 export const GalleryAddIcon = ({ className }: GalleryAddIconProps) => {
   return (
     <IconWrapper className={className}>
-      <img src={galleryAddSvg} alt="" />
+      <GalleryAddSvg />
     </IconWrapper>
   );
 };
