@@ -49,3 +49,10 @@ export const NoUser: Story = {
     infoFormat: 'name',
   },
 };
+
+export const AvatarOnly: Story = {
+  args: {
+    user: mockUser,
+    infoFormat: 'avatar',
+  },
+};
