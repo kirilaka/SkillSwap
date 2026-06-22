@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OfferCreatedModal } from './OfferCreatedModal';
+import { useArgs } from 'storybook/internal/preview-api';
 import { fn } from 'storybook/test';
 
 const meta: Meta<typeof OfferCreatedModal> = {
@@ -16,7 +17,14 @@ export default meta;
 type Story = StoryObj<typeof OfferCreatedModal>;
 
 export const Normal: Story = {
-  args: {
-    isOpen: true,
+  render: (args) => {
+    const [{ isOpen }, updateArgs] = useArgs();
+
+    const handleClose = () => {
+      args.onClose?.();
+      updateArgs({ isOpen: false });
+    };
+
+    return <OfferCreatedModal {...args} isOpen={isOpen} onClose={handleClose} />;
   },
 };
