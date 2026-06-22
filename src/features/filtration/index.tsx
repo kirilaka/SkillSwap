@@ -1,2 +1,2 @@
 export { FilterItem } from './ui/FilterItem/FilterItem';
-export { FilterCategory } from './FilterCategory/FilterCategory';
+export { FilterCategory } from './ui/FilterCategory/FilterCategory';

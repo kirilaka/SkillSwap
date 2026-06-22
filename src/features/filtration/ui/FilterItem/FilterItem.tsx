@@ -1,15 +1,12 @@
 import clsx from 'clsx';
 import { CheckboxCircle, CheckboxSquare } from '../../../../shared/ui/Checkbox';
 import { ControlChip } from '../../../../shared/ui/ControlChip/ControlChip';
+import { FilterItemType } from '../../models/types';
 import styles from './FilterItem.module.scss';
 
-interface FilterItemProps {
+interface FilterItemProps extends FilterItemType {
   /** Уникальный идентификатор фильтра */
   id: string;
-  /** Текст пункта фильтра */
-  label: string;
-  /** Наличие дочерних (вложенных) фильтров */
-  hasSubFilters?: boolean;
   /** Состояние открытого/закрытого пункта (для подфильтров) */
   isOpen?: boolean;
   /** Указывает, является ли пункт активным (выбранным) */
@@ -18,8 +15,6 @@ interface FilterItemProps {
   onCheckboxClick?: () => void;
   /** Обработчик клика на текст пункта */
   onTextClick?: () => void;
-  /** Вариант отображения чекбокса (круглый или квадратный) */
-  checkboxVariant?: 'circle' | 'squareMinus' | 'squareCheck';
   /** Имя чекбокса для HTML-формы */
   checkboxName?: string;
   /** Доп.классы */
