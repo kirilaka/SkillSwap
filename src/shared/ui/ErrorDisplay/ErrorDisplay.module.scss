@@ -1,12 +1,11 @@
 .errorDisplay {
-  transform: translateY(0);
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  min-height: 400px;
+  max-width: 550px;
+  max-height: 504px;
   margin-bottom: $space-xl;
   padding: $space-lg $space-md;
 
@@ -14,26 +13,22 @@
   font-size: $font-size-2xl;
   color: $color-text-primary;
   text-align: center;
-
-  opacity: 1;
-
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
 }
 
 .message {
-  max-width: 480px;
   margin-bottom: $space-xl;
-
   font-family: $roboto;
   font-size: $font-size-base;
-  color: $color-text-primary;
 }
 
 .buttons {
   display: flex;
-  gap: $space-lg;
+  place-content: center space-between;
   align-items: center;
-  justify-content: center;
+
+  width: 100%;
+}
+
+.button {
+  width: 47%;
 }

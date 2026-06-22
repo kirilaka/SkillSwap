@@ -95,14 +95,24 @@ export const ErrorDisplay = ({
               />
             </svg>
           </h1>
-          <h2>Страница не найдена</h2>
-          <p className={styles.message}>Попробуйте позже иливернитесь на главную страницу</p>
+          <h2>На сервере произошла ошибка</h2>
+          <p className={styles.message}>Попробуйте позже или вернитесь на главную страницу</p>
         </>
       )}
 
       <div className={styles.buttons}>
-        <Button label="Вернуться на главную" onClick={onClick} buttonType="primary" />
-        <Button label="Сообщить об ошибке" onClick={onSendButtonClick} buttonType="secondary" />
+        <Button
+          className={styles.button}
+          label="Сообщить об ошибке"
+          onClick={onSendButtonClick}
+          buttonType="secondary"
+        />
+        <Button
+          className={styles.button}
+          label="На главную"
+          onClick={onClick}
+          buttonType="primary"
+        />
       </div>
     </div>
   );

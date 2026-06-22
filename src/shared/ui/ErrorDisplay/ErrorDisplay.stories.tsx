@@ -5,6 +5,10 @@ import { type ErrorCode } from './types';
 const meta: Meta<typeof ErrorDisplay> = {
   title: 'Shared/ErrorDisplay',
   component: ErrorDisplay,
+  parameters: {
+    layout: 'centered',
+  },
+
   argTypes: {
     errorCode: {
       control: { type: 'radio', options: ['404', '500'] },
@@ -25,15 +29,11 @@ type Story = StoryObj<typeof ErrorDisplay>;
 export const ErrorCode404: Story = {
   args: {
     errorCode: '404' as ErrorCode,
-    onSendButtonClick: () => {},
-    onClick: () => {},
   },
 };
 
 export const ErrorCode500: Story = {
   args: {
     errorCode: '500' as ErrorCode,
-    onSendButtonClick: () => {},
-    onClick: () => {},
   },
 };
