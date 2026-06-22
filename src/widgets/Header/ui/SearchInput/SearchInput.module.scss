@@ -1,16 +1,7 @@
 .searchInputWrapper {
-  position: relative;
-
-  width: 100%;
-  max-width: 527px;
-  border-color: #fff !important;
-  border-radius: $radius-lg;
-
-  background-color: $color-bg-card;
+  border-color: $color-bg-card;
 }
 
 .searchIcon {
-  width: 20px;
-  height: 20px;
   color: $color-text-caption;
 }
