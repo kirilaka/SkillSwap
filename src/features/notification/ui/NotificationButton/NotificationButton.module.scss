@@ -1,12 +1,13 @@
 .wrapper {
   position: relative;
+  width: 24px;
+  height: 24px;
 }
 
 .dropdown {
   top: calc(100% + 32px);
   left: 50%;
   transform: translateX(-65%);
-  box-shadow: $shadow-md;
 }
 
 .dropdownContent {
