@@ -102,14 +102,14 @@ export const ErrorDisplay = ({
 
       <div className={styles.buttons}>
         <Button
-          className={styles.button}
           label="Сообщить об ошибке"
+          className={styles.button}
           onClick={onSendButtonClick}
           buttonType="secondary"
         />
         <Button
-          className={styles.button}
           label="На главную"
+          className={styles.button}
           onClick={onClick}
           buttonType="primary"
         />
