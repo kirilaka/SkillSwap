@@ -1,0 +1,14 @@
+.filterItem {
+  user-select: none;
+
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+
+  width: 100%;
+  padding: $space-xs 0;
+}
+
+.chipFlex {
+  flex-grow: 1;
+}

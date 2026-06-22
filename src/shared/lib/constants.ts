@@ -8,7 +8,7 @@ export const ROUTES = {
   REGISTER: '/register',
 } as const;
 
-export const SKILL_CATEGORIES = [
+export const SKILL_CATEGORIES_DEFAULT = [
   'Программирование',
   'Дизайн',
   'Языки',
@@ -26,3 +26,12 @@ export const LOCAL_STORAGE_KEYS = {
   REQUESTS: 'skillswap_requests',
   THEME: 'skillswap_theme',
 } as const;
+
+export type SKILL_CATEGORIES =
+  | 'business'
+  | 'art'
+  | 'language'
+  | 'education'
+  | 'home'
+  | 'health'
+  | 'more';

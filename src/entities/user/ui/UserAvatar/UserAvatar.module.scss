@@ -1,8 +1,12 @@
 .userAvatar {
-  cursor: pointer;
   display: flex;
   gap: 12px;
   align-items: center;
+
+  .avatar,
+  .info {
+    cursor: pointer;
+  }
 }
 
 .name {
@@ -49,4 +53,5 @@
   font-size: $font-size-xs;
   font-weight: 400;
   letter-spacing: 2%;
+  white-space: nowrap;
 }

@@ -1,0 +1,49 @@
+.wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.dropdown {
+  top: calc(100% + 32px);
+  left: 50%;
+  transform: translateX(-65%);
+}
+
+.dropdownContent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.box {
+  padding: 60px;
+  text-align: left;
+  box-shadow: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  align-items: flex-start;
+}
+
+.sectionTitle {
+  font-size: $font-size-2xl;
+  font-weight: 500;
+  color: $color-text-primary;
+}
+
+.empty {
+  font-family: $roboto;
+  font-size: $font-size-base;
+  color: $color-text-caption;
+  text-align: center;
+}

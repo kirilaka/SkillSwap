@@ -1,0 +1,56 @@
+.headerActions {
+  display: flex;
+  gap: $space-lg;
+  align-items: center;
+}
+
+.authSection {
+  position: relative;
+  gap: $space-sm;
+}
+
+.iconsSection {
+  gap: 20px;
+}
+
+.iconsSection,
+.authSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown {
+  top: calc(100% + 20px);
+  right: 0;
+}
+
+.dropdownBox {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px;
+}
+
+.dropdownItem {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  color: $color-text-primary;
+  text-align: left;
+
+  transition: color 200ms ease-in-out;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  &:active {
+    color: $color-text-link;
+  }
+}

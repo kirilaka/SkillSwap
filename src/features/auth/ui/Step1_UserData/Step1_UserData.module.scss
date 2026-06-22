@@ -1,0 +1,87 @@
+.page {
+  display: flex;
+  gap: $space-lg;
+}
+
+.form {
+  width: 556px;
+  max-width: 556px;
+  height: fit-content;
+  padding: 121.5px 60px;
+  border-radius: $radius-lg;
+
+  background-color: white;
+}
+
+.authButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  .socialButton {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 20px;
+    border: 1px solid $color-accent-dark;
+
+    letter-spacing: 0.32px;
+  }
+}
+
+.divider {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin: $space-lg 0;
+}
+
+.line {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 1px;
+  background-color: $color-border-default;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  margin-bottom: 32px;
+
+  .inputLabel {
+    margin-bottom: 4px;
+  }
+}
+
+.primaryButton {
+  width: 100%;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 556px;
+  padding: 132px 60px;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+
+  .title {
+    line-height: 28px;
+  }
+}

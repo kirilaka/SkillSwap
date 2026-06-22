@@ -1,37 +1,28 @@
+import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
 import styles from './Button.module.scss';
 import clsx from 'clsx';
 
-interface ButtonProps {
-  /** Надпись на кнопке */
-  label: string;
-  /** Обработчик клика */
-  onClick?: () => void;
-  /** Тип кнопки */
-  type?: 'submit' | 'reset' | 'button';
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Содержимое кнопки */
+  children?: ReactNode;
   /** Вид кнопки */
   buttonType?: 'primary' | 'secondary' | 'tertiary';
-  /** Доп. классы */
-  className?: string;
-  /** Состояние отключения кнопки */
-  disabled?: boolean;
 }
-
-export const Button = ({
-  label,
-  onClick,
-  type = 'button',
-  buttonType = 'secondary',
-  className,
-  disabled = false,
-}: ButtonProps) => {
+/** Кастомный компонент кнопки.
+ * Принимает пропсы children, buttonType, и все остальные пропсы для кнопки.
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { children, type = 'button', buttonType = 'secondary', className, ...props },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type={type}
-      onClick={onClick}
-      disabled={disabled}
       className={clsx(styles.button, styles[buttonType], className)}
+      {...props}
     >
-      {label}
+      {children}
     </button>
   );
-};
+});

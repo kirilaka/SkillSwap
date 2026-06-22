@@ -1,10 +1,9 @@
-.dropdown {
+:where(.dropdown) {
   position: absolute;
   z-index: 100;
 
   width: max-content;
   height: auto;
-  padding: $space-md;
   border-radius: $radius-lg;
 
   background-color: $color-bg-card;

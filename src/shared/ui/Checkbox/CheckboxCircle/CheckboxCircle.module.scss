@@ -1,0 +1,47 @@
+.wrapper {
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  clip-path: circle(50%);
+}
+
+.checkbox {
+  position: absolute;
+
+  overflow: hidden;
+
+  width: 1px;
+  height: 1px;
+
+  white-space: nowrap;
+
+  clip: rect(0 0 0 0);
+}
+
+.icon {
+  transition: color 0.2s ease;
+}
+
+.isActive {
+  color: $color-button-primary;
+
+  &:active {
+    color: $color-button-primary;
+  }
+}
+
+.isNotActive {
+  color: #000;
+  fill: #000;
+
+  &:hover {
+    color: $color-button-hover;
+  }
+
+  .checkboxCheck {
+    display: none;
+  }
+}

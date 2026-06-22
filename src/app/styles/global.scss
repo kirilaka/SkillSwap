@@ -18,7 +18,8 @@
   padding: 0;
 }
 
-body {
+body,
+#modal-root {
   font-family: $roboto;
   font-size: $font-size-base;
   font-weight: 400;
@@ -51,6 +52,7 @@ button {
 h1,
 h2,
 h3 {
+  font-family: $jost;
   font-weight: 500;
   letter-spacing: -1.1%;
 }

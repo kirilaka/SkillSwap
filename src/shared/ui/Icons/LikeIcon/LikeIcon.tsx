@@ -1,15 +1,16 @@
-import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import likeSvg from './LikeIcon.svg';
+import { IconWrapper } from '../IconWrapper';
+import LikeSvg from './LikeIcon.svg?react';
 
-interface LikeIconProps {
+export interface LikeIconProps {
   /** Дополнительные CSS-классы */
   className?: string;
 }
 
+/** Heart icon for favorite button */
 export const LikeIcon = ({ className }: LikeIconProps) => {
   return (
     <IconWrapper className={className}>
-      <img src={likeSvg} alt="" />
+      <LikeSvg />
     </IconWrapper>
   );
 };

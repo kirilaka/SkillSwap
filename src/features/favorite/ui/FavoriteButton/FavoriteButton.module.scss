@@ -1,0 +1,39 @@
+.favoriteButton {
+  cursor: pointer;
+
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  border: none;
+
+  background: none;
+
+  &:focus-visible {
+    border-radius: $radius-sm;
+    outline: 2px solid $color-button-primary;
+    outline-offset: 2px;
+  }
+
+  & .favoriteButtonIcon path {
+    color: $color-text-primary;
+    transition:
+      fill 0.2s ease-in-out,
+      color 0.2s ease-in-out;
+  }
+
+  &:hover .favoriteButtonIcon path {
+    color: $color-button-hover;
+    fill: $color-button-hover;
+  }
+
+  &:active .favoriteButtonIcon path {
+    color: $color-button-primary;
+    fill: $color-button-primary;
+  }
+
+  & .favoriteButtonIconIsActive path {
+    color: $color-accent-light;
+    fill: $color-accent-light;
+  }
+}
