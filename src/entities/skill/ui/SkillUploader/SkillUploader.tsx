@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import clsx from 'clsx';
 import { GalleryAddIcon } from '@/shared/ui/Icons/GalleryAddIcon/GalleryAddIcon';
 import styles from './SkillUploader.module.scss';
 
@@ -30,7 +31,12 @@ export const SkillUploader = ({ className = '' }: SkillUploaderProps) => {
   return (
     <div
       {...getRootProps()}
-      className={`${styles.skillUploader} ${isDragActive ? styles.skillUploaderIsDragActive : ''} ${hasErrors ? styles.skillUploaderHasErrors : ''} ${className}`}
+      className={clsx(
+        styles.skillUploader,
+        isDragActive && styles.skillUploaderIsDragActive,
+        hasErrors && styles.skillUploaderHasErrors,
+        className,
+      )}
     >
       <input {...getInputProps()} />
       <p className={styles.skillUploaderText}>
@@ -41,13 +47,11 @@ export const SkillUploader = ({ className = '' }: SkillUploaderProps) => {
         <span className={styles.skillUploaderActionText}>Выбрать изображения</span>
       </div>
       {hasErrors && (
-        <ul className={styles.skillUploaderErrors}>
-          {fileRejections.map(({ file, errors }, index) => (
-            <li key={`${file.name}-${index}`} className={styles.skillUploaderError}>
-              {file.name}: {errors.map((e) => e.message).join(', ')}
-            </li>
-          ))}
-        </ul>
+        <p className={styles.skillUploaderError}>
+          {fileRejections
+            .map(({ file, errors }) => `${file.name}: ${errors.map((e) => e.message).join(', ')}`)
+            .join('; ')}
+        </p>
       )}
     </div>
   );

@@ -25,13 +25,3 @@ export const Default: Story = {
     className: '',
   },
 };
-
-/** Активное состояние при перетаскивании */
-export const DragActive: Story = {
-  args: {
-    className: '',
-  },
-  parameters: {
-    pseudo: { hover: true },
-  },
-};
