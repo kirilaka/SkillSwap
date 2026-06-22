@@ -1,0 +1,29 @@
+.Footer {
+  background-color: $color-bg-card;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 36px;
+
+  .brandZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & > :first-child {
+      padding-top: 32px;
+    }
+
+    .copyright {
+      padding-bottom: 32px;
+      font-size: $font-size-xs;
+    }
+  }
+
+  nav {
+    padding-top: 92px;
+    padding-bottom: 80px;
+  }
+}
