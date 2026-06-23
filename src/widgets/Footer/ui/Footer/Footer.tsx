@@ -8,14 +8,14 @@ interface FooterProps {
 export const Footer = ({ className }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className={clsx(styles.Footer, className)}>
-      <div className={styles.content}>
+    <footer className={clsx(styles.footer, className)}>
+      <section className={styles.content}>
         <div className={styles.brandZone}>
           <Logo />
-          <span className={styles.copyright}>SkillSwap {currentYear}</span>
+          <span className={styles.copyright}>SkillSwap — {currentYear}</span>
         </div>
-        <FooterNavigation />
-      </div>
+        <FooterNavigation className={styles.nav} />
+      </section>
     </footer>
   );
 };
