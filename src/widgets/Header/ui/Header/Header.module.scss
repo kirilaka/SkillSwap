@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+
+  max-width: 1440px;
+  min-height: 116px;
+}
+
+.input {
+  min-width: 527px;
+  max-width: 648px;
+}
