@@ -1,54 +1,49 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import clsx from 'clsx';
-import { Box } from '../Box/Box';
-import { Input } from '../Input/Input';
-import { CheckboxSquare } from '../Checkbox';
-import { ChevronIcon } from '../Icons/ChevronIcon/ChevronIcon';
+import { Box } from '../../Box/Box';
+import { Input, InputProps } from '../../Input/Input';
+import { CheckboxSquare } from '../../Checkbox';
+import { ChevronIcon } from '../../Icons/ChevronIcon/ChevronIcon';
 import styles from './DdInputCheckbox.module.scss';
-import { IconWrapper } from '../Icons/IconWrapper';
-
-/** Моковые данные для теста компонента
- * const items = [
-  { id: '1', label: 'HTML' },
-  { id: '2', label: 'CSS' },
-  { id: '3', label: 'React' },
-  ]
- */
+import { IconWrapper } from '../../Icons/IconWrapper';
 
 interface DropdownItem {
   id: string;
   label: string;
 }
-interface DdInputCheckbox {
-  placeholder: string;
+interface DdInputCheckbox extends InputProps {
+  /** Массив данных для выбора */
   items: DropdownItem[];
+  /** Доп. классы стилизации */
   className?: string;
-  onChange?: (selectedId: string | null) => void;
 }
 
-export const DdInputCheckbox = ({ items, placeholder, className, onChange }: DdInputCheckbox) => {
-  const [isO, setIsO] = useState(false);
+export const DdInputCheckbox = forwardRef<HTMLInputElement, DdInputCheckbox>(function DdInputC(
+  { items, placeholder, className, ...props },
+  ref,
+) {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedItem = items.find((item) => item.id === selectedId);
 
   const handleSelect = (id: string) => {
     const newSelectedId = selectedId === id ? null : id;
     setSelectedId(newSelectedId);
-    onChange?.(newSelectedId);
   };
 
   const handleIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsO((prev) => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const handleClick = () => {
-    setIsO((prev) => !prev);
+    setIsOpen((prev) => !prev);
   };
   return (
     <Box className={clsx(styles.container, className)}>
-      <Box className={clsx(styles.box, isO && styles.boxActive)}>
+      <Box className={clsx(styles.box, isOpen && styles.boxActive)}>
         <Input
+          ref={ref}
           className={styles.input}
           readOnly
           value={selectedItem?.label ?? ''}
@@ -58,10 +53,11 @@ export const DdInputCheckbox = ({ items, placeholder, className, onChange }: DdI
           icon={
             <IconWrapper>
               <button type="button" onClick={handleIconClick}>
-                <ChevronIcon isOpen={isO} />
+                <ChevronIcon isOpen={isOpen} />
               </button>
             </IconWrapper>
           }
+          {...props}
         />
 
         <div className={styles.option}>
@@ -81,4 +77,4 @@ export const DdInputCheckbox = ({ items, placeholder, className, onChange }: DdI
       </Box>
     </Box>
   );
-};
+});

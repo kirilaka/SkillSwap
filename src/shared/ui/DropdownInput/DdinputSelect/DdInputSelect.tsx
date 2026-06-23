@@ -1,32 +1,27 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import clsx from 'clsx';
 import { Box } from '../Box/Box';
-import { Input } from '../Input/Input';
+import { Input, InputProps } from '../Input/Input';
 import { ChevronIcon } from '../Icons/ChevronIcon/ChevronIcon';
 import styles from './DdInputSelect.module.scss';
 import { IconWrapper } from '../Icons/IconWrapper';
 import { CrossIcon } from '../Icons/CrossIcon/CrossIcon';
 
-/** Моковые данные для теста компонента
- * const items = [
-  { id: '1', label: 'HTML' },
-  { id: '2', label: 'CSS' },
-  { id: '3', label: 'React' },
-  ]
- */
-
 interface DropdownItem {
   id: string;
   label: string;
 }
-interface DdInputSelectProps {
-  placeholder: string;
+interface DdInputSelectProps extends InputProps {
+  /** Массив данных для выбора */
   items: DropdownItem[];
+  /** Доп. классы стилизации */
   className?: string;
-  onChange?: (selectedId: string | null) => void;
 }
-export const DdInputSelect = ({ items, placeholder, className, onChange }: DdInputSelectProps) => {
-  const [isO, setIsO] = useState(false);
+export const DdInputSelect = forwardRef<HTMLInputElement, DdInputSelectProps>(function DdInputS(
+  { placeholder, items, className, ...props },
+  ref,
+) {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const filteredItems = items.filter((item) =>
@@ -37,54 +32,59 @@ export const DdInputSelect = ({ items, placeholder, className, onChange }: DdInp
     const selectedItem = items.find((item) => item.id === id);
     setSelectedId(id);
     setInputValue(selectedItem?.label ?? '');
-    onChange?.(id);
-    setIsO(false);
+    setIsOpen(false);
   };
 
   const handleIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsO((prev) => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const handleClick = () => {
-    setIsO((prev) => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setInputValue('');
     setSelectedId(null);
-    onChange?.(null);
-    setIsO(true);
   };
 
   return (
     <Box className={clsx(styles.container, className)}>
-      <Box className={clsx(styles.box, isO && styles.boxActive)}>
+      <Box className={clsx(styles.box, isOpen && styles.boxActive)}>
         <Input
+          ref={ref}
           className={styles.input}
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.target.value);
             setSelectedId(null);
-            setIsO(true);
+            setIsOpen(true);
           }}
           onClick={handleClick}
           placeholder={placeholder}
           iconPosition="right"
           icon={
             <IconWrapper>
-              {isO ? (
-                <button type="button" onClick={handleClear}>
+              {isOpen ? (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    if (!inputValue) return handleIconClick(e);
+                    handleClear(e);
+                  }}
+                >
                   <CrossIcon />
                 </button>
               ) : (
                 <button type="button" onClick={handleIconClick}>
-                  <ChevronIcon isOpen={isO} />
+                  <ChevronIcon isOpen={isOpen} />
                 </button>
               )}
             </IconWrapper>
           }
+          {...props}
         />
 
         <div className={styles.option}>
@@ -102,4 +102,4 @@ export const DdInputSelect = ({ items, placeholder, className, onChange }: DdInp
       </Box>
     </Box>
   );
-};
+});
