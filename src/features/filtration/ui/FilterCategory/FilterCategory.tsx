@@ -127,6 +127,7 @@ export const FilterCategory = ({
                       hasSubFilters={false}
                       checkboxVariant={subFilter.checkboxVariant || 'squareCheck'}
                       isActive={subFilter.isActive}
+                      onTextClick={() => handleCheckboxClick(subFilter.id)}
                       onCheckboxClick={() => handleCheckboxClick(subFilter.id)}
                     />
                   );
