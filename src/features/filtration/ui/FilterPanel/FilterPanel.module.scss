@@ -1,0 +1,188 @@
+.filterPanel {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+
+  width: 17.75rem;
+  max-width: 100%;
+  padding: 0;
+  border-radius: $radius-lg;
+
+  background: $color-bg-card;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $space-lg;
+}
+
+.title {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+
+  font-family: $jost;
+  font-size: $font-size-xl;
+  font-weight: 500;
+  color: $color-text-primary;
+  letter-spacing: -0.011em;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  border-radius: 0.625rem;
+
+  font-family: $roboto;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  color: $color-text-primary;
+
+  background: $color-accent-light;
+}
+
+.resetButton {
+  cursor: pointer;
+
+  padding: 0;
+  border: none;
+
+  font-family: $roboto;
+  font-size: $font-size-sm;
+  font-weight: 400;
+  color: $color-text-link;
+
+  background: transparent;
+
+  transition: color 200ms ease;
+
+  &:hover {
+    color: $color-button-primary;
+  }
+}
+
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.showAllButton {
+  cursor: pointer;
+
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+
+  padding: 0 $space-lg;
+  border: none;
+
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text-link;
+  letter-spacing: 0.02em;
+
+  background: transparent;
+
+  transition: color 200ms ease;
+
+  &:hover {
+    color: $color-button-primary;
+  }
+}
+
+/* === Тогл-секции === */
+.toggleSection {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  padding: 0 $space-lg;
+}
+
+.toggleTitle {
+  font-family: $jost;
+  font-size: $font-size-xl;
+  font-weight: 500;
+  color: $color-text-primary;
+  letter-spacing: -0.011em;
+}
+
+.toggleList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.toggleButton {
+  cursor: pointer;
+
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+
+  width: 100%;
+  padding: 0;
+  border: none;
+
+  background: transparent;
+
+  transition: opacity 200ms ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.toggleButtonActive {
+  /* При необходимости — дополнительные стили для активного состояния кнопки */
+}
+
+.toggleCheckbox {
+  flex-shrink: 0;
+}
+
+.toggleLabel {
+  font-family: $roboto;
+  font-size: $font-size-base;
+  font-weight: 400;
+  color: $color-text-primary;
+  letter-spacing: 0.02em;
+}
+
+.toggleLabelActive {
+  color: $color-text-link;
+}
+
+/* === Двухстрочное исполнение подкатегорий === */
+.skillsCategory {
+  [class*='subCategoryList'][class*='isOpen'] {
+    > [class*='filterItem'] {
+      align-items: flex-start !important;
+
+      height: auto;
+      min-height: 3.5rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+
+      > :first-child {
+        align-self: flex-start !important;
+        margin-top: 0.125rem;
+      }
+
+      > :last-child {
+        line-height: 1.5rem !important;
+        text-align: left !important;
+        overflow-wrap: break-word;
+        white-space: normal !important;
+      }
+    }
+  }
+}
