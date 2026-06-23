@@ -2,9 +2,13 @@
   display: flex;
   gap: 32px;
   align-items: center;
+  justify-content: space-between;
 
+  width: 1440px;
   max-width: 1440px;
-  min-height: 116px;
+  min-height: 104px;
+  max-height: 116px;
+  padding: 0 24px;
 }
 
 .input {

@@ -34,6 +34,7 @@ export const HeaderActions = ({
 }: HeaderActionsProps) => {
   const authUser = user ?? getAuthUser();
   const isAuth = !!authUser;
+  const [colorSchemeIs, setColorSchemeIs] = useState(colorScheme);
 
   const userInfo: UserInfo | undefined = authUser
     ? {
@@ -77,14 +78,14 @@ export const HeaderActions = ({
   }, [navigate]);
 
   const onThemeToggle = () => {
-    if (colorScheme == 'light') colorScheme = 'dark';
-    else colorScheme = 'light';
+    if (colorSchemeIs == 'light') setColorSchemeIs('dark');
+    else setColorSchemeIs('light');
   };
 
   return (
     <div className={clsx(styles.headerActions, className)}>
       <div className={styles.iconsSection}>
-        <ThemeToggle colorScheme={colorScheme} onClick={onThemeToggle} />
+        <ThemeToggle colorScheme={colorSchemeIs} onClick={onThemeToggle} />
         {isAuth && (
           <>
             <NotificationButton
