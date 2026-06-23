@@ -1,11 +1,11 @@
 import React, { forwardRef, useState } from 'react';
 import clsx from 'clsx';
-import { Box } from '../Box/Box';
-import { Input, InputProps } from '../Input/Input';
-import { ChevronIcon } from '../Icons/ChevronIcon/ChevronIcon';
+import { Box } from '@/shared/ui/Box/Box';
+import { Input, InputProps } from '@/shared/ui/Input/Input';
+import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 import styles from './DdInputSelect.module.scss';
-import { IconWrapper } from '../Icons/IconWrapper';
-import { CrossIcon } from '../Icons/CrossIcon/CrossIcon';
+import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
+import { CrossIcon } from '@/shared/ui/Icons/CrossIcon/CrossIcon';
 
 interface DropdownItem {
   id: string;
