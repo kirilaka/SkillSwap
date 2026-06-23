@@ -1,0 +1,160 @@
+.ProfileContent {
+  display: flex;
+  gap: $space-2xl;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.formSection {
+  display: flex;
+  flex: 1 1 70%;
+  flex-direction: column;
+  gap: $space-lg;
+
+  width: 100%;
+}
+
+.inputsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  width: 100%;
+}
+
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  width: 100%;
+}
+
+.fieldLabel {
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-text-caption;
+}
+
+.rowWrapper {
+  display: flex;
+  gap: $space-md;
+  width: 100%;
+
+  .fieldWrapper {
+    flex: 1;
+    max-width: calc(50% - (#{$space-md} / 2));
+
+    input[type='date'] {
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
+.avatarSection {
+  position: relative;
+  flex: 0 0 244px;
+  width: 244px;
+  height: 244px;
+}
+
+.hideProfileName {
+  position: relative !important;
+  display: block !important;
+  width: 244px !important;
+  height: 244px !important;
+
+  div:first-child {
+    position: relative !important;
+    width: 244px !important;
+    height: 244px !important;
+  }
+
+  img,
+  svg,
+  span,
+  div[class*='avatar'] {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+
+    width: 244px !important;
+    max-width: 244px !important;
+    height: 244px !important;
+    max-height: 244px !important;
+    border-radius: 50% !important;
+
+    object-fit: cover !important;
+  }
+
+  div[class*='info'] {
+    display: none !important;
+  }
+}
+
+.galleryButton {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 2;
+  right: 40px;
+  bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  background-color: $color-button-hover;
+}
+
+.galleryIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.passwordSection {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+button.passwordChip {
+  width: fit-content;
+  color: $color-button-primary;
+
+  span {
+    color: $color-button-primary;
+  }
+
+  &:hover,
+  &:active {
+    color: $color-button-primary;
+
+    span {
+      color: $color-button-primary;
+    }
+  }
+}
+
+.genderInput {
+  width: 100%;
+}
+
+button.submitButton {
+  width: 100%;
+}
