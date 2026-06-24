@@ -23,9 +23,20 @@ export type ProfileContentUser = User & {
   gender?: 'male' | 'female' | '';
 };
 
-const genderItems = [
+interface DropdownItem {
+  id: string;
+  label: string;
+}
+
+const genderItems: DropdownItem[] = [
   { id: 'male', label: 'Мужской' },
   { id: 'female', label: 'Женский' },
+];
+
+const cityItems: DropdownItem[] = [
+  { id: 'moscow', label: 'Москва' },
+  { id: 'spb', label: 'Санкт-Петербург' },
+  { id: 'kazan', label: 'Казань' },
 ];
 
 const toProfileUser = (user: User | null): ProfileContentUser | null =>
@@ -34,7 +45,6 @@ const toProfileUser = (user: User | null): ProfileContentUser | null =>
 export const ProfileContent = ({ user, className }: ProfileContentProps) => {
   const profileUser = toProfileUser(user);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const genderFieldRef = useRef<HTMLDivElement>(null);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -60,37 +70,32 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
     setIsPasswordVisible(false);
   }, [profileUser]);
 
-  useEffect(() => {
-    const field = genderFieldRef.current;
-    if (!field) return;
-
-    const handleGenderOptionClick = (event: MouseEvent) => {
-      const button = (event.target as HTMLElement).closest('button');
-      if (!button || !field.contains(button)) return;
-
-      const label = button.textContent?.trim();
-      const item = genderItems.find((genderItem) => genderItem.label === label);
-      if (item) {
-        setGender(item.id as 'male' | 'female');
-      }
-    };
-
-    field.addEventListener('click', handleGenderOptionClick);
-    return () => field.removeEventListener('click', handleGenderOptionClick);
-  }, []);
-
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const handleBirthdayChange = (e: ChangeEvent<HTMLInputElement>) => setBirthday(e.target.value);
-  const handleCityChange = (e: ChangeEvent<HTMLInputElement>) => setCity(e.target.value);
-  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setDescription(e.target.value);
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
+  const handleCityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const foundItem = cityItems.find(
+      (item) => item.label.toLowerCase() === value.toLowerCase() || item.id === value,
+    );
+    setCity(foundItem ? foundItem.id : value);
+  };
+
+  const handleGenderChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const foundItem = genderItems.find(
+      (item) => item.label.toLowerCase() === value.toLowerCase() || item.id === value,
+    );
+    if (foundItem) {
+      setGender(foundItem.id as 'male' | 'female');
+    }
+  };
+
   const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
-
-  const genderLabel = genderItems.find((item) => item.id === gender)?.label || '';
-
   const handleGalleryClick = () => fileInputRef.current?.click();
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +122,9 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
   if (!profileUser) {
     return <Box className={clsx(styles.ProfileContent, className)}>Пользователь не найден</Box>;
   }
+
+  const currentCityLabel = cityItems.find((item) => item.id === city)?.label || city;
+  const currentGenderLabel = genderItems.find((item) => item.id === gender)?.label || '';
 
   return (
     <Box className={clsx(styles.ProfileContent, className)}>
@@ -163,33 +171,41 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
             />
           </div>
 
-          <div className={styles.rowWrapper}>
-            <div className={styles.fieldWrapper}>
-              <label className={styles.fieldLabel}>Дата рождения</label>
-              <Input type="date" value={birthday} onChange={handleBirthdayChange} />
-            </div>
+          <div className={clsx(styles.fieldWrapper, styles.halfWidthField)}>
+            <label className={styles.fieldLabel}>Дата рождения</label>
+            <Input type="date" value={birthday} onChange={handleBirthdayChange} />
+          </div>
 
-            <div className={styles.fieldWrapper}>
-              <label className={styles.fieldLabel}>Пол</label>
-              <div ref={genderFieldRef}>
-                <DdInputSelect
-                  placeholder="Ваш пол"
-                  items={genderItems}
-                  className={styles.genderInput}
-                  value={genderLabel}
-                />
-              </div>
-            </div>
+          <div className={clsx(styles.fieldWrapper, styles.halfWidthField)}>
+            <label className={styles.fieldLabel}>Пол</label>
+            <DdInputSelect
+              placeholder="Ваш пол"
+              items={genderItems}
+              className={styles.genderInput}
+              value={currentGenderLabel}
+              onChange={handleGenderChange}
+            />
           </div>
 
           <div className={styles.fieldWrapper}>
             <label className={styles.fieldLabel}>Город</label>
-            <Input value={city} onChange={handleCityChange} />
+            <DdInputSelect value={currentCityLabel} onChange={handleCityChange} items={cityItems} />
           </div>
 
           <div className={styles.fieldWrapper}>
-            <label className={styles.fieldLabel}>Описание</label>
-            <Input value={description} onChange={handleDescriptionChange} />
+            <label className={styles.fieldLabel}>О себе</label>
+            <div className={styles.textareaWrapper}>
+              <textarea
+                value={description}
+                onChange={handleDescriptionChange}
+                placeholder="Расскажите о себе"
+                className={styles.textareaField}
+                rows={3}
+              />
+              <div className={styles.textareaIcon}>
+                <EditIcon />
+              </div>
+            </div>
           </div>
         </div>
 

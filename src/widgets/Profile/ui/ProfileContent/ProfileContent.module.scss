@@ -17,40 +17,27 @@
 }
 
 .inputsGrid {
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  width: 460px;
 }
 
 .fieldWrapper {
   display: flex;
+  grid-column: 1 / -1;
   flex-direction: column;
   gap: $space-sm;
-  width: 100%;
+}
+
+.halfWidthField {
+  grid-column: span 1;
 }
 
 .fieldLabel {
   font-size: $font-size-sm;
   font-weight: 500;
   color: $color-text-caption;
-}
-
-.rowWrapper {
-  display: flex;
-  gap: $space-md;
-  width: 100%;
-
-  .fieldWrapper {
-    flex: 1;
-    max-width: calc(50% - (#{$space-md} / 2));
-
-    input[type='date'] {
-      box-sizing: border-box !important;
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-  }
 }
 
 .avatarSection {
@@ -61,37 +48,37 @@
 }
 
 .hideProfileName {
-  position: relative !important;
-  display: block !important;
-  width: 244px !important;
-  height: 244px !important;
+  position: relative;
+  display: block;
+  width: 244px;
+  height: 244px;
 
   div:first-child {
-    position: relative !important;
-    width: 244px !important;
-    height: 244px !important;
+    position: relative;
+    width: 244px;
+    height: 244px;
   }
 
   img,
   svg,
   span,
   div[class*='avatar'] {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-    width: 244px !important;
-    max-width: 244px !important;
-    height: 244px !important;
-    max-height: 244px !important;
-    border-radius: 50% !important;
+    width: 244px;
+    max-width: 244px;
+    height: 244px;
+    max-height: 244px;
+    border-radius: 50%;
 
-    object-fit: cover !important;
+    object-fit: cover;
   }
 
   div[class*='info'] {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -113,7 +100,6 @@
   border: none;
   border-radius: 50%;
 
-  background: transparent;
   background-color: $color-button-hover;
 }
 
@@ -157,4 +143,43 @@ button.passwordChip {
 
 button.submitButton {
   width: 100%;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textareaField {
+  resize: vertical;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 40px 12px 12px;
+  border: 1px solid $color-accent-dark;
+  border-radius: $radius-lg;
+
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+
+  background-color: transparent;
+
+  &:focus {
+    border-color: $color-button-primary;
+    outline: none;
+  }
+}
+
+.textareaIcon {
+  pointer-events: none;
+
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
