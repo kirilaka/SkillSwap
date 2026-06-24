@@ -1,12 +1,11 @@
 .filterPanel {
   display: flex;
   flex-direction: column;
-  gap: $space-lg;
+  gap: 2.5rem; /* 40px */
 
-  width: 17.75rem;
-  max-width: 100%;
-  padding: 0;
-  border-radius: $radius-lg;
+  width: 20.25rem; /* 324px */
+  padding: 1.25rem; /* 20px */
+  border-radius: 0.75rem; /* 12px */
 
   background: $color-bg-card;
 }
@@ -15,19 +14,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 $space-lg;
 }
 
 .title {
   display: flex;
-  gap: $space-xs;
+  gap: 0.5rem; /* 8px */
   align-items: center;
 
-  font-family: $jost;
-  font-size: $font-size-xl;
-  font-weight: 500;
-  color: $color-text-primary;
-  letter-spacing: -0.011em;
+  /* h2 стили из global: font-family: $jost, font-weight: 500, letter-spacing: -1.1% */
+  font-size: $font-size-2xl; /* 24px */
+  line-height: 1.166; /* 28px — специфично для этого h2 */
 }
 
 .count {
@@ -35,67 +31,26 @@
   align-items: center;
   justify-content: center;
 
-  min-width: 1.25rem;
-  height: 1.25rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
   padding: 0 0.375rem;
-  border-radius: 0.625rem;
+  border-radius: 50%;
 
-  font-family: $roboto;
-  font-size: $font-size-xs;
+  font-size: $font-size-sm; /* 14px */
   font-weight: 500;
-  color: $color-text-primary;
+  color: $color-bg-card;
 
-  background: $color-accent-light;
+  background: $color-text-link;
 }
 
 .resetButton {
-  cursor: pointer;
-
-  padding: 0;
-  border: none;
-
-  font-family: $roboto;
-  font-size: $font-size-sm;
-  font-weight: 400;
+  /* button reset из global: cursor, border, font, background */
   color: $color-text-link;
-
-  background: transparent;
-
-  transition: color 200ms ease;
+  letter-spacing: 0.02em; /* специфично, global имеет 2% для body */
+  transition: opacity 200ms ease;
 
   &:hover {
-    color: $color-button-primary;
-  }
-}
-
-.categorySection {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-}
-
-.showAllButton {
-  cursor: pointer;
-
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-
-  padding: 0 $space-lg;
-  border: none;
-
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  color: $color-text-link;
-  letter-spacing: 0.02em;
-
-  background: transparent;
-
-  transition: color 200ms ease;
-
-  &:hover {
-    color: $color-button-primary;
+    opacity: 0.8;
   }
 }
 
@@ -103,36 +58,30 @@
 .toggleSection {
   display: flex;
   flex-direction: column;
-  gap: $space-sm;
-  padding: 0 $space-lg;
+  gap: 0.75rem; /* 12px */
 }
 
 .toggleTitle {
-  font-family: $jost;
-  font-size: $font-size-xl;
-  font-weight: 500;
-  color: $color-text-primary;
-  letter-spacing: -0.011em;
+  /* h3 стили из global: font-family: $jost, font-weight: 500, letter-spacing: -1.1% */
+  font-size: $font-size-xl; /* 20px */
+  line-height: 1.2; /* 24px — специфично */
 }
 
 .toggleList {
   display: flex;
   flex-direction: column;
-  gap: $space-xs;
+  gap: 0.75rem; /* 12px */
 }
 
 .toggleButton {
-  cursor: pointer;
-
   display: flex;
-  gap: $space-sm;
+  gap: 0.5rem; /* 8px */
   align-items: center;
 
   width: 100%;
   padding: 0;
-  border: none;
 
-  background: transparent;
+  /* button reset из global */
 
   transition: opacity 200ms ease;
 
@@ -141,24 +90,50 @@
   }
 }
 
-.toggleButtonActive {
-  /* При необходимости — дополнительные стили для активного состояния кнопки */
-}
-
 .toggleCheckbox {
   flex-shrink: 0;
 }
 
 .toggleLabel {
-  font-family: $roboto;
-  font-size: $font-size-base;
-  font-weight: 400;
-  color: $color-text-primary;
-  letter-spacing: 0.02em;
+  /* body стили из global: font-family: $roboto, font-weight: 400, line-height: 1.5 */
+  letter-spacing: 0.02em; /* специфично */
 }
 
 .toggleLabelActive {
   color: $color-text-link;
+}
+
+/* === Навыки === */
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+}
+
+.showAllButton {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+
+  padding: 0;
+
+  color: $color-text-link;
+  letter-spacing: 0.02em;
+
+  transition: opacity 200ms ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.showAllIcon {
+  transform: rotate(0deg); /* по умолчанию — направо */
+  transition: transform 200ms ease;
+}
+
+.showAllIconOpen {
+  transform: rotate(-180deg); /* при клике — вниз */
 }
 
 /* === Двухстрочное исполнение подкатегорий === */
@@ -168,9 +143,9 @@
       align-items: flex-start !important;
 
       height: auto;
-      min-height: 3.5rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      min-height: 3.5rem; /* 56px */
+      padding-top: 0.25rem; /* 4px */
+      padding-bottom: 0.25rem; /* 4px */
 
       > :first-child {
         align-self: flex-start !important;
@@ -178,7 +153,7 @@
       }
 
       > :last-child {
-        line-height: 1.5rem !important;
+        line-height: 1.5rem !important; /* 24px — переопределяем если нужно */
         text-align: left !important;
         overflow-wrap: break-word;
         white-space: normal !important;

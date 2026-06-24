@@ -4,6 +4,14 @@ import { FilterCategory } from '../FilterCategory/FilterCategory';
 import { CheckboxCircle } from '../../../../shared/ui/Checkbox';
 import { skillsFilterList, exchangeTypeFilterList, genderFilterList } from '../../models/artFilter';
 import type { MockFilterItem } from '../../models/artFilter';
+import {
+  countActiveFilters,
+  getResetFilters,
+  toggleSingleActive,
+  updateSkillsWithCallback,
+  updateExchangeTypeWithCallback,
+  updateGenderWithCallback,
+} from './../../models/FIltrationUtils';
 import styles from './FilterPanel.module.scss';
 
 export interface FilterPanelProps {
@@ -11,6 +19,8 @@ export interface FilterPanelProps {
   className?: string;
   /** Обработчик изменения фильтров */
   onFiltersChange?: (filters: Record<string, MockFilterItem[]>) => void;
+  /** Обработчик клика по "Все категории" */
+  onShowAllClick?: () => void;
 }
 
 export interface ToggleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -63,25 +73,11 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(fun
 });
 
 /** Панель фильтрации */
-export const FilterPanel = ({ className, onFiltersChange }: FilterPanelProps) => {
+export const FilterPanel = ({ className, onFiltersChange, onShowAllClick }: FilterPanelProps) => {
   const [skills, setSkills] = useState<MockFilterItem[]>(skillsFilterList);
   const [exchangeType, setExchangeType] = useState<MockFilterItem[]>(exchangeTypeFilterList);
   const [gender, setGender] = useState<MockFilterItem[]>(genderFilterList);
-
-  const countActiveFilters = useCallback((filters: MockFilterItem[]): number => {
-    let count = 0;
-    filters.forEach((filter) => {
-      if (filter.isActive && filter.id !== 'all' && filter.id !== 'any') {
-        count++;
-      }
-      if (filter.subFilters) {
-        filter.subFilters.forEach((sub: MockFilterItem) => {
-          if (sub.isActive) count++;
-        });
-      }
-    });
-    return count;
-  }, []);
+  const [isShowAllOpen, setIsShowAllOpen] = useState(false);
 
   const totalActive =
     countActiveFilters(skills) + countActiveFilters(exchangeType) + countActiveFilters(gender);
@@ -89,48 +85,45 @@ export const FilterPanel = ({ className, onFiltersChange }: FilterPanelProps) =>
   const handleSkillsChange = useCallback(
     (updated: MockFilterItem[]) => {
       setSkills(updated);
-      onFiltersChange?.({ skills: updated, exchangeType, gender });
+      updateSkillsWithCallback(updated, exchangeType, gender, onFiltersChange);
     },
     [exchangeType, gender, onFiltersChange],
   );
 
   const handleExchangeTypeToggle = useCallback(
     (clickedId: string) => {
-      const newState = exchangeType.map((f) => ({
-        ...f,
-        isActive: f.id === clickedId,
-      }));
+      const newState = toggleSingleActive(exchangeType, clickedId);
       setExchangeType(newState);
-      onFiltersChange?.({ skills, exchangeType: newState, gender });
+      updateExchangeTypeWithCallback(newState, skills, gender, onFiltersChange);
     },
     [exchangeType, skills, gender, onFiltersChange],
   );
 
   const handleGenderToggle = useCallback(
     (clickedId: string) => {
-      const newState = gender.map((f) => ({
-        ...f,
-        isActive: f.id === clickedId,
-      }));
+      const newState = toggleSingleActive(gender, clickedId);
       setGender(newState);
-      onFiltersChange?.({ skills, exchangeType, gender: newState });
+      updateGenderWithCallback(newState, skills, exchangeType, onFiltersChange);
     },
     [gender, skills, exchangeType, onFiltersChange],
   );
 
   const handleReset = useCallback(() => {
-    setSkills(
-      skillsFilterList.map((f: MockFilterItem) => ({
-        ...f,
-        isActive: false,
-        subFilters: f.subFilters?.map((s: MockFilterItem) => ({ ...s, isActive: false })),
-      })),
-    );
-    setExchangeType(
-      exchangeTypeFilterList.map((f: MockFilterItem) => ({ ...f, isActive: f.id === 'all' })),
-    );
-    setGender(genderFilterList.map((f: MockFilterItem) => ({ ...f, isActive: f.id === 'any' })));
-  }, []);
+    const reset = getResetFilters();
+    setSkills(reset.skills);
+    setExchangeType(reset.exchangeType);
+    setGender(reset.gender);
+    onFiltersChange?.({
+      skills: reset.skills,
+      exchangeType: reset.exchangeType,
+      gender: reset.gender,
+    });
+  }, [onFiltersChange]);
+
+  const handleShowAllClick = useCallback(() => {
+    setIsShowAllOpen((prev) => !prev);
+    onShowAllClick?.();
+  }, [onShowAllClick]);
 
   return (
     <div className={clsx(styles.filterPanel, className)}>
@@ -139,9 +132,11 @@ export const FilterPanel = ({ className, onFiltersChange }: FilterPanelProps) =>
           Фильтры
           {totalActive > 0 && <span className={styles.count}>{totalActive}</span>}
         </h2>
-        <button type="button" className={styles.resetButton} onClick={handleReset}>
-          Сбросить
-        </button>
+        {totalActive > 0 && (
+          <button type="button" className={styles.resetButton} onClick={handleReset}>
+            Сбросить
+          </button>
+        )}
       </div>
 
       {/* Тип обмена — тогл-кнопки */}
@@ -169,8 +164,24 @@ export const FilterPanel = ({ className, onFiltersChange }: FilterPanelProps) =>
             onFiltersChange={handleSkillsChange}
           />
         </div>
-        <button type="button" className={styles.showAllButton}>
+        <button type="button" className={styles.showAllButton} onClick={handleShowAllClick}>
           Все категории
+          <svg
+            width="16"
+            height="8"
+            viewBox="0 0 16 8"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={clsx(styles.showAllIcon, isShowAllOpen && styles.showAllIconOpen)}
+          >
+            <path
+              d="M2 1L8 7L14 1"
+              stroke="#508826"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </button>
       </div>
 
