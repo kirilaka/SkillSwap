@@ -11,7 +11,7 @@ import {
   updateSkillsWithCallback,
   updateExchangeTypeWithCallback,
   updateGenderWithCallback,
-} from './../../models/FIltrationUtils';
+} from '../../models/FIltrationUtils';
 import styles from './FilterPanel.module.scss';
 
 export interface FilterPanelProps {
