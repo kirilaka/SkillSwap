@@ -1,6 +1,5 @@
-import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/app/store';
-import { User } from '@/entities/user/model/types';
 
 const STORAGE_KEY = 'favoriteUserIds';
 
@@ -97,8 +96,3 @@ export const selectFavoritesError = (state: RootState) => state.favorites.error;
 
 export const selectIsFavoriteUser = (state: RootState, userId: string) =>
   state.favorites.favoriteUserIds.includes(userId);
-
-export const selectFavoriteUsers = createSelector(
-  [selectFavoriteUserIds, (state: RootState) => state.users.items],
-  (favoriteIds, users) => users.filter((user: User) => favoriteIds.includes(user.id)),
-);
