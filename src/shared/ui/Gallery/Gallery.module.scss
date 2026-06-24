@@ -1,0 +1,112 @@
+.mainWrapper {
+  position: relative;
+
+  display: flex;
+  gap: 24px;
+
+  width: 440px;
+  height: 324px;
+}
+
+.fallback {
+  align-self: center;
+  text-align: center;
+}
+
+.mainSwiper {
+  width: 324px;
+  max-width: 324px;
+  height: 324px;
+  max-height: 324px;
+}
+
+.subWrapper {
+  overflow: hidden;
+  width: 92px;
+  height: 324px;
+}
+
+.subSwiper,
+.subSwiper * {
+  overflow: visible;
+  width: 92px;
+  height: 92px;
+}
+
+.buttonContainer {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+
+  display: flex;
+  gap: 8px;
+  align-self: center;
+  justify-content: space-between;
+
+  width: 292px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  opacity: 1;
+  background-color: $color-border-default;
+
+  transition: opacity 0.3s ease-in-out;
+
+  & > svg {
+    width: 16px;
+    height: 16px;
+    color: $color-text-caption;
+  }
+
+  &.buttonPrev {
+    transform: rotate(90deg);
+  }
+
+  &.buttonNext {
+    transform: rotate(-90deg);
+  }
+
+  &.hide {
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+.slide * {
+  border-radius: $radius-lg;
+}
+
+.imgOverlay {
+  pointer-events: none;
+
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+
+  align-content: center;
+
+  width: 92px;
+  height: 92px;
+  border-radius: $radius-lg;
+
+  text-align: center;
+  letter-spacing: -1.1%;
+
+  opacity: 1;
+  background-color: rgb(255 255 255 / 50%);
+
+  transition: opacity 0.3s ease-in-out;
+
+  &.hide {
+    opacity: 0;
+  }
+}
