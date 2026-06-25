@@ -10,7 +10,6 @@ const meta: Meta<typeof FilterPanel> = {
   },
   argTypes: {
     onFiltersChange: { action: 'filters changed' },
-    onShowAllClick: { action: 'show all clicked' },
     className: { control: 'text' },
   },
 };
