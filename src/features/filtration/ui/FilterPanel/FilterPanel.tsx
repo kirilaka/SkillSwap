@@ -13,14 +13,13 @@ import {
   updateGenderWithCallback,
 } from '@/features/filtration/models/FiltrationUtils';
 import styles from './FilterPanel.module.scss';
+import { ControlChip } from '@/shared/ui/ControlChip/ControlChip';
 
 export interface FilterPanelProps {
   /** Доп. классы */
   className?: string;
   /** Обработчик изменения фильтров */
   onFiltersChange?: (filters: Record<string, MockFilterItem[]>) => void;
-  /** Обработчик клика по "Все категории" */
-  onShowAllClick?: () => void;
 }
 
 export interface ToggleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -73,7 +72,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(fun
 });
 
 /** Панель фильтрации */
-export const FilterPanel = ({ className, onFiltersChange, onShowAllClick }: FilterPanelProps) => {
+export const FilterPanel = ({ className, onFiltersChange }: FilterPanelProps) => {
   const [skills, setSkills] = useState<MockFilterItem[]>(skillsFilterList);
   const [exchangeType, setExchangeType] = useState<MockFilterItem[]>(exchangeTypeFilterList);
   const [gender, setGender] = useState<MockFilterItem[]>(genderFilterList);
@@ -120,10 +119,9 @@ export const FilterPanel = ({ className, onFiltersChange, onShowAllClick }: Filt
     });
   }, [onFiltersChange]);
 
-  const handleShowAllClick = useCallback(() => {
+  const handleShowAllClick = () => {
     setIsShowAllOpen((prev) => !prev);
-    onShowAllClick?.();
-  }, [onShowAllClick]);
+  };
 
   return (
     <div className={clsx(styles.filterPanel, className)}>
@@ -133,9 +131,12 @@ export const FilterPanel = ({ className, onFiltersChange, onShowAllClick }: Filt
           {totalActive > 0 && <span className={styles.count}>{totalActive}</span>}
         </h2>
         {totalActive > 0 && (
-          <button type="button" className={styles.resetButton} onClick={handleReset}>
-            Сбросить
-          </button>
+          <ControlChip
+            label="Сбросить"
+            onClick={handleReset}
+            className={styles.resetButton}
+            iconVariant="Cross"
+          />
         )}
       </div>
 
@@ -164,25 +165,13 @@ export const FilterPanel = ({ className, onFiltersChange, onShowAllClick }: Filt
             onFiltersChange={handleSkillsChange}
           />
         </div>
-        <button type="button" className={styles.showAllButton} onClick={handleShowAllClick}>
-          Все категории
-          <svg
-            width="16"
-            height="8"
-            viewBox="0 0 16 8"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={clsx(styles.showAllIcon, isShowAllOpen && styles.showAllIconOpen)}
-          >
-            <path
-              d="M2 1L8 7L14 1"
-              stroke="#508826"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        <ControlChip
+          label="Все категории"
+          iconVariant="Chevron"
+          onClick={handleShowAllClick}
+          isOpen={isShowAllOpen}
+          className={styles.showAllButton}
+        />
       </div>
 
       {/* Пол автора — тогл-кнопки */}

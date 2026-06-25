@@ -44,14 +44,7 @@
 }
 
 .resetButton {
-  /* button reset из global: cursor, border, font, background */
   color: $color-text-link;
-  letter-spacing: 0.02em; /* специфично, global имеет 2% для body */
-  transition: opacity 200ms ease;
-
-  &:hover {
-    opacity: 0.8;
-  }
 }
 
 /* === Тогл-секции === */
@@ -111,15 +104,8 @@
 }
 
 .showAllButton {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-
-  padding: 0;
-
   color: $color-text-link;
   letter-spacing: 0.02em;
-
   transition: opacity 200ms ease;
 
   &:hover {
@@ -136,28 +122,6 @@
   transform: rotate(-180deg); /* при клике — вниз */
 }
 
-/* === Двухстрочное исполнение подкатегорий === */
-.skillsCategory {
-  [class*='subCategoryList'][class*='isOpen'] {
-    > [class*='filterItem'] {
-      align-items: flex-start !important;
-
-      height: auto;
-      min-height: 3.5rem; /* 56px */
-      padding-top: 0.25rem; /* 4px */
-      padding-bottom: 0.25rem; /* 4px */
-
-      > :first-child {
-        align-self: flex-start !important;
-        margin-top: 0.125rem;
-      }
-
-      > :last-child {
-        line-height: 1.5rem !important; /* 24px — переопределяем если нужно */
-        text-align: left !important;
-        overflow-wrap: break-word;
-        white-space: normal !important;
-      }
-    }
-  }
+.skillsCategory * {
+  text-align: left;
 }
