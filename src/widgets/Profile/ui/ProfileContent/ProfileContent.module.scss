@@ -1,10 +1,12 @@
 .ProfileContent {
   display: flex;
-  gap: $space-2xl;
+  gap: 196px;
   align-items: flex-start;
   justify-content: space-between;
 
   width: 100%;
+  padding: 60px;
+  border: none;
 }
 
 .formSection {
@@ -28,10 +30,18 @@
   grid-column: 1 / -1;
   flex-direction: column;
   gap: $space-sm;
-}
 
-.halfWidthField {
-  grid-column: span 1;
+  &.halfWidthFieldL {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+    width: 218px;
+  }
+
+  &.halfWidthFieldR {
+    grid-column: 2 / -1;
+    grid-row: 4 / 5;
+    width: 218px;
+  }
 }
 
 .fieldLabel {
@@ -120,7 +130,6 @@
 }
 
 button.passwordChip {
-  width: fit-content;
   color: $color-button-primary;
 
   span {
@@ -137,10 +146,6 @@ button.passwordChip {
   }
 }
 
-.genderInput {
-  width: 100%;
-}
-
 button.submitButton {
   width: 100%;
 }
@@ -148,6 +153,7 @@ button.submitButton {
 .textareaWrapper {
   position: relative;
   width: 100%;
+  height: 120px;
 }
 
 .textareaField {
@@ -155,8 +161,8 @@ button.submitButton {
 
   box-sizing: border-box;
   width: 100%;
-  min-height: 44px;
-  padding: 12px 40px 12px 12px;
+  height: 100%;
+  padding: 12px 52px 12px 20px;
   border: 1px solid $color-accent-dark;
   border-radius: $radius-lg;
 
@@ -176,10 +182,7 @@ button.submitButton {
   pointer-events: none;
 
   position: absolute;
-  top: 12px;
-  right: 12px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
 }

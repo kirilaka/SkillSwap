@@ -72,28 +72,9 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-  const handleBirthdayChange = (e: ChangeEvent<HTMLInputElement>) => setBirthday(e.target.value);
   const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setDescription(e.target.value);
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
-
-  const handleCityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const foundItem = cityItems.find(
-      (item) => item.label.toLowerCase() === value.toLowerCase() || item.id === value,
-    );
-    setCity(foundItem ? foundItem.id : value);
-  };
-
-  const handleGenderChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const foundItem = genderItems.find(
-      (item) => item.label.toLowerCase() === value.toLowerCase() || item.id === value,
-    );
-    if (foundItem) {
-      setGender(foundItem.id as 'male' | 'female');
-    }
-  };
 
   const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
   const handleGalleryClick = () => fileInputRef.current?.click();
@@ -122,10 +103,6 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
   if (!profileUser) {
     return <Box className={clsx(styles.ProfileContent, className)}>Пользователь не найден</Box>;
   }
-
-  const currentCityLabel = cityItems.find((item) => item.id === city)?.label || city;
-  const currentGenderLabel = genderItems.find((item) => item.id === gender)?.label || '';
-
   return (
     <Box className={clsx(styles.ProfileContent, className)}>
       <form onSubmit={handleSubmit} className={styles.formSection}>
@@ -171,25 +148,19 @@ export const ProfileContent = ({ user, className }: ProfileContentProps) => {
             />
           </div>
 
-          <div className={clsx(styles.fieldWrapper, styles.halfWidthField)}>
+          <div className={clsx(styles.fieldWrapper, styles.halfWidthFieldL)}>
             <label className={styles.fieldLabel}>Дата рождения</label>
-            <Input type="date" value={birthday} onChange={handleBirthdayChange} />
+            <Input />
           </div>
 
-          <div className={clsx(styles.fieldWrapper, styles.halfWidthField)}>
+          <div className={clsx(styles.fieldWrapper, styles.halfWidthFieldR)}>
             <label className={styles.fieldLabel}>Пол</label>
-            <DdInputSelect
-              placeholder="Ваш пол"
-              items={genderItems}
-              className={styles.genderInput}
-              value={currentGenderLabel}
-              onChange={handleGenderChange}
-            />
+            <DdInputSelect placeholder="Ваш пол" items={genderItems} />
           </div>
 
           <div className={styles.fieldWrapper}>
             <label className={styles.fieldLabel}>Город</label>
-            <DdInputSelect value={currentCityLabel} onChange={handleCityChange} items={cityItems} />
+            <DdInputSelect items={cityItems} />
           </div>
 
           <div className={styles.fieldWrapper}>
