@@ -1,0 +1,19 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-lg;
+
+  width: 100%;
+  max-width: 1368px;
+  padding: 0 auto;
+
+  // padding: 32px 36px 60px;
+}
+
+.sidebar {
+  height: 100%;
+}
+
+.content {
+  height: 100%;
+}
