@@ -1,1 +1,114 @@
-[]
+{
+  "users": [
+    {
+      "id": "user-1",
+      "name": "Иван Петров",
+      "email": "ivan.petrov@example.com",
+      "avatarUrl": null,
+      "gender": "male",
+      "createdAt": "2026-01-10T10:00:00.000Z",
+      "city": "Санкт-Петербург",
+      "age": 28,
+      "description": "Frontend-разработчик, который любит делиться знаниями и учиться новому."
+    },
+    {
+      "id": "user-2",
+      "name": "Анна Смирнова",
+      "email": "anna.smirnova@example.com",
+      "avatarUrl": null,
+      "gender": "female",
+      "createdAt": "2026-01-15T12:30:00.000Z",
+      "city": "Москва",
+      "age": 25,
+      "description": "UX/UI дизайнер, создаю интерфейсы, которые вдохновляют."
+    },
+    {
+      "id": "user-3",
+      "name": "Дмитрий Иванов",
+      "email": "dmitry.ivanov@example.com",
+      "avatarUrl": null,
+      "gender": "male",
+      "createdAt": "2026-01-20T09:15:00.000Z",
+      "city": "Новосибирск",
+      "age": 32,
+      "description": "Backend-разработчик, увлекаюсь архитектурой микросервисов."
+    },
+    {
+      "id": "user-4",
+      "name": "Екатерина Козлова",
+      "email": "ekaterina.kozlov@example.com",
+      "avatarUrl": null,
+      "gender": "female",
+      "createdAt": "2026-01-25T14:45:00.000Z",
+      "city": "Екатеринбург",
+      "age": 26,
+      "description": "Data Scientist, работаю с нейросетями и машинным обучением."
+    },
+    {
+      "id": "user-5",
+      "name": "Алексей Морозов",
+      "email": "alexey.morozov@example.com",
+      "avatarUrl": null,
+      "gender": "male",
+      "createdAt": "2026-02-01T11:00:00.000Z",
+      "city": "Казань",
+      "age": 30,
+      "description": "DevOps инженер, автоматизирую всё, что можно автоматизировать."
+    },
+    {
+      "id": "user-6",
+      "name": "Мария Новикова",
+      "email": "maria.novikova@example.com",
+      "avatarUrl": null,
+      "gender": "female",
+      "createdAt": "2026-02-05T16:20:00.000Z",
+      "city": "Краснодар",
+      "age": 24,
+      "description": "Тестировщик, пишу автотесты и ищу баги в своё удовольствие."
+    },
+    {
+      "id": "user-7",
+      "name": "Сергей Фёдоров",
+      "email": "sergey.fedorov@example.com",
+      "avatarUrl": null,
+      "gender": "male",
+      "createdAt": "2026-02-10T13:10:00.000Z",
+      "city": "Самара",
+      "age": 29,
+      "description": "React-разработчик, создаю компоненты, которые переиспользуются годами."
+    },
+    {
+      "id": "user-8",
+      "name": "Ольга Кузнецова",
+      "email": "olga.kuznetsova@example.com",
+      "avatarUrl": null,
+      "gender": "female",
+      "createdAt": "2026-02-15T08:30:00.000Z",
+      "city": "Ростов-на-Дону",
+      "age": 27,
+      "description": "Project Manager, помогаю командам достигать целей без выгорания."
+    },
+    {
+      "id": "user-9",
+      "name": "Павел Соколов",
+      "email": "pavel.sokolov@example.com",
+      "avatarUrl": null,
+      "gender": "male",
+      "createdAt": "2026-02-20T17:00:00.000Z",
+      "city": "Омск",
+      "age": 31,
+      "description": "Мобильный разработчик на Flutter, создаю кроссплатформенные приложения."
+    },
+    {
+      "id": "user-10",
+      "name": "Елена Волкова",
+      "email": "elena.volkova@example.com",
+      "avatarUrl": null,
+      "gender": "female",
+      "createdAt": "2026-03-01T12:00:00.000Z",
+      "city": "Челябинск",
+      "age": 26,
+      "description": "UI-дизайнер, рисую интерфейсы, в которые хочется кликать."
+    }
+  ]
+}
