@@ -9,6 +9,7 @@ interface SectionCardsProps {
   className?: string;
   users?: UserInfo[];
   variant?: 'all' | 'three';
+  onClick?: () => void;
 }
 
 export const SectionCards = ({
@@ -16,6 +17,7 @@ export const SectionCards = ({
   className,
   users = [],
   variant = 'three',
+  onClick,
 }: SectionCardsProps) => {
   const displaydUsers = variant === 'three' ? users.slice(0, 3) : users;
 
@@ -23,13 +25,7 @@ export const SectionCards = ({
     <section className={className}>
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
-        <Button
-          className={styles.seeAllButton}
-          buttonType="tertiary"
-          onClick={() => {
-            console.log('seeAllButton clicked');
-          }}
-        >
+        <Button className={styles.seeAllButton} buttonType="tertiary" onClick={onClick}>
           Смотреть все
           <ChevronIcon orientation="vertical" />
         </Button>

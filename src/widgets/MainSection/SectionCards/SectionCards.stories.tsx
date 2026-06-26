@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionCards } from './SectionCards';
 import { UserInfo } from '@/shared/types';
+import { fn } from 'storybook/test';
 
 import usersData from '@/../public/db/users.json';
 
@@ -23,6 +24,7 @@ export const Default: Story = {
   args: {
     title: 'Популярное',
     variant: 'three',
+    onClick: fn(),
   },
   render: (args) => (
     <div style={{ width: '1020px' }}>
@@ -35,6 +37,7 @@ export const AllCards: Story = {
   args: {
     title: 'Популярное',
     variant: 'all',
+    onClick: fn(),
   },
   render: (args) => (
     <div style={{ width: '1020px' }}>
