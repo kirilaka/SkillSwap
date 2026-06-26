@@ -1,6 +1,7 @@
 import { getAuthUser } from '@/features/auth/model/authUtils';
 import type { User } from './types';
 
+// после появления стора перепимать без изменения сигнатуры
 export function getUser(): User | null {
   const authUser = getAuthUser();
 
