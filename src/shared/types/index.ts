@@ -22,6 +22,10 @@ export interface User {
   email: string;
   avatarUrl: string | null;
   createdAt: string;
+  city?: string;
+  age?: number;
+  gender?: 'male' | 'female';
+  description?: string;
 }
 
 export interface UserInfo extends User {

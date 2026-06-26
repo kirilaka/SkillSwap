@@ -1,11 +1,22 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '@/shared/types';
 
+//Ключи для localStorage
+
+const TOKEN_KEY = 'token';
+const USER_ID_KEY = 'userId';
+const REGISTERED_USERS_KEY = 'registeredUsers';
+
 interface AuthState {
+  // Текуший авторизованный пользователь
   user: User | null;
+  // mock-токен авторизации
   token: string | null;
+  // авторизован пользователь или нет
   isAuth: boolean;
+  // состояние загрузки / проверки авторизации
   isLoading: boolean;
+  // текст ошибки
   error: string | null;
 }
 
@@ -17,21 +28,74 @@ const initialState: AuthState = {
   error: null,
 };
 
+const getRegisteredUsers = (): User[] => {
+  const raw = localStorage.getItem(REGISTERED_USERS_KEY);
+  return raw ? JSON.parse(raw) : [];
+};
+
+const saveRegisteredUsers = (users: User[]) => {
+  localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
+};
+
+const setAuthData = (token: string, userId: string) => {
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(USER_ID_KEY, userId);
+};
+
+const clearAuthData = () => {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_ID_KEY);
+};
+
+interface RegisteredPayload {
+  name: string;
+  email: string;
+  city?: string;
+  age?: number;
+  gender: 'male' | 'female';
+}
+
+// Поиск пользователя во всех источниках
+const findUserByEmail = async (email: string): Promise<User | undefined> => {
+  // Ищем в users.json
+  const response = await fetch('/db/users.json');
+  const mockUsers: User[] = await response.json();
+  const mockUser = mockUsers.find((u) => u.email === email);
+  if (mockUser) {
+    return mockUser;
+  }
+
+  // Ищем в зарегестрированных
+  const registeredUsers = getRegisteredUsers();
+  return registeredUsers.find((u) => u.email === email);
+};
+
+const findUserById = async (userId: string): Promise<User | undefined> => {
+  // ищем в user.json
+  const response = await fetch('/db/users.json');
+  const mockUsers: User[] = await response.json();
+  const mockUser = mockUsers.find((u) => u.id === userId);
+  if (mockUser) {
+    return mockUser;
+  }
+
+  // ищем в зарегестрированных
+  const registeredUsers = getRegisteredUsers();
+  return registeredUsers.find((u) => u.id === userId);
+};
+
 export const loginThunk = createAsyncThunk<User, string, { rejectValue: string }>(
   'auth/login',
   async (email, { rejectWithValue }) => {
     try {
-      const response = await fetch('/db/users.json');
-      const users: User[] = await response.json();
-      const userEmail = users.find((u) => u.email === email);
+      const userEmail = await findUserByEmail(email);
 
       if (!userEmail) {
         return rejectWithValue('Пользователь не найден');
       }
 
       const token = 'token123';
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userEmail.id);
+      setAuthData(token, userEmail.id);
 
       return userEmail;
     } catch {
@@ -40,24 +104,56 @@ export const loginThunk = createAsyncThunk<User, string, { rejectValue: string }
   },
 );
 
+export const registerThunk = createAsyncThunk<User, RegisteredPayload, { rejectValue: string }>(
+  'auth/register',
+  async ({ name, email, city, age, gender }, { rejectWithValue }) => {
+    try {
+      const existingUser = await findUserByEmail(email);
+      if (existingUser) {
+        return rejectWithValue('Пользователь с таким e,ail уже существует');
+      }
+      const newUser: User = {
+        id: `user-registered-${Date.now()}`,
+        name,
+        email,
+        avatarUrl: null,
+        createdAt: new Date().toISOString(),
+        city,
+        age,
+        gender,
+        description: '',
+      };
+
+      // Сохраняем в registeredUsers
+      const registeredUsers = getRegisteredUsers();
+      registeredUsers.push(newUser);
+      saveRegisteredUsers(registeredUsers);
+
+      // Авторизуем
+      const token = 'token123';
+      setAuthData(token, newUser.id);
+
+      return newUser;
+    } catch {
+      return rejectWithValue('Ошибка регистрации');
+    }
+  },
+);
+
 export const checkAuthThunk = createAsyncThunk<User | null, void, { rejectValue: string }>(
   'auth/checkAuth',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem(TOKEN_KEY);
+      const userId = localStorage.getItem(USER_ID_KEY);
 
       if (!token || !userId) {
         return rejectWithValue('Нет данных для авторизации');
       }
-
-      const response = await fetch('/db/users.json');
-      const users: User[] = await response.json();
-      const user = users.find((u) => u.id === userId);
+      const user = await findUserById(userId);
 
       if (!user) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userId');
+        clearAuthData();
         return rejectWithValue('Пользователь не найден');
       }
       return user;
@@ -76,11 +172,18 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuth = false;
       state.error = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
+      clearAuthData();
     },
     clearAuthError(state) {
       state.error = null;
+    },
+    setAuthUser(state, action: PayloadAction<User>) {
+      state.user = action.payload;
+    },
+    updateAuthUser(state, action: PayloadAction<Partial<User>>) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
     },
   },
   extraReducers: (builder) => {
@@ -92,13 +195,29 @@ const authSlice = createSlice({
       })
       .addCase(loginThunk.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload;
-        state.token = localStorage.getItem('token');
+        state.token = localStorage.getItem(TOKEN_KEY);
         state.isAuth = true;
         state.isLoading = false;
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Неизвестная ошибка';
+      });
+
+    builder
+      .addCase(registerThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<User>) => {
+        state.user = action.payload;
+        state.token = localStorage.getItem(TOKEN_KEY);
+        state.isAuth = true;
+        state.isLoading = false;
+      })
+      .addCase(registerThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? 'Ошибка регистрации';
       });
 
     // checkAuthThunk
@@ -122,7 +241,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, clearAuthError } = authSlice.actions;
+export const { logout, clearAuthError, setAuthUser, updateAuthUser } = authSlice.actions;
 
 export const selectAuthUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectAuthToken = (state: { auth: AuthState }) => state.auth.token;
