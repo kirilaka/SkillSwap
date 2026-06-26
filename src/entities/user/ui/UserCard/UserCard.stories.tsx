@@ -19,11 +19,11 @@ type Story = StoryObj<typeof UserCard>;
 
 const mockUser = {
   id: '1',
-  name: 'Иван',
+  name: 'Анна',
   email: 'maxim@gmail.com',
   avatarUrl: '',
   createdAt: '2026-01-01',
-  city: 'Санкт-Петербург',
+  city: 'Москва',
   age: 38,
   description: 'Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое',
   skills: [
