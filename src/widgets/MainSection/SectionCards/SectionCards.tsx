@@ -23,7 +23,13 @@ export const SectionCards = ({
     <section className={className}>
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
-        <Button className={styles.seeAllButton} buttonType="tertiary">
+        <Button
+          className={styles.seeAllButton}
+          buttonType="tertiary"
+          onClick={() => {
+            console.log('seeAllButton clicked');
+          }}
+        >
           Смотреть все
           <ChevronIcon orientation="vertical" />
         </Button>
