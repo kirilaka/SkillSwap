@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from './types';
 import { fetchUserById, fetchUsers } from '@/api/users';
-import { RootState } from '@/store';
 
 export const fetchUsersThunk = createAsyncThunk('users/fetchAll', async () => {
   const data = await fetchUsers();
@@ -17,8 +16,7 @@ type UsersState = {
   /** список всех пользователей */
   items: User[];
   /** выбранный пользователь, если нужен для профиля или страницы пользователя */
-  /** сделал undefined вместо null потомучто функция fetchUserById возвращает User | undefined */
-  currentUser: User | undefined;
+  currentUser: User | null;
   /** состояние загрузки */
   isLoading: boolean;
   /** текст ошибки при неудачной загрузке */
@@ -27,14 +25,10 @@ type UsersState = {
 
 const initialState: UsersState = {
   items: [],
-  currentUser: undefined,
+  currentUser: null,
   isLoading: false,
   error: null,
 };
-
-/** получить пользователя по id из списка items */
-export const selectUserById = (state: RootState, id: string) =>
-  state.users.items.find((user) => user.id === id);
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -46,7 +40,7 @@ export const usersSlice = createSlice({
     },
     /** очистка выбранного пользователя */
     clearCurrentUser: (state) => {
-      state.currentUser = undefined;
+      state.currentUser = null;
     },
   },
   selectors: {
@@ -58,6 +52,8 @@ export const usersSlice = createSlice({
     selectUsersLoading: (state) => state.isLoading,
     /** получить ошибку */
     selectUsersError: (state) => state.error,
+    /** получить пользователя по id из списка items */
+    selectUserById: (state) => (id: string) => state.items.find((user) => user.id === id),
   },
   extraReducers: (builder) => {
     builder
@@ -80,7 +76,7 @@ export const usersSlice = createSlice({
       })
       .addCase(fetchUserByIdThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.currentUser = action.payload;
+        state.currentUser = action.payload ?? null;
       })
       .addCase(fetchUserByIdThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -93,5 +89,10 @@ export default usersSlice.reducer;
 
 export const { clearUsersError, clearCurrentUser } = usersSlice.actions;
 
-export const { selectUsers, selectCurrentUser, selectUsersLoading, selectUsersError } =
-  usersSlice.selectors;
+export const {
+  selectUsers,
+  selectCurrentUser,
+  selectUsersLoading,
+  selectUsersError,
+  selectUserById,
+} = usersSlice.selectors;
