@@ -24,9 +24,14 @@ export interface User {
   createdAt: string;
 }
 
+export type GenderType = 'male' | 'female';
+
 export interface UserInfo extends User {
   description?: string;
   skills?: Skill[];
+  gender?: GenderType;
+  age?: number;
+  city?: string;
 }
 
 // ─── Request ─────────────────────────────────────────────
