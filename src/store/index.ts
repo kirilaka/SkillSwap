@@ -1,15 +1,11 @@
-import { usersSlice } from '@/entities/user/model/usersSlice';
 import { configureStore } from '@reduxjs/toolkit';
-// Импортируй свои slice'ы здесь по мере их создания:
-// import skillsReducer from '@/entities/skill/model/skillsSlice'
-// import authReducer from '@/features/auth/model/authSlice'
+import favoritesReducer from '@/features/favorites/model/favoritesSlice';
 
 export const store = configureStore({
   reducer: {
-    users: usersSlice.reducer,
-    // skills: skillsReducer,
-    // auth: authReducer,
+    favorites: favoritesReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export type RootState = ReturnType<typeof store.getState>;

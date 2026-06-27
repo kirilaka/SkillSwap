@@ -1,34 +1,36 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@/app/store';
+import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 
 const STORAGE_KEY = 'favoriteUserIds';
 
 interface FavoritesState {
   favoriteUserIds: string[];
-  isLoading: boolean;
   error: string | null;
 }
 
 const loadFavoritesFromStorage = (): string[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed) && parsed.every((item) => typeof item === 'string')) {
+      return parsed;
+    }
+    return [];
   } catch {
     return [];
   }
 };
 
-const saveFavoritesToStorage = (ids: string[]) => {
+const saveFavoritesToStorage = (ids: string[]): void => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-  } catch (error) {
-    console.error('Failed to save favorites:', error);
+  } catch {
+    throw new Error('Не удалось сохранить избранное');
   }
 };
 
 const initialState: FavoritesState = {
   favoriteUserIds: loadFavoritesFromStorage(),
-  isLoading: false,
   error: null,
 };
 
@@ -36,22 +38,27 @@ const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
-    initFavorites: (state) => {
-      state.favoriteUserIds = loadFavoritesFromStorage();
-      state.isLoading = false;
-      state.error = null;
-    },
     addFavoriteUser: (state, action: PayloadAction<string>) => {
       const userId = action.payload;
       if (!state.favoriteUserIds.includes(userId)) {
         state.favoriteUserIds.push(userId);
-        saveFavoritesToStorage(state.favoriteUserIds);
+        try {
+          saveFavoritesToStorage(state.favoriteUserIds);
+          state.error = null;
+        } catch {
+          state.error = 'Ошибка сохранения избранного';
+        }
       }
     },
     removeFavoriteUser: (state, action: PayloadAction<string>) => {
       const userId = action.payload;
       state.favoriteUserIds = state.favoriteUserIds.filter((id) => id !== userId);
-      saveFavoritesToStorage(state.favoriteUserIds);
+      try {
+        saveFavoritesToStorage(state.favoriteUserIds);
+        state.error = null;
+      } catch {
+        state.error = 'Ошибка сохранения избранного';
+      }
     },
     toggleFavoriteUser: (state, action: PayloadAction<string>) => {
       const userId = action.payload;
@@ -61,12 +68,21 @@ const favoritesSlice = createSlice({
       } else {
         state.favoriteUserIds.push(userId);
       }
-      saveFavoritesToStorage(state.favoriteUserIds);
+      try {
+        saveFavoritesToStorage(state.favoriteUserIds);
+        state.error = null;
+      } catch {
+        state.error = 'Ошибка сохранения избранного';
+      }
     },
     clearFavorites: (state) => {
       state.favoriteUserIds = [];
-      saveFavoritesToStorage(state.favoriteUserIds);
-      state.error = null;
+      try {
+        saveFavoritesToStorage(state.favoriteUserIds);
+        state.error = null;
+      } catch {
+        state.error = 'Ошибка сохранения избранного';
+      }
     },
     clearFavoritesError: (state) => {
       state.error = null;
@@ -75,7 +91,6 @@ const favoritesSlice = createSlice({
 });
 
 export const {
-  initFavorites,
   addFavoriteUser,
   removeFavoriteUser,
   toggleFavoriteUser,
@@ -85,14 +100,12 @@ export const {
 
 export default favoritesSlice.reducer;
 
-// ===== Selectors =====
-export const selectFavoritesState = (state: RootState) => state.favorites;
+export const selectFavoriteUserIds = (state: { favorites: FavoritesState }) =>
+  state.favorites.favoriteUserIds;
 
-export const selectFavoriteUserIds = (state: RootState) => state.favorites.favoriteUserIds;
+export const selectFavoritesError = (state: { favorites: FavoritesState }) => state.favorites.error;
 
-export const selectFavoritesLoading = (state: RootState) => state.favorites.isLoading;
-
-export const selectFavoritesError = (state: RootState) => state.favorites.error;
-
-export const selectIsFavoriteUser = (state: RootState, userId: string) =>
-  state.favorites.favoriteUserIds.includes(userId);
+export const selectIsFavoriteUser = createSelector(
+  [selectFavoriteUserIds, (_, userId: string) => userId],
+  (favoriteIds, userId) => favoriteIds.includes(userId),
+);
