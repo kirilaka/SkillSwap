@@ -31,7 +31,7 @@ export interface UserInfo extends User {
   skills?: Skill[];
   gender?: GenderType;
   age?: number;
-  city: string;
+  city?: string;
 }
 
 // ─── Request ─────────────────────────────────────────────
