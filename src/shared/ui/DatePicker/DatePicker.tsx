@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  type ChangeEvent,
-  type FocusEvent,
-  type MouseEvent as ReactMouseEvent,
-} from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type FocusEvent, useCallback } from 'react';
 import { DayPicker, type Matcher, getDefaultClassNames } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { format, parse, isValid, startOfDay, isBefore, isAfter } from 'date-fns';
@@ -17,17 +10,26 @@ import { CalendarIcon } from '@/shared/ui/Icons/CalendarIcon/CalendarIcon';
 import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 
 import styles from './DatePicker.module.scss';
+import { Button } from '../Button/Button';
 
 const DATE_FORMAT = 'dd.MM.yyyy';
 
 interface DatePickerProps {
+  /** выбранная дата */
   value?: Date;
+  /** обработчик выбора даты */
   onChange: (date: Date | undefined) => void;
+  /** текст, который отображается, если дата не выбрана */
   placeholder?: string;
+  /** блокирует открытие календаря и выбор даты*/
   disabled?: boolean;
+  /** минимальная доступная для выбора дата */
   minDate?: Date;
+  /** максимальная доступная для выбора дата*/
   maxDate?: Date;
+  /**  текст ошибки, отображаемый под компонентом.*/
   error?: string;
+  /**  дополнительные классы для внешнего контейнера */
   className?: string;
 }
 
@@ -63,13 +65,14 @@ export const DatePicker = ({
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(() => (value ? formatDate(value) : ''));
   const [inputError, setInputError] = useState<string | null>(null);
+  const [tempSelectedDate, setTempSelectedDate] = useState<Date | undefined>(value);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const isFocusedRef = useRef(false);
 
   useEffect(() => {
-    if (!isFocusedRef.current) {
-      setInputValue(value ? formatDate(value) : '');
-    }
+    setInputValue(value ? formatDate(value) : '');
+    setTempSelectedDate(value);
+    setInputError(null);
   }, [value]);
 
   useEffect(() => {
@@ -80,21 +83,28 @@ export const DatePicker = ({
 
   const toggleCalendar = () => {
     if (!disabled) {
+      if (!isOpen) {
+        setTempSelectedDate(value);
+      }
       setIsOpen((prev) => !prev);
     }
   };
 
   const handleDaySelect = (date: Date | undefined) => {
-    onChange(date);
+    setTempSelectedDate(date);
+  };
+
+  const handleConfirm = () => {
+    onChange(tempSelectedDate);
     setInputError(null);
-    setInputValue(date ? formatDate(date) : '');
+    setInputValue(tempSelectedDate ? formatDate(tempSelectedDate) : '');
     setIsOpen(false);
   };
 
-  const closeCalendar = () => {
+  const handleCancel = useCallback(() => {
+    setTempSelectedDate(value);
     setIsOpen(false);
-  };
-
+  }, [value]);
   const commitInputValue = () => {
     const trimmed = inputValue.trim();
 
@@ -108,19 +118,16 @@ export const DatePicker = ({
 
     if (!parsed) {
       setInputError('Введите дату в формате дд.мм.гггг');
-      setInputValue(value ? formatDate(value) : '');
       return;
     }
 
     if (!isDateInRange(parsed, minDate, maxDate)) {
       setInputError('Дата вне допустимого диапазона');
-      setInputValue(value ? formatDate(value) : '');
       return;
     }
 
     setInputError(null);
     onChange(parsed);
-    setInputValue(formatDate(parsed));
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -128,33 +135,21 @@ export const DatePicker = ({
     setInputValue(event.target.value.replace(/[^\d.]/g, ''));
   };
 
-  const handleInputFocus = () => {
-    isFocusedRef.current = true;
-  };
-
   const handleContainerBlur = (event: FocusEvent<HTMLDivElement>) => {
-    isFocusedRef.current = false;
-
     const nextTarget = event.relatedTarget as Node | null;
     if (nextTarget && containerRef.current?.contains(nextTarget)) return;
 
     commitInputValue();
   };
 
-  const handleIconMouseDown = (event: ReactMouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeCalendar();
-      }
+      if (event.key === 'Escape') handleCancel();
     };
 
     const handleClickOutside = (event: globalThis.MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        closeCalendar();
+        handleCancel();
       }
     };
 
@@ -167,15 +162,9 @@ export const DatePicker = ({
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, handleCancel]);
 
-  const containerClasses = clsx(
-    styles.datePicker,
-    {
-      [styles.disabled]: disabled,
-    },
-    className,
-  );
+  const containerClasses = clsx(styles.datePicker, { [styles.disabled]: disabled }, className);
 
   const disabledMatchers: Matcher[] = [];
   if (minDate) disabledMatchers.push({ before: minDate });
@@ -209,7 +198,7 @@ export const DatePicker = ({
         placeholder={placeholder}
         value={inputValue}
         onChange={handleInputChange}
-        onFocus={handleInputFocus}
+        onClick={toggleCalendar}
         maxLength={10}
         inputMode="numeric"
         iconPosition="right"
@@ -220,18 +209,7 @@ export const DatePicker = ({
           isOpen && styles.inputOpen,
           displayError && styles.inputError,
         )}
-        icon={
-          <button
-            type="button"
-            className={styles.iconTrigger}
-            onMouseDown={handleIconMouseDown}
-            onClick={toggleCalendar}
-            disabled={disabled}
-            aria-label="Открыть календарь"
-          >
-            <CalendarIcon />
-          </button>
-        }
+        icon={<CalendarIcon className={styles.calendarIcon} />}
       />
 
       {inputError && !error && <div className={styles.errorMessage}>{inputError}</div>}
@@ -240,7 +218,7 @@ export const DatePicker = ({
         <div className={styles.popover}>
           <DayPicker
             mode="single"
-            selected={value}
+            selected={tempSelectedDate}
             onSelect={handleDaySelect}
             locale={ru}
             weekStartsOn={1}
@@ -251,11 +229,11 @@ export const DatePicker = ({
             disabled={disabledMatchers.length > 0 ? disabledMatchers : undefined}
             components={{
               Dropdown: ({ value: selectValue, onChange: selectOnChange, options }) => {
-                const selectOptions = options || [];
+                const dropdownOptions = options || [];
                 return (
                   <div className={styles.selectWrapper}>
                     <select value={selectValue} onChange={selectOnChange}>
-                      {selectOptions.map((opt) => (
+                      {dropdownOptions.map((opt) => (
                         <option key={opt.value} value={opt.value}>
                           {opt.label}
                         </option>
@@ -269,6 +247,15 @@ export const DatePicker = ({
               },
             }}
           />
+
+          <div className={styles.popoverActions}>
+            <Button buttonType="secondary" className={styles.cancelButton} onClick={handleCancel}>
+              Отмена
+            </Button>
+            <Button buttonType="primary" className={styles.confirmButton} onClick={handleConfirm}>
+              Выбрать
+            </Button>
+          </div>
         </div>
       )}
     </div>

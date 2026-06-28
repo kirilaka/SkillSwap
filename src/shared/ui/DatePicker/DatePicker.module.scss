@@ -2,7 +2,6 @@
   isolation: isolate;
   position: relative;
   display: inline-block;
-  width: 100%;
 
   &.disabled {
     opacity: 0.6;
@@ -11,30 +10,34 @@
 
 .input {
   border-color: $color-border-default;
-
-  &:hover:not(:has(:disabled)) {
-    border-color: $color-text-primary;
-    outline: 2px solid $color-text-primary;
-  }
 }
 
 .inputOpen {
   border-color: $color-accent-light;
   outline: 2px solid $color-accent-light;
-
-  &:hover:not(:has(:disabled)) {
-    border-color: $color-accent-light;
-    outline: 2px solid $color-accent-light;
-  }
 }
 
 .inputError {
   border-color: $color-error;
+}
 
+.input,
+.inputOpen,
+.inputError {
   &:hover:not(:has(:disabled)) {
-    border-color: $color-error;
-    outline: 2px solid $color-error;
+    border-color: inherit;
+    outline: 2px solid currentcolor;
   }
+}
+
+.inputOpen:hover:not(:has(:disabled)) {
+  border-color: $color-accent-light;
+  outline: 2px solid $color-accent-light;
+}
+
+.inputError:hover:not(:has(:disabled)) {
+  border-color: $color-error;
+  outline: 2px solid $color-error;
 }
 
 .errorMessage {
@@ -43,38 +46,16 @@
   color: $color-error;
 }
 
-.iconTrigger {
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  border: none;
-
-  background: transparent;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-}
-
 .popover {
   position: absolute;
   z-index: 100;
-  top: 100%;
-  left: 0;
 
-  min-width: 320px;
+  width: 280px;
   margin-top: $space-sm;
-  padding: 20px;
-  border: 1px solid $color-border-default;
+  padding: 16px 32px;
   border-radius: $radius-lg;
 
   background-color: $color-bg-card;
-  box-shadow: $shadow-sm;
 }
 
 .calendarRoot {
@@ -85,7 +66,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: $space-md;
 }
 
 .dropdowns {
@@ -101,47 +81,26 @@
 }
 
 .monthGrid {
+  table-layout: fixed;
   border-collapse: collapse;
   width: 100%;
 }
 
 .weekday {
-  width: 38px;
-  height: 32px;
+  height: 16px;
   padding: 0;
 
-  font-family: $roboto;
-  font-size: $font-size-xs;
-  font-weight: 500;
   color: $color-text-link;
   text-align: center;
   vertical-align: middle;
 }
 
 .day {
-  padding: 2px;
+  padding: 0;
   text-align: center;
 }
 
 .dayButton {
-  cursor: pointer;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 38px;
-  height: 38px;
-  border: none;
-  border-radius: 50%;
-
-  font-family: $roboto;
-  font-size: $font-size-sm;
-  font-weight: 400;
-  color: $color-text-primary;
-
-  background: transparent;
-
   transition: background-color 0.15s ease;
 
   &:hover:not(:disabled) {
@@ -161,7 +120,8 @@
   }
 }
 
-.dayOutside {
+.dayOutside,
+.dayDisabled {
   .dayButton {
     color: $color-text-disabled;
   }
@@ -170,14 +130,7 @@
 .dayDisabled {
   .dayButton {
     cursor: not-allowed;
-    color: $color-text-disabled;
     opacity: 0.35;
-  }
-}
-
-.dayToday {
-  .dayButton {
-    font-weight: 600;
   }
 }
 
@@ -189,14 +142,10 @@
   select {
     cursor: pointer;
 
-    padding: 6px 24px 6px $space-sm;
+    padding: 8px 16px 8px 8px;
     border: none;
     border-radius: $radius-sm;
 
-    font-family: $roboto;
-    font-size: $font-size-sm;
-    font-weight: 600;
-    color: $color-text-primary;
     text-transform: capitalize;
 
     appearance: none;
@@ -212,7 +161,7 @@
     pointer-events: none;
 
     position: absolute;
-    right: 6px;
+    right: 4px;
     transform: scale(0.8);
 
     display: flex;
@@ -220,4 +169,15 @@
 
     color: $color-text-primary;
   }
+}
+
+.calendarIcon {
+  pointer-events: none;
+}
+
+.popoverActions {
+  display: flex;
+  gap: $space-xs;
+  width: 100%;
+  margin-top: $space-md;
 }
