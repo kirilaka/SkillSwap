@@ -31,6 +31,21 @@
     cursor: auto;
     border-color: $color-border-default;
   }
+
+  &:hover.customInputWrapperError:not(:has(.customInputField:disabled)) {
+    border-color: transparent;
+    outline: 2px solid $color-error;
+  }
+
+  &:focus-visible.customInputWrapperError {
+    border-color: transparent;
+    outline: 2px solid $color-error;
+  }
+
+  &Error {
+    border: 1px solid $color-error;
+    border-radius: $radius-lg;
+  }
 }
 
 .customInputField {
@@ -66,7 +81,7 @@
     padding-left: 44px;
 
     + * {
-      right: 12px;
+      left: 12px;
     }
   }
 
@@ -77,4 +92,10 @@
       right: 20px;
     }
   }
+}
+
+.errorMessage {
+  margin-top: 4px;
+  font-size: $font-size-xs;
+  color: $color-error;
 }

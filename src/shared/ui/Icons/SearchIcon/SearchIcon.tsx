@@ -1,5 +1,5 @@
 import { IconWrapper } from '@/shared/ui/Icons/IconWrapper';
-import searchSvg from './SearchIcon.svg';
+import SearchSvg from './SearchIcon.svg?react';
 
 interface SearchIconProps {
   /** Дополнительные CSS-классы */
@@ -9,7 +9,7 @@ interface SearchIconProps {
 export const SearchIcon = ({ className }: SearchIconProps) => {
   return (
     <IconWrapper className={className}>
-      <img src={searchSvg} alt="" />
+      <SearchSvg />
     </IconWrapper>
   );
 };

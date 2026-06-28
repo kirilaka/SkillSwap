@@ -1,0 +1,188 @@
+.ProfileContent {
+  display: flex;
+  gap: 196px;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 60px;
+  border: none;
+}
+
+.formSection {
+  display: flex;
+  flex: 1 1 70%;
+  flex-direction: column;
+  gap: $space-lg;
+
+  width: 100%;
+}
+
+.inputsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  width: 460px;
+}
+
+.fieldWrapper {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-direction: column;
+  gap: $space-sm;
+
+  &.halfWidthFieldL {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+    width: 218px;
+  }
+
+  &.halfWidthFieldR {
+    grid-column: 2 / -1;
+    grid-row: 4 / 5;
+    width: 218px;
+  }
+}
+
+.fieldLabel {
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-text-caption;
+}
+
+.avatarSection {
+  position: relative;
+  flex: 0 0 244px;
+  width: 244px;
+  height: 244px;
+}
+
+.hideProfileName {
+  position: relative;
+  display: block;
+  width: 244px;
+  height: 244px;
+
+  div:first-child {
+    position: relative;
+    width: 244px;
+    height: 244px;
+  }
+
+  img,
+  svg,
+  span,
+  div[class*='avatar'] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 244px;
+    max-width: 244px;
+    height: 244px;
+    max-height: 244px;
+    border-radius: 50%;
+
+    object-fit: cover;
+  }
+
+  div[class*='info'] {
+    display: none;
+  }
+}
+
+.galleryButton {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 2;
+  right: 40px;
+  bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+
+  background-color: $color-button-hover;
+}
+
+.galleryIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.passwordSection {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+button.passwordChip {
+  color: $color-button-primary;
+
+  span {
+    color: $color-button-primary;
+  }
+
+  &:hover,
+  &:active {
+    color: $color-button-primary;
+
+    span {
+      color: $color-button-primary;
+    }
+  }
+}
+
+button.submitButton {
+  width: 100%;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+  height: 120px;
+}
+
+.textareaField {
+  resize: vertical;
+
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 12px 52px 12px 20px;
+  border: 1px solid $color-accent-dark;
+  border-radius: $radius-lg;
+
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+
+  background-color: transparent;
+
+  &:focus {
+    border-color: $color-button-primary;
+    outline: none;
+  }
+}
+
+.textareaIcon {
+  pointer-events: none;
+
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}

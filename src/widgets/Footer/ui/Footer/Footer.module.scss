@@ -1,0 +1,31 @@
+.Footer {
+  width: 1440px;
+  max-width: 1440px;
+  height: 232px;
+  padding: 32px 36px;
+
+  background-color: $color-bg-card;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+
+  .brandZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .copyright {
+      font-size: $font-size-xs;
+      line-height: 16px;
+      color: $color-text-caption;
+    }
+  }
+
+  .nav {
+    align-self: center;
+  }
+}

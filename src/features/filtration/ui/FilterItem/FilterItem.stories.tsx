@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { FilterItem } from './FilterItem';
 import { fn } from 'storybook/test';
 const meta: Meta<typeof FilterItem> = {
-  title: 'FEATURES/FilterItem',
+  title: 'FEATURES/Filtration/FilterItem',
   component: FilterItem,
   parameters: {
     layout: 'centered',
