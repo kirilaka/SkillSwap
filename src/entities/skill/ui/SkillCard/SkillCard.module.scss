@@ -1,0 +1,112 @@
+.card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+
+  width: 100%;
+  max-width: 1020px;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+}
+
+.offer {
+  padding: 32px 52px 40px;
+}
+
+.editable {
+  padding: 44px 60px 72px;
+}
+
+.offerHeader {
+  display: flex;
+  gap: $space-md;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.editHeader {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  align-items: center;
+
+  width: 100%;
+
+  text-align: center;
+}
+
+.editTitle {
+  font-size: $font-size-2xl;
+}
+
+.editSubtitle {
+  font-size: $font-size-sm;
+  color: $color-text-caption;
+}
+
+.content {
+  display: grid;
+  width: 100%;
+
+  &Offer {
+    grid-template-columns: 399px 1fr;
+    gap: 77px;
+  }
+
+  &Edit {
+    grid-template-columns: 420px 1fr;
+    gap: 44px;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.title {
+  font-size: $font-size-3xl;
+}
+
+.category {
+  font-size: $font-size-sm;
+  color: $color-text-caption;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.actionButton {
+  flex: 1;
+}
+
+.buttonWithIcon {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery {
+  grid-column: 2;
+}
