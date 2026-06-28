@@ -48,6 +48,7 @@ export interface SwapRequest {
   status: RequestStatus;
   createdAt: string;
   updatedAt: string;
+  finishedAt?: string | null;
 }
 
 // ─── Auth ────────────────────────────────────────────────
