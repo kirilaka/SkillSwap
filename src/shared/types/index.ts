@@ -9,6 +9,9 @@ export interface Skill {
   description: string;
   type: SkillType;
   category: SKILL_CATEGORIES;
+  categoryId: string;
+  subcategory: string;
+  subcategoryId: string;
   tags: string[];
   imageUrl: string | null;
   authorId: string;
@@ -24,9 +27,14 @@ export interface User {
   createdAt: string;
 }
 
+export type GenderType = 'male' | 'female';
+
 export interface UserInfo extends User {
   description?: string;
   skills?: Skill[];
+  gender?: GenderType;
+  age?: number;
+  city?: string;
 }
 
 // ─── Request ─────────────────────────────────────────────

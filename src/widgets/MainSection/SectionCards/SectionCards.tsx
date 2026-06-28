@@ -21,14 +21,18 @@ export const SectionCards = ({
 }: SectionCardsProps) => {
   const displaydUsers = variant === 'three' ? users.slice(0, 3) : users;
 
+  const showButton = variant === 'three';
+
   return (
     <section className={className}>
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
-        <Button className={styles.seeAllButton} buttonType="tertiary" onClick={onClick}>
-          Смотреть все
-          <ChevronIcon orientation="vertical" />
-        </Button>
+        {showButton && (
+          <Button className={styles.seeAllButton} buttonType="tertiary" onClick={onClick}>
+            Смотреть все
+            <ChevronIcon orientation="vertical" />
+          </Button>
+        )}
       </div>
       <div className={styles.cards}>
         {displaydUsers.map((user) => (

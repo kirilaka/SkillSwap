@@ -8,7 +8,7 @@ import favoriteReducer from '@/features/favorite/model/favoriteSlice';
 export const store = configureStore({
   reducer: {
     users: usersReducer,
-    favorites: favoriteReducer,
+    favorite: favoriteReducer,
     // skills: skillsReducer,
     // auth: authReducer,
   },
