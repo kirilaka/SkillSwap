@@ -1,4 +1,4 @@
-import { usersSlice } from '@/entities/user/model/usersSlice';
+import usersReducer from '@/entities/user/model/usersSlice';
 import { configureStore } from '@reduxjs/toolkit';
 // Импортируй свои slice'ы здесь по мере их создания:
 // import skillsReducer from '@/entities/skill/model/skillsSlice'
@@ -6,7 +6,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {
-    users: usersSlice.reducer,
+    users: usersReducer,
     // skills: skillsReducer,
     // auth: authReducer,
   },
