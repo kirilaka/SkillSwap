@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { ExchangeRequest, RequestStatus } from './types';
+import type { SwapRequest, RequestStatus } from './types';
 import {
   getRequestsFromStorage,
   saveRequestsToStorage,
@@ -15,7 +15,7 @@ export interface CreateRequestPayload {
 }
 
 export interface RequestsState {
-  items: ExchangeRequest[];
+  items: SwapRequest[];
   isLoading: boolean;
   error: string | null;
 }
@@ -44,7 +44,7 @@ const requestsSlice = createSlice({
         return;
       }
 
-      const newRequest: ExchangeRequest = {
+      const newRequest: SwapRequest = {
         id: `request-${Date.now()}`,
         skillId,
         fromUserId,
