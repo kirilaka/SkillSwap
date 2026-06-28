@@ -34,7 +34,7 @@ const initialState: FavoritesState = {
   error: null,
 };
 
-const favoritesSlice = createSlice({
+const favoriteSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
@@ -96,9 +96,9 @@ export const {
   toggleFavoriteUser,
   clearFavorites,
   clearFavoritesError,
-} = favoritesSlice.actions;
+} = favoriteSlice.actions;
 
-export default favoritesSlice.reducer;
+export default favoriteSlice.reducer;
 
 export const selectFavoriteUserIds = (state: { favorites: FavoritesState }) =>
   state.favorites.favoriteUserIds;
