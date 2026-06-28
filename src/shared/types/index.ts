@@ -13,7 +13,7 @@ export interface Skill {
   subcategory: string;
   subcategoryId: string;
   tags: string[];
-  imageUrl: string | null;
+  imageUrl: string[] | null;
   authorId: string;
   createdAt: string;
 }

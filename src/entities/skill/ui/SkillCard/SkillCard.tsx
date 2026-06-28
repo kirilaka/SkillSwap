@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import clsx from 'clsx';
 import { Button } from '@/shared/ui/Button/Button';
-import { LikeIcon } from '@/shared/ui/Icons/LikeIcon/LikeIcon';
 import { ShareIcon } from '@/shared/ui/Icons/ShareIcon/ShareIcon';
 import { MoreCircleIcon } from '@/shared/ui/Icons/MoreCircleIcon/MoreCircleIcon';
 import { EditIcon } from '@/shared/ui/Icons/EditIcon/EditIcon';
 import { Skill as SkillType } from '@/entities/skill/model/types';
 import { Gallery } from '@/shared/ui/Gallery/Gallery';
 import styles from './SkillCard.module.scss';
+import { FavoriteButton } from '@/features/favorite/ui/FavoriteButton';
 
 export interface SkillCardProps {
   /** Данные навыка */
@@ -36,9 +36,7 @@ export const SkillCard: FC<SkillCardProps> = ({
     <article className={clsx(styles.card, styles[cardVariant], className)}>
       {cardVariant === 'offer' ? (
         <div className={styles.offerHeader}>
-          <button type="button" className={styles.headerIcon} aria-label="В избранное">
-            <LikeIcon />
-          </button>
+          <FavoriteButton aria-label="В избранное" />
           <button type="button" className={styles.headerIcon} aria-label="Поделиться">
             <ShareIcon />
           </button>
@@ -55,7 +53,12 @@ export const SkillCard: FC<SkillCardProps> = ({
         </div>
       )}
 
-      <div className={styles.contentWrapper}>
+      <div
+        className={clsx(
+          styles.content,
+          cardVariant == `offer` ? styles.contentOffer : styles.contentEdit,
+        )}
+      >
         <div className={styles.info}>
           <div className={styles.textBlock}>
             <div className={styles.titleWrapper}>
@@ -96,7 +99,13 @@ export const SkillCard: FC<SkillCardProps> = ({
         </div>
 
         <div className={styles.gallery}>
-          <Gallery>{[]}</Gallery>
+          <Gallery>
+            {skill.imageUrl
+              ? skill.imageUrl.map((url, index) => {
+                  return <img key={index} src={url} alt={`skill photo ${index}`} />;
+                })
+              : []}
+          </Gallery>
         </div>
       </div>
     </article>
