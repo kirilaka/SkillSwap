@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@/shared/types';
+import { UserInfo as User } from '@/shared/types';
 
 //Ключи для localStorage
 
@@ -110,7 +110,7 @@ export const registerThunk = createAsyncThunk<User, RegisteredPayload, { rejectV
     try {
       const existingUser = await findUserByEmail(email);
       if (existingUser) {
-        return rejectWithValue('Пользователь с таким e,ail уже существует');
+        return rejectWithValue('Пользователь с таким email уже существует');
       }
       const newUser: User = {
         id: `user-registered-${Date.now()}`,

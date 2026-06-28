@@ -22,15 +22,16 @@ export interface User {
   email: string;
   avatarUrl: string | null;
   createdAt: string;
-  city?: string;
-  age?: number;
-  gender?: 'male' | 'female';
-  description?: string;
 }
+
+export type GenderType = 'male' | 'female';
 
 export interface UserInfo extends User {
   description?: string;
   skills?: Skill[];
+  gender?: GenderType;
+  age?: number;
+  city?: string;
 }
 
 // ─── Request ─────────────────────────────────────────────
