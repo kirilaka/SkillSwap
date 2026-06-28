@@ -1,10 +1,15 @@
 .container {
   position: relative;
+  z-index: 1;
 
   width: 100%;
   height: 48px;
   padding: 0;
   border: 0;
+}
+
+.containerActive {
+  z-index: 100;
 }
 
 .box {
@@ -56,6 +61,8 @@
 }
 
 .option {
+  z-index: 101;
+
   overflow-y: auto;
   display: flex;
   flex-direction: column;
