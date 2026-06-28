@@ -9,6 +9,9 @@ export interface Skill {
   description: string;
   type: SkillType;
   category: SKILL_CATEGORIES;
+  categoryId: string;
+  subcategory: string;
+  subcategoryId: string;
   tags: string[];
   imageUrl: string | null;
   authorId: string;
