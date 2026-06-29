@@ -1,0 +1,158 @@
+.datePicker {
+  isolation: isolate;
+  position: relative;
+  display: inline-block;
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.inputOpen {
+  border-color: $color-accent-light;
+  outline: 2px solid $color-accent-light;
+}
+
+.inputOpen:hover:not(:has(:disabled)) {
+  border-color: $color-accent-light;
+  outline: 2px solid $color-accent-light;
+}
+
+.popover {
+  position: absolute;
+  z-index: 100;
+
+  width: 282px;
+  margin-top: $space-xs;
+  padding: 16px;
+  border-color: $color-accent-dark;
+}
+
+.calendarRoot {
+  width: 100%;
+  padding: 0 12px 16px;
+  text-transform: capitalize;
+}
+
+.monthCaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdowns {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+  justify-content: center;
+}
+
+.navHidden,
+.captionLabelHidden {
+  display: none;
+}
+
+.monthGrid {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.weekday,
+.day {
+  width: 32px;
+  height: 32px;
+
+  font-size: $font-size-xs;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.weekday {
+  color: $color-text-link;
+}
+
+.dayButton {
+  width: 32px;
+  height: 32px;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover:not(:disabled) {
+    background-color: $color-button-hover;
+  }
+}
+
+.daySelected {
+  .dayButton {
+    border: none;
+    background-color: $color-accent-light;
+
+    &:hover:not(:disabled) {
+      background-color: $color-accent-light;
+    }
+  }
+}
+
+.dayOutside,
+.dayDisabled {
+  .dayButton {
+    color: $color-text-disabled;
+  }
+}
+
+.dayDisabled {
+  .dayButton {
+    cursor: not-allowed;
+    opacity: 0.35;
+  }
+}
+
+.selectWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px 0 16px;
+
+  select {
+    cursor: pointer;
+
+    padding: 8px 24px 8px 0;
+    border: none;
+    border-radius: $radius-sm;
+
+    text-align: end;
+    text-transform: capitalize;
+
+    appearance: none;
+    background-color: transparent;
+    outline: none;
+
+    &:hover {
+      background-color: $color-button-hover;
+    }
+  }
+
+  .selectArrow {
+    pointer-events: none;
+    position: absolute;
+    right: 4px;
+  }
+}
+
+.calendarIcon {
+  pointer-events: none;
+}
+
+.popoverActions {
+  display: flex;
+  gap: $space-sm;
+  width: 100%;
+
+  & .cancelButton {
+    width: 125px;
+  }
+
+  & .confirmButton {
+    width: 115px;
+  }
+}
