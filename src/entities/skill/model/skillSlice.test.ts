@@ -65,7 +65,7 @@ describe('skillsSlice', () => {
     it('should have correct initial state', () => {
       const state = store.getState();
       expect(state.skills.items).toEqual([]);
-      expect(state.skills.currentSkill).toBeNull();
+      expect(state.skills.currentSkill).toBeUndefined();
       expect(state.skills.isLoading).toBe(false);
       expect(state.skills.error).toBeNull();
     });
@@ -79,7 +79,7 @@ describe('skillsSlice', () => {
 
     it('clearCurrentSkill should clear current skill', () => {
       store.dispatch(clearCurrentSkill());
-      expect(selectCurrentSkill(store.getState())).toBeNull();
+      expect(selectCurrentSkill(store.getState())).toBeUndefined();
     });
   });
 
@@ -135,7 +135,7 @@ describe('skillsSlice', () => {
 
       await store.dispatch(fetchSkillByIdThunk('999'));
 
-      expect(selectCurrentSkill(store.getState())).toBeNull();
+      expect(selectCurrentSkill(store.getState())).toBeUndefined();
     });
 
     it('should handle rejected state', async () => {

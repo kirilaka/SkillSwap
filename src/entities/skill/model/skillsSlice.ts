@@ -4,14 +4,14 @@ import type { Skill } from '@/shared/types';
 
 interface SkillsState {
   items: Skill[];
-  currentSkill: Skill | null;
+  currentSkill: Skill | undefined;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: SkillsState = {
   items: [],
-  currentSkill: null,
+  currentSkill: undefined,
   isLoading: false,
   error: null,
 };
@@ -27,17 +27,20 @@ export const fetchSkillsThunk = createAsyncThunk<Skill[], void, { rejectValue: s
   },
 );
 
-export const fetchSkillByIdThunk = createAsyncThunk<
-  Skill | undefined,
-  string,
-  { rejectValue: string }
->('skills/fetchById', async (id, { rejectWithValue }) => {
-  try {
-    return await fetchSkillById(id);
-  } catch (err) {
-    return rejectWithValue(err instanceof Error ? err.message : 'Unknown error');
-  }
-});
+export const fetchSkillByIdThunk = createAsyncThunk<Skill, string, { rejectValue: string }>(
+  'skills/fetchById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const skill = await fetchSkillById(id);
+      if (!skill) {
+        throw new Error(`Skill with id ${id} not found`);
+      }
+      return skill;
+    } catch (err) {
+      return rejectWithValue(err instanceof Error ? err.message : 'Unknown error');
+    }
+  },
+);
 
 const skillsSlice = createSlice({
   name: 'skills',
@@ -47,7 +50,7 @@ const skillsSlice = createSlice({
       state.error = null;
     },
     clearCurrentSkill: (state) => {
-      state.currentSkill = null;
+      state.currentSkill = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -68,9 +71,9 @@ const skillsSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchSkillByIdThunk.fulfilled, (state, action: PayloadAction<Skill | undefined>) => {
+      .addCase(fetchSkillByIdThunk.fulfilled, (state, action: PayloadAction<Skill>) => {
         state.isLoading = false;
-        state.currentSkill = action.payload ?? null;
+        state.currentSkill = action.payload;
       })
       .addCase(fetchSkillByIdThunk.rejected, (state, action) => {
         state.isLoading = false;
