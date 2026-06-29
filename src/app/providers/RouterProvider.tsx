@@ -18,33 +18,14 @@ export function AppRouter() {
         <Routes>
           <Route path={ROUTES.HOME} element={<CatalogPage />} />
           <Route path={ROUTES.SKILL} element={<SkillPage />} />
-          <Route
-            path={ROUTES.FAVORITES}
-            element={
-              <PrivateRoute>
-                <FavoritesPage />
-              </PrivateRoute>
-            }
-          />
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<LoginPage />} />
 
-          <Route
-            path={ROUTES.PROFILE}
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={ROUTES.CREATE}
-            element={
-              <PrivateRoute>
-                <CreateSkillPage />
-              </PrivateRoute>
-            }
-          />
+          <Route element={<PrivateRoute />}>
+            <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

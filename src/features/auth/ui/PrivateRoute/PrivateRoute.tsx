@@ -1,19 +1,15 @@
-import { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuth } from '../../model/authSlice';
+import { ROUTES } from '@/shared/lib/constants';
 
-interface PrivateRouteProps {
-  children: ReactNode;
-}
-
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+export const PrivateRoute = () => {
   const isAuth = useAppSelector(selectIsAuth);
   const location = useLocation();
 
   if (!isAuth) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
