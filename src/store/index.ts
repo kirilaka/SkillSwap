@@ -1,5 +1,5 @@
 import usersReducer from '@/entities/user/model/usersSlice';
-import { filtrationReducer } from '@/features/filtration/models/filtrationSlice';
+import filtrationReducer from '@/features/filtration/models/filtrationSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import favoriteReducer from '@/features/favorite/model/favoriteSlice';
 // Импортируй свои slice'ы здесь по мере их создания:

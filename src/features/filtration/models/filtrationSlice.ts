@@ -80,7 +80,7 @@ export const {
   resetFilters,
 } = filtrationSlice.actions;
 
-export const filtrationReducer = filtrationSlice.reducer;
+export default filtrationSlice.reducer;
 
 export const selectFiltration = (state: RootState) => state.filtration;
 export const selectSelectedCategoryIds = (state: RootState) => state.filtration.selectedCategoryIds;
