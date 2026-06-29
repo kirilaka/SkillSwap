@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from './types';
 import { fetchUserById, fetchUsers } from '@/api/users';
+import { UserInfo } from '@/shared/types';
 
 export const fetchUsersThunk = createAsyncThunk('users/fetchAll', async () => {
   const data = await fetchUsers();
@@ -14,7 +15,7 @@ export const fetchUserByIdThunk = createAsyncThunk('users/fetchById', async (id:
 
 type UsersState = {
   /** список всех пользователей */
-  items: User[];
+  items: UserInfo[];
   /** выбранный пользователь, если нужен для профиля или страницы пользователя */
   currentUser: User | null;
   /** состояние загрузки */

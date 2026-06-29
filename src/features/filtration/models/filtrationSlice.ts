@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ExchangeType } from './types';
-import { GenderFilter } from './types';
 import { RootState } from '@/store';
-import { Skill, User } from './types';
+import { UserInfo } from '@/shared/types';
+import { ExchangeFilterType } from './types';
+import { GenderFilterType } from './types';
 import { FiltrationState } from './types';
 const initialState: FiltrationState = {
   /**Выбранные id основных категорий */
@@ -23,13 +23,22 @@ export const filtrationSlice = createSlice({
   name: 'filtration',
   initialState,
   reducers: {
-    toogleCategory: (state, action: PayloadAction<string>) => {
-      const categoryId = action.payload;
+    toogleCategory: (
+      state,
+      action: PayloadAction<{ categoryId: string; subcategoryIds: string[] }>,
+    ) => {
+      const { categoryId, subcategoryIds } = action.payload;
 
       if (state.selectedCategoryIds.includes(categoryId)) {
         state.selectedCategoryIds = state.selectedCategoryIds.filter((id) => id !== categoryId);
+        state.selectedSubcategoryIds = state.selectedSubcategoryIds.filter(
+          (id) => !subcategoryIds.includes(id),
+        );
       } else {
         state.selectedCategoryIds.push(categoryId);
+        state.selectedSubcategoryIds = Array.from(
+          new Set([...state.selectedSubcategoryIds, ...subcategoryIds]),
+        );
       }
     },
     toogleSubcategory: (state, action: PayloadAction<string>) => {
@@ -43,10 +52,10 @@ export const filtrationSlice = createSlice({
         state.selectedSubcategoryIds.push(subcategoryId);
       }
     },
-    setExchangeType: (state, action: PayloadAction<ExchangeType>) => {
+    setExchangeType: (state, action: PayloadAction<ExchangeFilterType>) => {
       state.exchangeType = action.payload;
     },
-    setGender: (state, action: PayloadAction<GenderFilter>) => {
+    setGender: (state, action: PayloadAction<GenderFilterType>) => {
       state.gender = action.payload;
     },
     setCity: (state, action: PayloadAction<string>) => {
@@ -83,51 +92,51 @@ export const selectCity = (state: RootState) => state.filtration.city;
 export const selectSearchValue = (state: RootState) => state.filtration.searchValue;
 export const selectAvailableCities = (state: RootState) => {
   const users = state.users.items;
-  return Array.from(new Set(users.map((user: User) => user.city).filter(Boolean)));
+  return Array.from(new Set(users.map((user: UserInfo) => user.city).filter(Boolean)));
 };
 
 export const selectFilteredSkills = (state: RootState) => {
-  const skills = state.skills.items;
   const users = state.users.items;
   const { selectedCategoryIds, selectedSubcategoryIds, exchangeType, gender, city, searchValue } =
     state.filtration;
 
-  return skills.filter((skill: Skill) => {
-    const author = users.find((user: User) => user.id === skill.authorId);
+  return users.flatMap((user) => {
+    const skills = user.skills ?? [];
 
-    if (selectedCategoryIds.length > 0 && !selectedCategoryIds.includes(skill.categoryId)) {
-      return false;
-    }
-
-    if (
-      selectedSubcategoryIds.length > 0 &&
-      !selectedSubcategoryIds.includes(skill.subcategoryId)
-    ) {
-      return false;
-    }
-
-    if (exchangeType !== 'all' && skill.type !== exchangeType) {
-      return false;
-    }
-
-    if (gender !== 'any' && author?.gender !== gender) {
-      return false;
-    }
-
-    if (city && author?.city !== city) {
-      return false;
-    }
-
-    if (searchValue) {
-      const value = searchValue.toLowerCase();
-      const matchesSearch =
-        skill.title.toLowerCase().includes(value) ||
-        skill.description.toLowerCase().includes(value) ||
-        skill.tags.some((tag) => tag.toLowerCase().includes(value));
-      if (!matchesSearch) {
+    return skills.filter((skill) => {
+      if (selectedCategoryIds.length > 0 && !selectedCategoryIds.includes(skill.categoryId)) {
         return false;
       }
-    }
-    return true;
+
+      if (
+        selectedSubcategoryIds.length > 0 &&
+        !selectedSubcategoryIds.includes(skill.subcategoryId)
+      ) {
+        return false;
+      }
+
+      if (exchangeType !== 'all' && skill.type !== exchangeType) {
+        return false;
+      }
+
+      if (gender !== 'any' && user.gender !== gender) {
+        return false;
+      }
+
+      if (city && user.city !== city) {
+        return false;
+      }
+
+      if (searchValue) {
+        const value = searchValue.toLowerCase();
+
+        return (
+          skill.title.toLowerCase().includes(value) ||
+          skill.description.toLowerCase().includes(value)
+        );
+      }
+
+      return true;
+    });
   });
 };

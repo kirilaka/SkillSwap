@@ -1,3 +1,7 @@
+import { GenderType } from '@/shared/types';
+import { SkillType } from '@/shared/types';
+export type ExchangeFilterType = 'all' | SkillType;
+export type GenderFilterType = 'any' | GenderType;
 export interface FilterItemType {
   /** Текст пункта фильтра */
   label: string;
@@ -7,40 +11,11 @@ export interface FilterItemType {
   checkboxVariant?: 'circle' | 'squareMinus' | 'squareCheck';
 }
 
-export type ExchangeType = 'all' | 'teach' | 'learn';
-export type GenderFilter = 'any' | 'male' | 'female';
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string | null;
-  createdAt: string;
-  city: string;
-  age: number;
-  gender: GenderFilter;
-  description: string;
-}
-
 export interface FiltrationState {
   selectedCategoryIds: string[];
   selectedSubcategoryIds: string[];
-  exchangeType: ExchangeType;
-  gender: GenderFilter;
+  exchangeType: ExchangeFilterType;
+  gender: GenderFilterType;
   city: string;
   searchValue: string;
-}
-
-export interface Skill {
-  id: string;
-  title: string;
-  description: string;
-  type: 'teach' | 'learn';
-  category: string;
-  categoryId: string;
-  subcategory: string;
-  subcategoryId: string;
-  tags: string[];
-  imageUrl: string | null;
-  authorId: string;
-  createdAt: string;
 }
