@@ -30,9 +30,16 @@
 }
 
 .avatar {
+  position: relative;
   width: 72px;
   height: 72px;
   padding: 9px;
+}
+
+.addIcon {
+  position: absolute;
+  right: 8px;
+  bottom: 9px;
 }
 
 .fileInput {

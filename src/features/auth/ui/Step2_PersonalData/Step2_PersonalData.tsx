@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import styles from './Step2_PersonalData.module.scss';
 import UserInfo from 'shared/assets/images/user-info.svg';
+import AddIcon from 'shared/assets/images/Add.svg';
 import { Avatar } from '@/shared/ui/Avatar/Avatar';
 import { Input } from '@/shared/ui/Input/Input';
 import { DdInputSelect } from '@/shared/ui/DropdownInput';
@@ -34,10 +35,15 @@ interface ProfileFormData {
 }
 
 interface Step2_PersonalDataProps {
+  /**Доп.классы */
   className?: string;
+  /** Массив полов для Dd */
   genders: DropdownItem[];
+  /** Массив городов для Dd */
   cities: DropdownItem[];
+  /** Массив категорий и подкатегорий для Dd */
   categories: Category[];
+  /**Сабмит при клике на кнопку*/
   onSubmit: (data: ProfileFormData) => void;
 }
 
@@ -105,6 +111,7 @@ export const Step2_PersonalData = ({
         <div className={styles.avatarContainer}>
           <label className={styles.avatar}>
             <Avatar src={avatarUrl} alt="Изображение пользователя" />
+            <img className={styles.addIcon} src={AddIcon} alt="" aria-hidden="true" />
             <input
               type="file"
               accept="image/*"
