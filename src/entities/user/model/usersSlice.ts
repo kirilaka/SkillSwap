@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { User } from './types';
 import { fetchUserById, fetchUsers } from '@/api/users';
 import { UserInfo } from '@/shared/types';
 
@@ -17,7 +16,7 @@ type UsersState = {
   /** список всех пользователей */
   items: UserInfo[];
   /** выбранный пользователь, если нужен для профиля или страницы пользователя */
-  currentUser: User | null;
+  currentUser: UserInfo | null;
   /** состояние загрузки */
   isLoading: boolean;
   /** текст ошибки при неудачной загрузке */
