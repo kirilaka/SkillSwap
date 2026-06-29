@@ -8,26 +8,9 @@
   }
 }
 
-.input {
-  border-color: $color-border-default;
-}
-
 .inputOpen {
   border-color: $color-accent-light;
   outline: 2px solid $color-accent-light;
-}
-
-.inputError {
-  border-color: $color-error;
-}
-
-.input,
-.inputOpen,
-.inputError {
-  &:hover:not(:has(:disabled)) {
-    border-color: inherit;
-    outline: 2px solid currentcolor;
-  }
 }
 
 .inputOpen:hover:not(:has(:disabled)) {
@@ -35,31 +18,20 @@
   outline: 2px solid $color-accent-light;
 }
 
-.inputError:hover:not(:has(:disabled)) {
-  border-color: $color-error;
-  outline: 2px solid $color-error;
-}
-
-.errorMessage {
-  margin-top: 4px;
-  font-size: $font-size-xs;
-  color: $color-error;
-}
-
 .popover {
   position: absolute;
   z-index: 100;
 
-  width: 280px;
-  margin-top: $space-sm;
-  padding: 16px 32px;
-  border-radius: $radius-lg;
-
-  background-color: $color-bg-card;
+  width: 282px;
+  margin-top: $space-xs;
+  padding: 16px;
+  border-color: $color-accent-dark;
 }
 
 .calendarRoot {
   width: 100%;
+  padding: 0 12px 16px;
+  text-transform: capitalize;
 }
 
 .monthCaption {
@@ -86,22 +58,24 @@
   width: 100%;
 }
 
-.weekday {
-  height: 16px;
-  padding: 0;
+.weekday,
+.day {
+  width: 32px;
+  height: 32px;
 
-  color: $color-text-link;
-  text-align: center;
-  vertical-align: middle;
+  font-size: $font-size-xs;
+  font-weight: 400;
+  line-height: 16px;
 }
 
-.day {
-  padding: 0;
-  text-align: center;
+.weekday {
+  color: $color-text-link;
 }
 
 .dayButton {
-  transition: background-color 0.15s ease;
+  width: 32px;
+  height: 32px;
+  transition: background-color 0.15s ease-in-out;
 
   &:hover:not(:disabled) {
     background-color: $color-button-hover;
@@ -110,8 +84,7 @@
 
 .daySelected {
   .dayButton {
-    font-weight: 600;
-    color: $color-text-primary;
+    border: none;
     background-color: $color-accent-light;
 
     &:hover:not(:disabled) {
@@ -138,14 +111,16 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  padding: 0 8px 0 16px;
 
   select {
     cursor: pointer;
 
-    padding: 8px 16px 8px 8px;
+    padding: 8px 24px 8px 0;
     border: none;
     border-radius: $radius-sm;
 
+    text-align: end;
     text-transform: capitalize;
 
     appearance: none;
@@ -159,15 +134,8 @@
 
   .selectArrow {
     pointer-events: none;
-
     position: absolute;
     right: 4px;
-    transform: scale(0.8);
-
-    display: flex;
-    align-items: center;
-
-    color: $color-text-primary;
   }
 }
 
@@ -177,7 +145,14 @@
 
 .popoverActions {
   display: flex;
-  gap: $space-xs;
+  gap: $space-sm;
   width: 100%;
-  margin-top: $space-md;
+
+  & .cancelButton {
+    width: 125px;
+  }
+
+  & .confirmButton {
+    width: 115px;
+  }
 }

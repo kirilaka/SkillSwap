@@ -11,6 +11,7 @@ import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 
 import styles from './DatePicker.module.scss';
 import { Button } from '../Button/Button';
+import { Box } from '../Box/Box';
 
 const DATE_FORMAT = 'dd.MM.yyyy';
 
@@ -27,8 +28,6 @@ interface DatePickerProps {
   minDate?: Date;
   /** максимальная доступная для выбора дата*/
   maxDate?: Date;
-  /**  текст ошибки, отображаемый под компонентом.*/
-  error?: string;
   /**  дополнительные классы для внешнего контейнера */
   className?: string;
 }
@@ -36,11 +35,8 @@ interface DatePickerProps {
 const formatDate = (date: Date) => format(date, DATE_FORMAT, { locale: ru });
 
 const parseDateInput = (text: string): Date | undefined => {
-  const trimmed = text.trim();
-  if (!trimmed) return undefined;
-
-  const parsed = parse(trimmed, DATE_FORMAT, new Date(), { locale: ru });
-  if (!isValid(parsed) || formatDate(parsed) !== trimmed) return undefined;
+  const parsed = parse(text, DATE_FORMAT, new Date(), { locale: ru });
+  if (!isValid(parsed) || formatDate(parsed) !== text) return undefined;
 
   return startOfDay(parsed);
 };
@@ -59,12 +55,10 @@ export const DatePicker = ({
   disabled = false,
   minDate,
   maxDate,
-  error,
   className = '',
 }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(() => (value ? formatDate(value) : ''));
-  const [inputError, setInputError] = useState<string | null>(null);
   const [tempSelectedDate, setTempSelectedDate] = useState<Date | undefined>(value);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -72,14 +66,7 @@ export const DatePicker = ({
   useEffect(() => {
     setInputValue(value ? formatDate(value) : '');
     setTempSelectedDate(value);
-    setInputError(null);
   }, [value]);
-
-  useEffect(() => {
-    if (error) setInputError(null);
-  }, [error]);
-
-  const displayError = error || inputError;
 
   const toggleCalendar = () => {
     if (!disabled) {
@@ -96,7 +83,6 @@ export const DatePicker = ({
 
   const handleConfirm = () => {
     onChange(tempSelectedDate);
-    setInputError(null);
     setInputValue(tempSelectedDate ? formatDate(tempSelectedDate) : '');
     setIsOpen(false);
   };
@@ -105,41 +91,27 @@ export const DatePicker = ({
     setTempSelectedDate(value);
     setIsOpen(false);
   }, [value]);
-  const commitInputValue = () => {
-    const trimmed = inputValue.trim();
 
-    if (!trimmed) {
-      setInputError(null);
-      if (value) onChange(undefined);
-      return;
-    }
-
-    const parsed = parseDateInput(trimmed);
-
+  const validateDate = (value: string) => {
+    const parsed = parseDateInput(value);
     if (!parsed) {
-      setInputError('Введите дату в формате дд.мм.гггг');
-      return;
+      return 'Введите дату в формате дд.мм.гггг';
     }
 
     if (!isDateInRange(parsed, minDate, maxDate)) {
-      setInputError('Дата вне допустимого диапазона');
-      return;
+      return 'Дата вне допустимого диапазона';
     }
 
-    setInputError(null);
-    onChange(parsed);
+    return null;
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputError(null);
     setInputValue(event.target.value.replace(/[^\d.]/g, ''));
   };
 
   const handleContainerBlur = (event: FocusEvent<HTMLDivElement>) => {
     const nextTarget = event.relatedTarget as Node | null;
     if (nextTarget && containerRef.current?.contains(nextTarget)) return;
-
-    commitInputValue();
   };
 
   useEffect(() => {
@@ -202,22 +174,17 @@ export const DatePicker = ({
         maxLength={10}
         inputMode="numeric"
         iconPosition="right"
-        validate={() => error || null}
-        showErrorOn="change"
-        className={clsx(
-          styles.input,
-          isOpen && styles.inputOpen,
-          displayError && styles.inputError,
-        )}
+        validate={validateDate}
+        showErrorOn="blur"
+        className={clsx(styles.input, isOpen && styles.inputOpen)}
         icon={<CalendarIcon className={styles.calendarIcon} />}
       />
 
-      {inputError && !error && <div className={styles.errorMessage}>{inputError}</div>}
-
       {isOpen && (
-        <div className={styles.popover}>
+        <Box className={styles.popover}>
           <DayPicker
             mode="single"
+            showOutsideDays={true}
             selected={tempSelectedDate}
             onSelect={handleDaySelect}
             locale={ru}
@@ -239,9 +206,7 @@ export const DatePicker = ({
                         </option>
                       ))}
                     </select>
-                    <span className={styles.selectArrow}>
-                      <ChevronIcon isOpen={false} />
-                    </span>
+                    <ChevronIcon isOpen={false} className={styles.selectArrow} />
                   </div>
                 );
               },
@@ -250,13 +215,13 @@ export const DatePicker = ({
 
           <div className={styles.popoverActions}>
             <Button buttonType="secondary" className={styles.cancelButton} onClick={handleCancel}>
-              Отмена
+              Отменить
             </Button>
             <Button buttonType="primary" className={styles.confirmButton} onClick={handleConfirm}>
               Выбрать
             </Button>
           </div>
-        </div>
+        </Box>
       )}
     </div>
   );

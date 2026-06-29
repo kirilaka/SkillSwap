@@ -53,8 +53,8 @@ export const WithValue: Story = {
 
 export const WithError: Story = {
   args: {
-    error: 'Дата не может быть в прошлом',
-    value: new Date(2023, 0, 1),
+    value: new Date(19000, 0, 1),
+    minDate: new Date(1940, 0, 1),
   },
 };
 
