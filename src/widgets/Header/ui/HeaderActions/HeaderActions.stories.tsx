@@ -8,12 +8,15 @@ const meta: Meta<typeof HeaderActions> = {
   title: 'Widgets/Header/HeaderActions',
   component: HeaderActions,
   tags: ['autodocs'],
+  // Центрируем компонент в Storybook
+  parameters: {
+    layout: 'centered',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof HeaderActions>;
 
-// Базовый store без preloadedState (тип выводится автоматически)
 const createStore = () =>
   configureStore({
     reducer: { auth: authReducer },
