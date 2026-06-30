@@ -7,6 +7,7 @@ import { Input } from '@/shared/ui/Input/Input';
 import { DdInputSelect } from '@/shared/ui/DropdownInput';
 import { DdInputCheckbox } from '@/shared/ui/DropdownInput';
 import { Button } from '@/shared/ui/Button/Button';
+import { cities } from 'src/entities/city/model/constants';
 import React, { useState } from 'react';
 
 interface DropdownItem {
@@ -39,8 +40,6 @@ interface Step2_PersonalDataProps {
   className?: string;
   /** Массив полов для Dd */
   genders: DropdownItem[];
-  /** Массив городов для Dd */
-  cities: DropdownItem[];
   /** Массив категорий и подкатегорий для Dd */
   categories: Category[];
   /**Сабмит при клике на кнопку*/
@@ -49,7 +48,6 @@ interface Step2_PersonalDataProps {
 
 export const Step2_PersonalData = ({
   genders,
-  cities,
   categories,
   className,
   onSubmit,
@@ -144,7 +142,14 @@ export const Step2_PersonalData = ({
         </div>
         <label className={styles.label}>
           Город
-          <DdInputSelect items={cities} placeholder="Не указан" onSelectItem={handleCitiChange} />
+          <DdInputSelect
+            items={cities.map((city) => ({
+              id: city.id,
+              label: city.name,
+            }))}
+            placeholder="Не указан"
+            onSelectItem={handleCitiChange}
+          />
         </label>
         <label className={styles.label}>
           Категория навыка, которому хотите научиться
