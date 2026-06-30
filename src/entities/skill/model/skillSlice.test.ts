@@ -8,11 +8,20 @@ import skillsReducer, {
   selectCurrentUserSkills,
 } from './skillsSlice';
 import * as skillsApi from '@/api/skills';
-import * as storage from '@/shared/lib/localStorage/CreatedSkillsStorage';
 import type { Skill } from '@/shared/types';
 
+// Мокаем API
 vi.mock('@/api/skills');
-vi.mock('@/shared/lib/localStorage/createdSkillsStorage');
+
+// Мокаем localStorage helpers
+const mockGetCreatedSkills = vi.fn();
+const mockSaveCreatedSkills = vi.fn();
+
+vi.mock('@/shared/lib/localStorage/createdSkillsStorage', () => ({
+  getCreatedSkillsFromStorage: () => mockGetCreatedSkills(),
+  saveCreatedSkillsToStorage: (skills: Skill[]) => mockSaveCreatedSkills(skills),
+  clearCreatedSkillsStorage: () => {},
+}));
 
 const mockSkill: Skill = {
   id: 'skill-1',
@@ -30,7 +39,6 @@ const mockSkill: Skill = {
   source: 'mock',
 };
 
-// Минимальный auth reducer для тестов
 const authReducer = (state = { user: null }) => state;
 
 const createTestStore = () =>
@@ -46,6 +54,7 @@ describe('skillsSlice', () => {
   beforeEach(() => {
     store = createTestStore();
     vi.clearAllMocks();
+    mockGetCreatedSkills.mockReturnValue([]);
   });
 
   describe('initial state', () => {
@@ -60,9 +69,9 @@ describe('skillsSlice', () => {
 
   describe('fetchSkillsThunk', () => {
     it('should merge mock and created skills', async () => {
-      const createdSkill = { ...mockSkill, id: 'created-1', source: 'created' as const };
+      const createdSkill: Skill = { ...mockSkill, id: 'created-1', source: 'created' };
       vi.mocked(skillsApi.fetchSkills).mockResolvedValue([mockSkill]);
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([createdSkill]);
+      mockGetCreatedSkills.mockReturnValue([createdSkill]);
 
       await store.dispatch(fetchSkillsThunk());
 
@@ -73,8 +82,8 @@ describe('skillsSlice', () => {
 
   describe('createSkillThunk', () => {
     it('should create skill with source created', async () => {
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
-      vi.mocked(storage.saveCreatedSkillsToStorage).mockImplementation(() => {});
+      mockGetCreatedSkills.mockReturnValue([]);
+      mockSaveCreatedSkills.mockImplementation(() => {});
 
       await store.dispatch(
         createSkillThunk({
@@ -104,7 +113,7 @@ describe('skillsSlice', () => {
         { ...mockSkill, authorId: 'user1' },
         { ...mockSkill, id: 'skill-2', authorId: 'user2' },
       ]);
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
+      mockGetCreatedSkills.mockReturnValue([]);
 
       await store.dispatch(fetchSkillsThunk());
 
