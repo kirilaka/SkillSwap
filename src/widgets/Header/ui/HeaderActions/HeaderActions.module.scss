@@ -20,6 +20,17 @@
   justify-content: center;
 }
 
+.profileWrapper {
+  position: relative;
+}
+
+.avatarButton {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
 .dropdown {
   top: calc(100% + 20px);
   right: 0;
@@ -53,4 +64,11 @@
   &:active {
     color: $color-text-link;
   }
+}
+
+.logoutButton {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: transparent;
 }

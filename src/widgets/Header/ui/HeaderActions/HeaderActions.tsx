@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectAuthUser, selectIsAuth, logout } from '@/features/auth/model/authSlice';
 import { ThemeToggle } from '@/features/theme/ui/ThemeToggle/ThemeToggle';
 import { FavoriteButton } from '@/features/favorite/ui/FavoriteButton/FavoriteButton';
 import { NotificationButton } from '@/features/notification/ui/NotificationButton/NotificationButton';
@@ -9,17 +11,17 @@ import { SignUpButton } from '@/features/auth/ui/SignUpButton/SignUpButton';
 import { UserAvatar } from '@/entities/user/ui/UserAvatar/UserAvatar';
 import { Dropdown } from '@/shared/ui/Dropdown/Dropdown';
 import { Box } from '@/shared/ui/Box/Box';
-import { getAuthUser, clearAuthUser } from '@/features/auth/model/authUtils';
+import { LogOutIcon } from '@/shared/ui/Icons/LogOutIcon/LogOutIcon';
+import { ROUTES } from '@/shared/lib/constants';
 import type { UserInfo } from '@/shared/types';
 import styles from './HeaderActions.module.scss';
-import { ROUTES } from '@/shared/lib/constants';
-import { LogOutIcon } from '@/shared/ui/Icons/LogOutIcon/LogOutIcon';
 
 export interface HeaderActionsProps {
   colorScheme?: 'light' | 'dark';
   hasNewNotifications?: boolean;
   notificationsNew?: Parameters<typeof NotificationButton>[0]['notificationsNew'];
   notificationsOld?: Parameters<typeof NotificationButton>[0]['notificationsOld'];
+  /** Только для Storybook/тестов */
   user?: UserInfo | null;
   className?: string;
 }
@@ -32,22 +34,15 @@ export const HeaderActions = ({
   user,
   className,
 }: HeaderActionsProps) => {
-  const authUser = user ?? getAuthUser();
-  const isAuth = !!authUser;
-  const [colorSchemeIs, setColorSchemeIs] = useState(colorScheme);
-
-  const userInfo: UserInfo | undefined = authUser
-    ? {
-        id: authUser.id,
-        name: authUser.name,
-        email: authUser.email,
-        avatarUrl: null,
-        createdAt: '',
-      }
-    : undefined;
-
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const authUser = useAppSelector(selectAuthUser);
+  const isAuth = useAppSelector(selectIsAuth);
 
+  const currentUser = authUser ?? user ?? undefined;
+  const isAuthenticated = isAuth || !!currentUser;
+
+  const [colorSchemeIs, setColorSchemeIs] = useState(colorScheme);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleProfileClick = useCallback((e: React.MouseEvent) => {
@@ -60,10 +55,10 @@ export const HeaderActions = ({
   }, []);
 
   const handleLogout = useCallback(() => {
-    clearAuthUser();
+    dispatch(logout());
     setIsProfileOpen(false);
     navigate(ROUTES.HOME);
-  }, [navigate]);
+  }, [dispatch, navigate]);
 
   const handleLogIn = useCallback(() => {
     navigate(ROUTES.LOGIN);
@@ -78,15 +73,14 @@ export const HeaderActions = ({
   }, [navigate]);
 
   const onThemeToggle = () => {
-    if (colorSchemeIs == 'light') setColorSchemeIs('dark');
-    else setColorSchemeIs('light');
+    setColorSchemeIs((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (
     <div className={clsx(styles.headerActions, className)}>
       <div className={styles.iconsSection}>
         <ThemeToggle colorScheme={colorSchemeIs} onClick={onThemeToggle} />
-        {isAuth && (
+        {isAuthenticated && (
           <>
             <NotificationButton
               hasNew={hasNewNotifications}
@@ -99,23 +93,27 @@ export const HeaderActions = ({
       </div>
 
       <div className={styles.authSection}>
-        {!isAuth ? (
+        {!isAuthenticated ? (
           <>
             <LogInButton onClick={handleLogIn} />
             <SignUpButton onClick={handleSignUp} />
           </>
         ) : (
-          <>
-            <div onClick={handleProfileClick}>
-              <UserAvatar user={userInfo} infoFormat="name" />
-            </div>
+          <div className={styles.profileWrapper}>
+            <button type="button" className={styles.avatarButton} onClick={handleProfileClick}>
+              <UserAvatar user={currentUser} infoFormat="name" />
+            </button>
             <Dropdown
               isOpen={isProfileOpen}
               onClose={handleProfileClose}
               className={styles.dropdown}
             >
               <Box className={styles.dropdownBox}>
-                <Link to="/profile" className={styles.dropdownItem} onClick={handleProfileClose}>
+                <Link
+                  to={ROUTES.PROFILE}
+                  className={styles.dropdownItem}
+                  onClick={handleProfileClose}
+                >
                   Личный кабинет
                 </Link>
                 <button
@@ -128,7 +126,7 @@ export const HeaderActions = ({
                 </button>
               </Box>
             </Dropdown>
-          </>
+          </div>
         )}
       </div>
     </div>
