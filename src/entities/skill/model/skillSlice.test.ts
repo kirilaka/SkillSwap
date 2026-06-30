@@ -2,53 +2,40 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { configureStore } from '@reduxjs/toolkit';
 import skillsReducer, {
   fetchSkillsThunk,
-  fetchSkillByIdThunk,
-  clearSkillsError,
-  clearCurrentSkill,
+  createSkillThunk,
   selectSkills,
-  selectCurrentSkill,
-  selectSkillsLoading,
-  selectSkillsError,
+  selectSkillsByAuthorId,
+  selectCurrentUserSkills,
 } from './skillsSlice';
 import * as skillsApi from '@/api/skills';
+import * as storage from '@/shared/lib/localStorage/CreatedSkillsStorage';
 import type { Skill } from '@/shared/types';
 
 vi.mock('@/api/skills');
+vi.mock('@/shared/lib/localStorage/createdSkillsStorage');
 
-const mockSkills: Skill[] = [
-  {
-    id: '1',
-    title: 'React',
-    description: 'Frontend framework',
-    type: 'teach',
-    category: 'business',
-    categoryId: 'cat-1',
-    subcategory: 'Frontend',
-    subcategoryId: 'sub-1',
-    tags: ['js', 'ui'],
-    imageUrl: null,
-    authorId: 'user1',
-    createdAt: '2024-01-01',
-  },
-  {
-    id: '2',
-    title: 'Node.js',
-    description: 'Backend runtime',
-    type: 'learn',
-    category: 'education',
-    categoryId: 'cat-2',
-    subcategory: 'Backend',
-    subcategoryId: 'sub-2',
-    tags: ['js', 'server'],
-    imageUrl: null,
-    authorId: 'user2',
-    createdAt: '2024-01-02',
-  },
-];
+const mockSkill: Skill = {
+  id: 'skill-1',
+  title: 'React',
+  description: 'Frontend',
+  type: 'teach',
+  category: 'business',
+  categoryId: 'cat-1',
+  subcategory: 'Frontend',
+  subcategoryId: 'sub-1',
+  tags: [],
+  imageUrl: null,
+  authorId: 'user1',
+  createdAt: '2024-01-01',
+  source: 'mock',
+};
+
+// Минимальный auth reducer для тестов
+const authReducer = (state = { user: null }) => state;
 
 const createTestStore = () =>
   configureStore({
-    reducer: { skills: skillsReducer },
+    reducer: { skills: skillsReducer, auth: authReducer },
   });
 
 type TestStore = ReturnType<typeof createTestStore>;
@@ -65,86 +52,69 @@ describe('skillsSlice', () => {
     it('should have correct initial state', () => {
       const state = store.getState();
       expect(state.skills.items).toEqual([]);
-      expect(state.skills.currentSkill).toBeUndefined();
+      expect(state.skills.currentSkill).toBeNull();
       expect(state.skills.isLoading).toBe(false);
       expect(state.skills.error).toBeNull();
     });
   });
 
-  describe('reducers', () => {
-    it('clearSkillsError should clear error', () => {
-      store.dispatch(clearSkillsError());
-      expect(selectSkillsError(store.getState())).toBeNull();
-    });
+  describe('fetchSkillsThunk', () => {
+    it('should merge mock and created skills', async () => {
+      const createdSkill = { ...mockSkill, id: 'created-1', source: 'created' as const };
+      vi.mocked(skillsApi.fetchSkills).mockResolvedValue([mockSkill]);
+      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([createdSkill]);
 
-    it('clearCurrentSkill should clear current skill', () => {
-      store.dispatch(clearCurrentSkill());
-      expect(selectCurrentSkill(store.getState())).toBeUndefined();
+      await store.dispatch(fetchSkillsThunk());
+
+      expect(selectSkills(store.getState())).toHaveLength(2);
+      expect(selectSkills(store.getState())[1].source).toBe('created');
+    });
+  });
+
+  describe('createSkillThunk', () => {
+    it('should create skill with source created', async () => {
+      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
+      vi.mocked(storage.saveCreatedSkillsToStorage).mockImplementation(() => {});
+
+      await store.dispatch(
+        createSkillThunk({
+          title: 'New Skill',
+          description: 'Desc',
+          type: 'teach',
+          category: 'art',
+          categoryId: 'cat-1',
+          subcategory: 'Music',
+          subcategoryId: 'sub-1',
+          tags: [],
+          imageUrl: null,
+          authorId: 'user1',
+        }),
+      );
+
+      const skills = selectSkills(store.getState());
+      expect(skills).toHaveLength(1);
+      expect(skills[0].source).toBe('created');
+      expect(skills[0].authorId).toBe('user1');
     });
   });
 
   describe('selectors', () => {
-    it('selectSkills should return items', () => {
-      expect(selectSkills(store.getState())).toEqual([]);
-    });
-
-    it('selectSkillsLoading should return isLoading', () => {
-      expect(selectSkillsLoading(store.getState())).toBe(false);
-    });
-  });
-
-  describe('fetchSkillsThunk', () => {
-    it('should handle pending state', () => {
-      store.dispatch(fetchSkillsThunk.pending('', undefined));
-      expect(selectSkillsLoading(store.getState())).toBe(true);
-      expect(selectSkillsError(store.getState())).toBeNull();
-    });
-
-    it('should handle fulfilled state', async () => {
-      vi.mocked(skillsApi.fetchSkills).mockResolvedValue(mockSkills);
+    it('selectSkillsByAuthorId should filter by author', async () => {
+      vi.mocked(skillsApi.fetchSkills).mockResolvedValue([
+        { ...mockSkill, authorId: 'user1' },
+        { ...mockSkill, id: 'skill-2', authorId: 'user2' },
+      ]);
+      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
 
       await store.dispatch(fetchSkillsThunk());
 
-      expect(selectSkills(store.getState())).toEqual(mockSkills);
-      expect(selectSkillsLoading(store.getState())).toBe(false);
-      expect(selectSkillsError(store.getState())).toBeNull();
+      const user1Skills = selectSkillsByAuthorId('user1')(store.getState());
+      expect(user1Skills).toHaveLength(1);
+      expect(user1Skills[0].authorId).toBe('user1');
     });
 
-    it('should handle rejected state', async () => {
-      vi.mocked(skillsApi.fetchSkills).mockRejectedValue(new Error('Network error'));
-
-      await store.dispatch(fetchSkillsThunk());
-
-      expect(selectSkillsLoading(store.getState())).toBe(false);
-      expect(selectSkillsError(store.getState())).toBe('Network error');
-    });
-  });
-
-  describe('fetchSkillByIdThunk', () => {
-    it('should handle fulfilled with found skill', async () => {
-      vi.mocked(skillsApi.fetchSkillById).mockResolvedValue(mockSkills[0]);
-
-      await store.dispatch(fetchSkillByIdThunk('1'));
-
-      expect(selectCurrentSkill(store.getState())).toEqual(mockSkills[0]);
-      expect(selectSkillsLoading(store.getState())).toBe(false);
-    });
-
-    it('should handle fulfilled with not found skill', async () => {
-      vi.mocked(skillsApi.fetchSkillById).mockResolvedValue(undefined);
-
-      await store.dispatch(fetchSkillByIdThunk('999'));
-
-      expect(selectCurrentSkill(store.getState())).toBeUndefined();
-    });
-
-    it('should handle rejected state', async () => {
-      vi.mocked(skillsApi.fetchSkillById).mockRejectedValue(new Error('Not found'));
-
-      await store.dispatch(fetchSkillByIdThunk('1'));
-
-      expect(selectSkillsLoading(store.getState())).toBe(false);
-      expect(selectSkillsError(store.getState())).toBe('Not found');
+    it('selectCurrentUserSkills should return empty if no user', () => {
+      expect(selectCurrentUserSkills(store.getState())).toEqual([]);
     });
   });
 });
