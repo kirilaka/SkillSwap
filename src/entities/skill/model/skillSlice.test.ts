@@ -12,7 +12,6 @@ import * as storage from '@/shared/lib/localStorage/CreatedSkillsStorage';
 import type { Skill } from '@/shared/types';
 
 vi.mock('@/api/skills');
-vi.mock('@/shared/lib/localStorage/createdSkillsStorage');
 
 const mockSkill: Skill = {
   id: 'skill-1',
@@ -45,6 +44,8 @@ describe('skillsSlice', () => {
   beforeEach(() => {
     store = createTestStore();
     vi.clearAllMocks();
+    // Сбрасываем spy'ы перед каждым тестом
+    vi.restoreAllMocks();
   });
 
   describe('initial state', () => {
@@ -61,7 +62,7 @@ describe('skillsSlice', () => {
     it('should merge mock and created skills', async () => {
       const createdSkill: Skill = { ...mockSkill, id: 'created-1', source: 'created' };
       vi.mocked(skillsApi.fetchSkills).mockResolvedValue([mockSkill]);
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([createdSkill]);
+      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([createdSkill]);
 
       await store.dispatch(fetchSkillsThunk());
 
@@ -72,8 +73,8 @@ describe('skillsSlice', () => {
 
   describe('createSkillThunk', () => {
     it('should create skill with source created', async () => {
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
-      vi.mocked(storage.saveCreatedSkillsToStorage).mockImplementation(() => {});
+      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([]);
+      vi.spyOn(storage, 'saveCreatedSkillsToStorage').mockImplementation(() => {});
 
       await store.dispatch(
         createSkillThunk({
@@ -103,7 +104,7 @@ describe('skillsSlice', () => {
         { ...mockSkill, authorId: 'user1' },
         { ...mockSkill, id: 'skill-2', authorId: 'user2' },
       ]);
-      vi.mocked(storage.getCreatedSkillsFromStorage).mockReturnValue([]);
+      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([]);
 
       await store.dispatch(fetchSkillsThunk());
 
