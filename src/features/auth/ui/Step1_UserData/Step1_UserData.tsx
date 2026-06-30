@@ -11,27 +11,53 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 
 interface Step1_UserDataProps {
   /**Сабмит при клике на кнопку*/
-  onSubmit: () => void;
+  onSubmit: (data: RegistrationFormData) => void;
   /**Доп.классы */
   className?: string;
 }
-
+interface RegistrationFormData {
+  email: string;
+  password: string;
+}
 export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const validateEmail = (value: string) => {
+    if (!value.trim()) {
+      return 'Введите email';
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return 'Некорректный email';
+    }
+    return null;
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value.trim()) {
+      return 'Введите пароль';
+    }
+    if (value.length < 8) {
+      return 'Пароль должен быть не меньше 8 символов';
+    }
+    return null;
+  };
+
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    /**Добавить валидацию */
     setPassword(e.target.value);
   };
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    /** Добавить валидацию */
     setEmail(e.target.value);
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    /** Добавить валидацию */
-    onSubmit();
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    if (emailError || passwordError) return;
+    onSubmit({
+      email: email,
+      password: password,
+    });
   };
 
   const handleTooglePassword = () => {
@@ -39,7 +65,7 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
   };
   return (
     <div className={styles.page}>
-      <form onSubmit={handleSubmit} className={clsx(className, styles.form)}>
+      <form noValidate onSubmit={handleSubmit} className={clsx(className, styles.form)}>
         <div className={styles.authButtons}>
           <Button type="button" className={styles.socialButton}>
             <img src={GoogleIcon} alt="" aria-hidden={true} />
@@ -66,6 +92,8 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
               className={styles.input}
               type="email"
               placeholder="Введите email"
+              validate={validateEmail}
+              showErrorOn="change"
             />
           </label>
           <label className={styles.inputLabel}>
@@ -75,7 +103,9 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
               placeholder="Придумайте надёжный пароль"
               onChange={handlePasswordChange}
               value={password}
+              validate={validatePassword}
               className={styles.input}
+              showErrorOn="change"
               type={isPasswordVisible ? 'text' : 'password'}
               icon={
                 <button type="button" onClick={handleTooglePassword}>
