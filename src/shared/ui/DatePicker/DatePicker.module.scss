@@ -1,11 +1,14 @@
 .datePicker {
-  isolation: isolate;
   position: relative;
   display: inline-block;
 
   &.disabled {
     opacity: 0.6;
   }
+}
+
+.datePickerOpen {
+  z-index: 1000;
 }
 
 .inputOpen {
@@ -20,7 +23,7 @@
 
 .popover {
   position: absolute;
-  z-index: 100;
+  z-index: 1001;
 
   width: 282px;
   margin-top: $space-xs;

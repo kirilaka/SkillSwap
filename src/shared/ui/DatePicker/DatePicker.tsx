@@ -136,7 +136,12 @@ export const DatePicker = ({
     };
   }, [isOpen, handleCancel]);
 
-  const containerClasses = clsx(styles.datePicker, { [styles.disabled]: disabled }, className);
+  const containerClasses = clsx(
+    styles.datePicker,
+    isOpen && styles.datePickerOpen,
+    { [styles.disabled]: disabled },
+    className,
+  );
 
   const disabledMatchers: Matcher[] = [];
   if (minDate) disabledMatchers.push({ before: minDate });

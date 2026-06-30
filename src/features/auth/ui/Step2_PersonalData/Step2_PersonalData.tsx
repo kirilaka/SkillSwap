@@ -7,73 +7,83 @@ import { Input } from '@/shared/ui/Input/Input';
 import { DdInputSelect } from '@/shared/ui/DropdownInput';
 import { DdInputCheckbox } from '@/shared/ui/DropdownInput';
 import { Button } from '@/shared/ui/Button/Button';
+import { DatePicker } from '@/shared/ui/DatePicker/DatePicker';
 import { cities } from 'src/entities/city/model/constants';
+import { skillsFilterList } from '@/features/filtration/models/artFilter';
+import { ProfileFormData } from '../../model/types';
 import React, { useState } from 'react';
+
+export const genders = [
+  { id: 'male', label: 'Мужской' },
+  { id: 'female', label: 'Женский' },
+];
 
 interface DropdownItem {
   id: string;
   label: string;
 }
 
-interface Subcategory {
-  id: string;
-  label: string;
-}
-
-interface Category {
-  id: string;
-  label: string;
-  subcategories: Subcategory[];
-}
-interface ProfileFormData {
-  name: string;
-  birthData: string;
-  genderId: string | null;
-  citiId: string | null;
-  categoryId: string | null;
-  subcategoryId: string | null;
-  avatar: File | null;
-}
-
 interface Step2_PersonalDataProps {
   /**Доп.классы */
   className?: string;
-  /** Массив полов для Dd */
-  genders: DropdownItem[];
-  /** Массив категорий и подкатегорий для Dd */
-  categories: Category[];
   /**Сабмит при клике на кнопку*/
   onSubmit: (data: ProfileFormData) => void;
 }
 
-export const Step2_PersonalData = ({
-  genders,
-  categories,
-  className,
-  onSubmit,
-}: Step2_PersonalDataProps) => {
+export const Step2_PersonalData = ({ className, onSubmit }: Step2_PersonalDataProps) => {
   const [formData, setFormData] = useState<ProfileFormData>({
     name: '',
-    birthData: '',
+    birthData: undefined,
     genderId: null,
     citiId: null,
     categoryId: null,
     subcategoryId: null,
     avatar: null,
   });
+  const allSubcategories: DropdownItem[] = skillsFilterList.flatMap(
+    (category) =>
+      category?.subFilters?.map((subcategory) => ({
+        id: subcategory.id,
+        label: subcategory.label,
+      })) ?? [],
+  );
 
-  const selectedCategory = categories.find((category) => category.id === formData.categoryId);
-  const subcategories = selectedCategory?.subcategories ?? [];
+  const selectedCategory = skillsFilterList.find((category) => category.id === formData.categoryId);
+
+  const selectedSubcategoryCategory = skillsFilterList.find((category) =>
+    category.subFilters?.some((subcategory) => subcategory.id === formData.subcategoryId),
+  );
+
+  const categoryItems: DropdownItem[] =
+    formData.subcategoryId && selectedSubcategoryCategory
+      ? [
+          {
+            id: selectedSubcategoryCategory.id,
+            label: selectedSubcategoryCategory.label,
+          },
+        ]
+      : skillsFilterList.map((category) => ({
+          id: category.id,
+          label: category.label,
+        }));
+
+  const subcategoryItems: DropdownItem[] =
+    formData.categoryId && selectedCategory
+      ? (selectedCategory?.subFilters?.map((subcategory) => ({
+          id: subcategory.id,
+          label: subcategory.label,
+        })) ?? [])
+      : allSubcategories;
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
       name: e.target.value,
     }));
   };
-  const handleBirthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBirthChange = (date?: Date) => {
     setFormData((prev) => ({
       ...prev,
-      birthData: e.target.value,
+      birthData: date,
     }));
   };
   const handleGenderChange = (id: string | null) => {
@@ -125,7 +135,7 @@ export const Step2_PersonalData = ({
         <div className={styles.birthGenderRow}>
           <label className={clsx(styles.label, styles.date)}>
             Дата рождения
-            <Input
+            <DatePicker
               placeholder="дд.мм.гггг"
               value={formData.birthData}
               onChange={handleBirthChange}
@@ -154,17 +164,15 @@ export const Step2_PersonalData = ({
         <label className={styles.label}>
           Категория навыка, которому хотите научиться
           <DdInputCheckbox
-            items={categories}
+            items={categoryItems}
             placeholder="Выберите категорию"
-            onSelectItem={(id) =>
-              setFormData((prev) => ({ ...prev, categoryId: id, subcategoryId: null }))
-            }
+            onSelectItem={(id) => setFormData((prev) => ({ ...prev, categoryId: id }))}
           />
         </label>
         <label className={styles.label}>
           Подкатегория навыка, которому хотите научиться
           <DdInputCheckbox
-            items={subcategories}
+            items={subcategoryItems}
             placeholder="Выберите подкатегорию"
             onSelectItem={(id) => setFormData((prev) => ({ ...prev, subcategoryId: id }))}
           />
