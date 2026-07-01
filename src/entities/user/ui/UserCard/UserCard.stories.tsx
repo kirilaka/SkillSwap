@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { UserCard } from './UserCard';
 import { Skill } from '@/shared/types';
+
 const meta: Meta<typeof UserCard> = {
   title: 'Entities/UserCard',
   component: UserCard,
@@ -10,6 +11,8 @@ const meta: Meta<typeof UserCard> = {
   },
   args: {
     onButtonClick: fn(),
+    onFavoriteClick: fn(),
+    isFavorite: false,
   },
 };
 
@@ -30,8 +33,6 @@ const mockUser = {
     { title: 'Английский язык', type: 'teach', category: 'language' },
     { title: 'React', type: 'teach', category: 'education' },
     { title: 'Танцевать', type: 'learn', category: 'art' },
-    { title: 'Python', type: 'learn', category: 'education' },
-    { title: 'Figma', type: 'learn', category: 'education' },
   ] as Skill[],
 };
 
@@ -52,6 +53,23 @@ export const StatusTrue: Story = {
 export const NoUser: Story = {
   args: {
     user: null,
+    hasDescription: false,
+  },
+};
+
+export const NoSkills: Story = {
+  args: {
+    user: {
+      id: '2',
+      name: 'Без навыков',
+      email: 'no.skills@example.com',
+      avatarUrl: '',
+      createdAt: '2026-01-01',
+      city: 'Санкт-Петербург',
+      age: 25,
+      description: 'У меня пока нет навыков',
+      skills: [] as Skill[],
+    },
     hasDescription: false,
   },
 };
