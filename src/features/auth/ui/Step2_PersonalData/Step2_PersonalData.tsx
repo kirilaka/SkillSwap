@@ -28,9 +28,15 @@ interface Step2_PersonalDataProps {
   className?: string;
   /**Сабмит при клике на кнопку*/
   onSubmit: (data: ProfileFormData) => void;
+  /**Обработчик клика по кнопке назад*/
+  onPrevButtonClick: () => void;
 }
 
-export const Step2_PersonalData = ({ className, onSubmit }: Step2_PersonalDataProps) => {
+export const Step2_PersonalData = ({
+  className,
+  onSubmit,
+  onPrevButtonClick,
+}: Step2_PersonalDataProps) => {
   const [formData, setFormData] = useState<ProfileFormData>({
     name: '',
     birthData: undefined,
@@ -179,7 +185,9 @@ export const Step2_PersonalData = ({ className, onSubmit }: Step2_PersonalDataPr
         </label>
 
         <div className={styles.buttons}>
-          <Button type="button">Назад</Button>
+          <Button type="button" onClick={onPrevButtonClick}>
+            Назад
+          </Button>
           <Button type="submit" buttonType="primary">
             Продолжить
           </Button>
