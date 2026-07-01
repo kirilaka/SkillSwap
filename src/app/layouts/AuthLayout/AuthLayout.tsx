@@ -4,9 +4,8 @@ import { CrossIcon } from '@/shared/ui/Icons/CrossIcon/CrossIcon';
 import { ROUTES } from '@/shared/lib/constants';
 import { Button } from '@/shared/ui/Button/Button';
 import styles from './AuthLayout.module.scss';
-import clsx from 'clsx';
 
-export const AuthLayout = ({ className }: { className?: string }) => {
+export const AuthLayout = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
@@ -14,11 +13,11 @@ export const AuthLayout = ({ className }: { className?: string }) => {
   };
 
   return (
-    <div className={clsx(styles.authLayout, className)}>
+    <div className={styles.authLayout}>
       <header className={styles.header}>
         <Logo />
         <Button
-          type="button"
+          buttonType="tertiary"
           className={styles.closeButton}
           onClick={handleClose}
           aria-label="Закрыть"

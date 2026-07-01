@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
-import { MainLayout } from '@/app/MainLayout/MainLayout';
+import { MainLayout } from '@/app/layouts';
 import { AuthLayout } from '@/app/layouts';
 
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
