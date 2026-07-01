@@ -19,12 +19,15 @@ import {
   selectSearchValue,
   selectSelectedCategoryIds,
   selectSelectedSubcategoryIds,
+  setCity,
   setExchangeType,
   setGender,
   toggleCategory,
   toggleSubcategory,
 } from '../../models/filtrationSlice';
 import { ExchangeFilterType, GenderFilterType } from '../../models/types';
+import { selectAvailableFilterCities } from '@/entities/city';
+import { FilterItem } from '../FilterItem/FilterItem';
 
 export interface FilterPanelProps {
   /** Доп. классы */
@@ -94,8 +97,10 @@ export const FilterPanel = ({ className }: FilterPanelProps) => {
   const city = useAppSelector(selectCity);
   /** значение поиска */
   const searchValue = useAppSelector(selectSearchValue);
+  const availableCities = useAppSelector(selectAvailableFilterCities);
 
   const [isShowAllOpen, setIsShowAllOpen] = useState(false);
+  const [isShowAllCitiesOpen, setIsShowAllCitiesOpen] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -162,6 +167,13 @@ export const FilterPanel = ({ className }: FilterPanelProps) => {
   const handleReset = useCallback(() => {
     dispatch(resetFilters());
   }, [dispatch]);
+
+  const handleCitiesToggle = useCallback(
+    (cityName: string) => {
+      dispatch(setCity(city === cityName ? '' : cityName));
+    },
+    [dispatch, city],
+  );
 
   const handleShowAllClick = () => {
     setIsShowAllOpen((prev) => !prev);
@@ -234,6 +246,33 @@ export const FilterPanel = ({ className }: FilterPanelProps) => {
           ))}
         </div>
       </div>
+
+      {/* Города — чекбоксы */}
+      {availableCities.length > 0 && (
+        <div className={styles.categorySection}>
+          <h3 className={styles.toggleTitle}>Город</h3>
+          <div className={styles.skillsCategory}>
+            {availableCities.map((item) => (
+              <FilterItem
+                key={item.id}
+                id={item.id}
+                label={item.name}
+                hasSubFilters={false}
+                checkboxVariant={'squareCheck'}
+                isActive={city === item.name}
+                onCheckboxClick={() => handleCitiesToggle(item.name)}
+              />
+            ))}
+          </div>
+          <ControlChip
+            label="Все города"
+            iconVariant="Chevron"
+            onClick={() => setIsShowAllCitiesOpen((prev) => !prev)}
+            isOpen={isShowAllCitiesOpen}
+            className={styles.showAllButton}
+          />
+        </div>
+      )}
     </div>
   );
 };
