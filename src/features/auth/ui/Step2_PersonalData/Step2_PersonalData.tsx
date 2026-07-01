@@ -29,7 +29,7 @@ interface Step2_PersonalDataProps {
   /**Сабмит при клике на кнопку*/
   onSubmit: (data: ProfileFormData) => void;
   /**Обработчик клика по кнопке назад*/
-  onPrevButtonClick: () => void;
+  onPrevButtonClick?: () => void;
 }
 
 export const Step2_PersonalData = ({
