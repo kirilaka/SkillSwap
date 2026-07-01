@@ -2,85 +2,44 @@ import styles from './Notification.module.scss';
 import clsx from 'clsx';
 import { IdeaIcon } from '@/shared/ui/Icons/IdeaIcon/IdeaIcon';
 import { Button } from '@/shared/ui/Button/Button';
-import type { User } from '@/shared/types';
 
 export interface NotificationProps {
   /** Уникальный идентификатор уведомления */
   id: string;
+  /** Заголовок уведомления */
+  title: string;
+  /** Дополнительный текст */
+  description?: string;
   /** Состояние: новое или просмотренное */
-  viewState: 'new' | 'viewed';
-  /** Состояние обмена: отправлен или завершён */
-  exchangeStatus: 'sent' | 'completed';
+  isNew?: boolean;
+  /** id заявки, если по клику нужно открыть заявку */
+  requestId?: string;
   /** Обработчик клика */
   onClick?: () => void;
   /** Дата уведомления */
-  date: Date;
-  /** Пользователь */
-  user: User | null;
+  date?: string;
   /** Доп. классы */
   className?: string;
 }
 
-const formatDate = (date: Date): string => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const dateOnly = new Date(date);
-  dateOnly.setHours(0, 0, 0, 0);
-
-  if (dateOnly.getTime() === today.getTime()) return 'сегодня';
-  if (dateOnly.getTime() === yesterday.getTime()) return 'вчера';
-
-  const day = dateOnly.getDate();
-  const months = [
-    'января',
-    'февраля',
-    'марта',
-    'апреля',
-    'мая',
-    'июня',
-    'июля',
-    'августа',
-    'сентября',
-    'октября',
-    'ноября',
-    'декабря',
-  ];
-  return `${day} ${months[dateOnly.getMonth()]}`;
-};
-
-const getTitle = (user: User | null, exchangeStatus: 'sent' | 'completed'): string => {
-  const name = user?.name ?? 'Пользователь';
-  return exchangeStatus === 'completed'
-    ? `${name} принял ваш обмен`
-    : `${name} предлагает вам обмен`;
-};
-
-const getDescription = (exchangeStatus: 'sent' | 'completed'): string =>
-  exchangeStatus === 'completed'
-    ? 'Перейдите в профиль, чтобы обсудить детали'
-    : 'Примите обмен, чтобы обсудить детали';
-
 export const Notification = ({
-  id,
-  viewState,
-  exchangeStatus,
-  onClick,
+  title,
+  description,
   date,
-  user,
+  isNew = false,
+  onClick,
   className,
 }: NotificationProps) => (
-  <div className={clsx(styles.notification, styles[viewState], className)} id={id}>
+  <div className={clsx(styles.notification, isNew ? styles.new : styles.viewed, className)}>
     <div className={styles.topRow}>
       <IdeaIcon className={styles.icon} />
       <div className={styles.content}>
-        <p className={styles.title}>{getTitle(user, exchangeStatus)}</p>
-        <p className={styles.description}>{getDescription(exchangeStatus)}</p>
+        <p className={styles.title}>{title}</p>
+        {description && <p className={styles.description}>{description}</p>}
       </div>
-      <span className={styles.date}>{formatDate(date)}</span>
+      {date && <span className={styles.date}>{date}</span>}
     </div>
-    {viewState === 'new' && (
+    {isNew && (
       <Button onClick={onClick} buttonType="primary" className={styles.button}>
         Перейти
       </Button>

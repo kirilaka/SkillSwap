@@ -5,6 +5,9 @@ import {
   saveRequestsToStorage,
   clearRequestsStorage,
 } from '@/shared/lib/localStorage/requestsStorage';
+import { selectAuthUser } from '@/features/auth/model/authSlice';
+import type { RootState } from '@/store';
+import type { NotificationProps } from '@/features/notification/ui/Notification/Notification';
 
 const ACTIVE_STATUSES: RequestStatus[] = ['pending', 'accepted', 'inProgress'];
 
@@ -176,3 +179,84 @@ export const selectHasActiveRequest =
         request.fromUserId === userId &&
         ACTIVE_STATUSES.includes(request.status),
     );
+
+const getRequestNotificationTitle = (status: string): string => {
+  switch (status) {
+    case 'pending':
+      return 'Новая заявка на обмен';
+    case 'accepted':
+      return 'Заявка принята';
+    case 'rejected':
+      return 'Заявка отклонена';
+    case 'inProgress':
+      return 'Обмен в процессе';
+    case 'done':
+      return 'Сессия завершена';
+    default:
+      return 'Заявка';
+  }
+};
+
+const getRequestNotificationDescription = (status: string): string => {
+  switch (status) {
+    case 'pending':
+      return 'Примите обмен, чтобы обсудить детали';
+    case 'accepted':
+      return 'Перейдите в профиль, чтобы обсудить детали';
+    case 'rejected':
+      return 'Заявка была отклонена';
+    case 'inProgress':
+      return 'Обмен активен';
+    case 'done':
+      return 'Сессия завершена';
+    default:
+      return '';
+  }
+};
+
+const formatDate = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const dateOnly = new Date(date);
+  dateOnly.setHours(0, 0, 0, 0);
+
+  if (dateOnly.getTime() === today.getTime()) return 'сегодня';
+  if (dateOnly.getTime() === yesterday.getTime()) return 'вчера';
+
+  const day = dateOnly.getDate();
+  const months = [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря',
+  ];
+  return `${day} ${months[dateOnly.getMonth()]}`;
+};
+
+export const selectRequestNotifications = (state: RootState): NotificationProps[] => {
+  const requests = selectRequests(state);
+  const authUser = selectAuthUser(state);
+  if (!authUser) return [];
+
+  return requests
+    .filter((r) => r.fromUserId === authUser.id || r.toUserId === authUser.id)
+    .map((r) => ({
+      id: `notification-${r.id}`,
+      requestId: r.id,
+      title: getRequestNotificationTitle(r.status),
+      description: getRequestNotificationDescription(r.status),
+      date: formatDate(r.updatedAt ?? r.createdAt),
+      isNew: r.status === 'pending',
+    }));
+};

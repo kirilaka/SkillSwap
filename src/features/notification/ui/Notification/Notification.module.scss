@@ -18,6 +18,10 @@
       width: calc(100px / 3);
     }
   }
+
+  &:hover {
+    background-color: $color-border-default;
+  }
 }
 
 .topRow {
@@ -48,4 +52,8 @@
 
 .button {
   width: 114px;
+}
+
+.new {
+  background-color: $color-button-hover;
 }

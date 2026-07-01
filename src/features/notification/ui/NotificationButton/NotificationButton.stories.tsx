@@ -1,113 +1,82 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { NotificationButton } from './NotificationButton';
 import type { NotificationProps } from '../Notification/Notification';
 
-// --- Mock Data ---
-const mockUser = {
-  id: '123',
-  name: 'Анна',
-  email: 'anna@example.com',
-  avatarUrl: '/avatars/anna.jpg',
-  createdAt: new Date().toISOString(),
-};
+const mockStore = configureStore({
+  reducer: {
+    requests: () => ({ items: [], isLoading: false, error: null }),
+    auth: () => ({ user: null, token: null, isAuth: false, isLoading: false, error: null }),
+  },
+});
 
-const mockUser2 = {
-  id: '456',
-  name: 'Мария',
-  email: 'maria@example.com',
-  avatarUrl: '/avatars/maria.jpg',
-  createdAt: new Date().toISOString(),
-};
+const mockNew: NotificationProps[] = [
+  {
+    id: '1',
+    title: 'Анна предлагает обмен',
+    description: 'React',
+    date: 'сегодня',
+    isNew: true,
+    requestId: 'r1',
+  },
+  {
+    id: '2',
+    title: 'Максим предлагает обмен',
+    description: 'TypeScript',
+    date: 'сегодня',
+    isNew: true,
+    requestId: 'r2',
+  },
+];
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const mockOld: NotificationProps[] = [
+  {
+    id: '3',
+    title: 'Николай принял обмен',
+    description: 'Python',
+    date: 'вчера',
+    isNew: false,
+    requestId: 'r3',
+  },
+  {
+    id: '4',
+    title: 'Сессия завершена',
+    description: 'Figma',
+    date: '2 дня назад',
+    isNew: false,
+    requestId: 'r4',
+  },
+];
 
-const mockNotificationNew1: NotificationProps = {
-  id: '1',
-  viewState: 'new',
-  exchangeStatus: 'completed',
-  date: new Date(Date.now() - 1000 * 60 * 5),
-  user: mockUser,
-};
-
-const mockNotificationNew2: NotificationProps = {
-  id: '2',
-  viewState: 'new',
-  exchangeStatus: 'sent',
-  date: new Date(today.getTime() - 1000 * 60 * 30),
-  user: mockUser2,
-};
-
-const mockNotificationOld1: NotificationProps = {
-  id: '3',
-  viewState: 'viewed',
-  exchangeStatus: 'sent',
-  date: new Date(today.getTime() - 1000 * 60 * 60 * 24),
-  user: mockUser,
-};
-
-const mockNotificationOld2: NotificationProps = {
-  id: '4',
-  viewState: 'viewed',
-  exchangeStatus: 'completed',
-  date: new Date(today.getTime() - 1000 * 60 * 60 * 48),
-  user: mockUser2,
-};
-
-// --- Mock Data Arrays ---
-const emptyNotifications = {
-  notificationsNew: null,
-  notificationsOld: null,
-};
-
-const newOnly = {
-  notificationsNew: [mockNotificationNew1, mockNotificationNew2],
-  notificationsOld: null,
-};
-
-const oldOnly = {
-  notificationsNew: null,
-  notificationsOld: [mockNotificationOld1, mockNotificationOld2],
-};
-
-const both = {
-  notificationsNew: [mockNotificationNew1, mockNotificationNew2],
-  notificationsOld: [mockNotificationOld1, mockNotificationOld2],
-};
-
-// --- Meta ---
 const meta: Meta<typeof NotificationButton> = {
   title: 'Features/NotificationButton',
   component: NotificationButton,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <Provider store={mockStore}>
+        <Story />
+      </Provider>
+    ),
+  ],
+  parameters: { layout: 'centered' },
 };
 
 export default meta;
-
-type Story = StoryObj<{
-  hasNew?: boolean;
-  notificationsNew?: NotificationProps[] | null;
-  notificationsOld?: NotificationProps[] | null;
-  className?: string;
-}>;
-
-// --- Stories ---
+type Story = StoryObj<typeof NotificationButton>;
 
 export const Empty: Story = {
-  args: { ...emptyNotifications, hasNew: false },
+  args: { notificationsNew: [], notificationsOld: [], hasNew: false },
 };
 
 export const WithNewOnly: Story = {
-  args: { ...newOnly, hasNew: true },
+  args: { notificationsNew: mockNew, notificationsOld: [], hasNew: true },
 };
 
 export const WithOldOnly: Story = {
-  args: { ...oldOnly, hasNew: false },
+  args: { notificationsNew: [], notificationsOld: mockOld, hasNew: false },
 };
 
 export const WithBoth: Story = {
-  args: { ...both, hasNew: true },
+  args: { notificationsNew: mockNew, notificationsOld: mockOld, hasNew: true },
 };
