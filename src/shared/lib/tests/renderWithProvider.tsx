@@ -1,3 +1,4 @@
+// src/shared/lib/tests/renderWithProviders.tsx
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -12,6 +13,7 @@ import skillsReducer from '@/entities/skill/model/skillsSlice';
 import authReducer from '@/features/auth/model/authSlice';
 import favoriteReducer from '@/features/favorite/model/favoriteSlice';
 import filtrationReducer from '@/features/filtration/models/filtrationSlice';
+import requestsReducer from '@/features/requests/model/requestsSlice';
 
 // ─── Root reducer через combineReducers ───────────────────────────────────
 
@@ -21,6 +23,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   favorite: favoriteReducer,
   filtration: filtrationReducer,
+  requests: requestsReducer,
 });
 
 // ─── Options ──────────────────────────────────────────────────────────────
