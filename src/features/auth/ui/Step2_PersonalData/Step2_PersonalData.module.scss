@@ -1,0 +1,92 @@
+.page {
+  display: flex;
+  gap: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 556px;
+  padding: 40px 60px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date {
+  max-width: 208px;
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  cursor: pointer;
+
+  position: relative;
+
+  width: 72px;
+  height: 72px;
+  padding: 9px;
+}
+
+.addIcon {
+  position: absolute;
+  right: 8px;
+  bottom: 9px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.birthGenderRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 556px;
+  padding: 132px 60px;
+
+  text-align: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    line-height: 28px;
+  }
+}
+
+.image {
+  width: 300px;
+  height: 300px;
+}
