@@ -23,7 +23,7 @@ export const filtrationSlice = createSlice({
   name: 'filtration',
   initialState,
   reducers: {
-    toogleCategory: (
+    toggleCategory: (
       state,
       action: PayloadAction<{ categoryId: string; subcategoryIds: string[] }>,
     ) => {
@@ -41,7 +41,7 @@ export const filtrationSlice = createSlice({
         );
       }
     },
-    toogleSubcategory: (state, action: PayloadAction<string>) => {
+    toggleSubcategory: (state, action: PayloadAction<string>) => {
       const subcategoryId = action.payload;
 
       if (state.selectedSubcategoryIds.includes(subcategoryId)) {
@@ -71,8 +71,8 @@ export const filtrationSlice = createSlice({
 });
 
 export const {
-  toogleCategory,
-  toogleSubcategory,
+  toggleCategory,
+  toggleSubcategory,
   setExchangeType,
   setGender,
   setCity,

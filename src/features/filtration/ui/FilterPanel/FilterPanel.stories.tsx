@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Provider } from 'react-redux';
+
 import { FilterPanel } from './FilterPanel';
+import { store } from '@/store';
 
 const meta: Meta<typeof FilterPanel> = {
   title: 'Features/Filtration/FilterPanel',
@@ -8,16 +11,24 @@ const meta: Meta<typeof FilterPanel> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <Provider store={store}>
+        <Story />
+      </Provider>
+    ),
+  ],
   argTypes: {
-    onFiltersChange: { action: 'filters changed' },
-    className: { control: 'text' },
+    className: {
+      control: 'text',
+    },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof FilterPanel>;
 
-/** По умолчанию */
 export const Default: Story = {
   args: {},
 };
