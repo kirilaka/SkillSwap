@@ -44,7 +44,7 @@ export const UserCard = ({
 
   const renderSkillList = (skillList: Skill[]) => {
     if (skillList.length === 0) {
-      return null;
+      return <div className={styles.emptySkills} />;
     }
     return (
       <>
@@ -74,14 +74,12 @@ export const UserCard = ({
         <div className={styles.topRowIcon}>
           <UserAvatar user={user} infoFormat="all" />
           {!hasDescription && (
-            <div onClick={(e) => e.stopPropagation()}>
-              <FavoriteButton
-                isFavorite={isFavorite}
-                onClick={() => {
-                  onFavoriteClick?.();
-                }}
-              />
-            </div>
+            <FavoriteButton
+              isFavorite={isFavorite}
+              onClick={() => {
+                onFavoriteClick?.();
+              }}
+            />
           )}
         </div>
         {hasDescription && <span className={styles.description}>{user.description}</span>}
