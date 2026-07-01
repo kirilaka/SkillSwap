@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
-import { MainLayout } from '@/app/MainLayout/MainLayout';
+import { MainLayout } from '@/app/layouts';
+import { AuthLayout } from '@/app/layouts';
 
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const SkillPage = lazy(() => import('@/pages/SkillPage'));
@@ -10,6 +11,7 @@ const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
 const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+//const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export function AppRouter() {
@@ -29,9 +31,10 @@ export function AppRouter() {
 
             <Route path="*" element={<NotFoundPage />} />
           </Route>
-
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.REGISTER} element={<LoginPage />} />
+          <Route element={<AuthLayout />}>
+            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            {/* <Route path={ROUTES.REGISTER} element={<RegisterPage />} /> */}
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>
