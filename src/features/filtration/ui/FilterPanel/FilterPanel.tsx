@@ -1,9 +1,13 @@
 import { useCallback, useState, forwardRef, ButtonHTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { FilterCategory } from '../FilterCategory/FilterCategory';
-import { CheckboxCircle } from '../../../../shared/ui/Checkbox';
-import { skillsFilterList, exchangeTypeFilterList, genderFilterList } from '../../models/artFilter';
-import type { MockFilterItem } from '../../models/artFilter';
+import { CheckboxCircle } from '@/shared/ui/Checkbox';
+import {
+  skillsFilterList,
+  exchangeTypeFilterList,
+  genderFilterList,
+} from '@/features/filtration/models/artFilter';
+import type { MockFilterItem } from '@/features/filtration/models/artFilter';
 import styles from './FilterPanel.module.scss';
 import { ControlChip } from '@/shared/ui/ControlChip/ControlChip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
