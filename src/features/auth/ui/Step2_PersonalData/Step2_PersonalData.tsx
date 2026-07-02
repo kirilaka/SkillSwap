@@ -49,6 +49,14 @@ export const Step2_PersonalData = ({
     skillDescription: '',
     skillImageUrl: null,
   });
+  const isFormValid =
+    formData.name.trim() !== '' &&
+    formData.birthDate !== undefined &&
+    formData.genderId !== null &&
+    formData.cityId !== null &&
+    formData.categoryId.learn !== null &&
+    formData.subcategoryId.learn !== null;
+
   const allSubcategories: DropdownItem[] = skillsFilterList.flatMap(
     (category) =>
       category?.subFilters?.map((subcategory) => ({
@@ -94,7 +102,7 @@ export const Step2_PersonalData = ({
   const handleBirthChange = (date?: Date) => {
     setFormData((prev) => ({
       ...prev,
-      birthData: date,
+      birthDate: date,
     }));
   };
   const handleGenderChange = (id: string | null) => {
@@ -106,7 +114,7 @@ export const Step2_PersonalData = ({
   const handleCitiChange = (id: string | null) => {
     setFormData((prev) => ({
       ...prev,
-      citiId: id,
+      cityId: id,
     }));
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -200,7 +208,7 @@ export const Step2_PersonalData = ({
           <Button type="button" onClick={onPrevButtonClick}>
             Назад
           </Button>
-          <Button type="submit" buttonType="primary">
+          <Button type="submit" buttonType="primary" disabled={!isFormValid}>
             Продолжить
           </Button>
         </div>
