@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { UserInfo as User } from '@/shared/types';
-
-//Ключи для localStorage
-
-const TOKEN_KEY = 'token';
-const USER_ID_KEY = 'userId';
-const REGISTERED_USERS_KEY = 'registeredUsers';
+import {
+  clearAuthData,
+  findUserByEmail,
+  findUserById,
+  getRegisteredUsers,
+  saveRegisteredUsers,
+  setAuthData,
+  TOKEN_KEY,
+  USER_ID_KEY,
+} from './authApi';
+import { UserInfo } from '@/shared/types';
 
 interface AuthState {
   // Текуший авторизованный пользователь
-  user: User | null;
+  user: UserInfo | null;
   // mock-токен авторизации
   token: string | null;
   // авторизован пользователь или нет
@@ -28,67 +32,21 @@ const initialState: AuthState = {
   error: null,
 };
 
-const getRegisteredUsers = (): User[] => {
-  const raw = localStorage.getItem(REGISTERED_USERS_KEY);
-  return raw ? JSON.parse(raw) : [];
-};
-
-const saveRegisteredUsers = (users: User[]) => {
-  localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
-};
-
-const setAuthData = (token: string, userId: string) => {
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_ID_KEY, userId);
-};
-
-const clearAuthData = () => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_ID_KEY);
-};
-
 export interface RegisterPayload {
   name: string;
   email: string;
+  password: string;
   city?: string;
   age?: number;
   gender: 'male' | 'female';
+  avatarUrl: string | null;
 }
 interface RegisterResult {
-  user: User;
+  user: UserInfo;
   token: string;
 }
 
-// Поиск пользователя во всех источниках
-const findUserByEmail = async (email: string): Promise<User | undefined> => {
-  // Ищем в users.json
-  const response = await fetch('/db/users.json');
-  const mockUsers: User[] = await response.json();
-  const mockUser = mockUsers.find((u) => u.email === email);
-  if (mockUser) {
-    return mockUser;
-  }
-
-  // Ищем в зарегестрированных
-  const registeredUsers = getRegisteredUsers();
-  return registeredUsers.find((u) => u.email === email);
-};
-
-const findUserById = async (userId: string): Promise<User | undefined> => {
-  // ищем в user.json
-  const response = await fetch('/db/users.json');
-  const mockUsers: User[] = await response.json();
-  const mockUser = mockUsers.find((u) => u.id === userId);
-  if (mockUser) {
-    return mockUser;
-  }
-
-  // ищем в зарегестрированных
-  const registeredUsers = getRegisteredUsers();
-  return registeredUsers.find((u) => u.id === userId);
-};
-
-export const loginThunk = createAsyncThunk<User, string, { rejectValue: string }>(
+export const loginThunk = createAsyncThunk<UserInfo, string, { rejectValue: string }>(
   'auth/login',
   async (email, { rejectWithValue }) => {
     try {
@@ -118,11 +76,11 @@ export const registerThunk = createAsyncThunk<
     if (existingUser) {
       return rejectWithValue('Пользователь с таким email уже существует');
     }
-    const newUser: User = {
+    const newUser: UserInfo = {
       id: `user-registered-${Date.now()}`,
       name: payload.name,
       email: payload.email,
-      avatarUrl: null,
+      avatarUrl: payload.avatarUrl,
       createdAt: new Date().toISOString(),
       city: payload.city,
       age: payload.age,
@@ -130,22 +88,27 @@ export const registerThunk = createAsyncThunk<
       description: '',
     };
 
+    const newRegisteredUser = {
+      ...newUser,
+      password: payload.password,
+    };
+
     // Сохраняем в registeredUsers
     const registeredUsers = getRegisteredUsers();
-    registeredUsers.push(newUser);
+    registeredUsers.push(newRegisteredUser);
     saveRegisteredUsers(registeredUsers);
 
     // Авторизуем
     const token = 'token123';
-    setAuthData(token, newUser.id);
+    setAuthData(token, newRegisteredUser.id);
 
-    return { user: newUser, token };
+    return { user: newRegisteredUser, token };
   } catch {
     return rejectWithValue('Ошибка регистрации');
   }
 });
 
-export const checkAuthThunk = createAsyncThunk<User | null, void, { rejectValue: string }>(
+export const checkAuthThunk = createAsyncThunk<UserInfo | null, void, { rejectValue: string }>(
   'auth/checkAuth',
   async (_, { rejectWithValue }) => {
     try {
@@ -182,10 +145,10 @@ const authSlice = createSlice({
     clearAuthError(state) {
       state.error = null;
     },
-    setAuthUser(state, action: PayloadAction<User>) {
+    setAuthUser(state, action: PayloadAction<UserInfo>) {
       state.user = action.payload;
     },
-    updateAuthUser(state, action: PayloadAction<Partial<User>>) {
+    updateAuthUser(state, action: PayloadAction<Partial<UserInfo>>) {
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
       }
@@ -198,7 +161,7 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(loginThunk.fulfilled, (state, action: PayloadAction<UserInfo>) => {
         state.user = action.payload;
         state.token = localStorage.getItem(TOKEN_KEY);
         state.isAuth = true;
@@ -230,7 +193,7 @@ const authSlice = createSlice({
       .addCase(checkAuthThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(checkAuthThunk.fulfilled, (state, action: PayloadAction<User | null>) => {
+      .addCase(checkAuthThunk.fulfilled, (state, action: PayloadAction<UserInfo | null>) => {
         if (action.payload) {
           state.user = action.payload;
           state.isAuth = true;

@@ -4,14 +4,13 @@ import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
 import { MainLayout } from '@/app/layouts';
 import { AuthLayout } from '@/app/layouts';
-import { RegisterPage } from '@/pages/RegisterPage/RegisterPage';
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const SkillPage = lazy(() => import('@/pages/SkillPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
 const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
-//const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
+const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export function AppRouter() {

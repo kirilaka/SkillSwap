@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { SwapRequest, RequestStatus } from './types';
 import {
   getRequestsFromStorage,
@@ -244,19 +244,22 @@ const formatDate = (dateStr: string): string => {
   return `${day} ${months[dateOnly.getMonth()]}`;
 };
 
-export const selectRequestNotifications = (state: RootState): NotificationProps[] => {
-  const requests = selectRequests(state);
-  const authUser = selectAuthUser(state);
-  if (!authUser) return [];
+const selectRequestsItems = (state: RootState) => state.requests.items;
 
-  return requests
-    .filter((r) => r.fromUserId === authUser.id || r.toUserId === authUser.id)
-    .map((r) => ({
-      id: `notification-${r.id}`,
-      requestId: r.id,
-      title: getRequestNotificationTitle(r.status),
-      description: getRequestNotificationDescription(r.status),
-      date: formatDate(r.updatedAt ?? r.createdAt),
-      isNew: r.status === 'pending',
-    }));
-};
+export const selectRequestNotifications = createSelector(
+  [selectRequestsItems, selectAuthUser],
+  (requests, authUser): NotificationProps[] => {
+    if (!authUser) return [];
+
+    return requests
+      .filter((r) => r.fromUserId === authUser.id || r.toUserId === authUser.id)
+      .map((r) => ({
+        id: `notification-${r.id}`,
+        requestId: r.id,
+        title: getRequestNotificationTitle(r.status),
+        description: getRequestNotificationDescription(r.status),
+        date: formatDate(r.updatedAt ?? r.createdAt),
+        isNew: r.status === 'pending',
+      }));
+  },
+);

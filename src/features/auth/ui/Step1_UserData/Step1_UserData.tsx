@@ -8,6 +8,7 @@ import { EyeIcon } from '@/shared/ui/Icons/EyeIcon/EyeIcon';
 import { EyeSlashIcon } from '@/shared/ui/Icons/EyeSlashIcon/EyeSlashIcon';
 import clsx from 'clsx';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { findUserByEmail } from '@/features/auth/model/authApi';
 
 interface Step1_UserDataProps {
   /**Сабмит при клике на кнопку*/
@@ -49,11 +50,15 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
+
     if (emailError || passwordError) return;
+    // Пока только такая валидация :((
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) return alert('Пользователь с таким email уже зарегистрирован');
     onSubmit({
       email: email,
       password: password,
