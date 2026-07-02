@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/Button/Button';
 import { SkillCard } from '@/entities/skill/ui/SkillCard/SkillCard';
 import { Modal } from '@/shared/ui/Modal/Modal';
 import clsx from 'clsx';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import styles from './Step3_SkillData.module.scss';
 import SchoolBoard from 'shared/assets/images/school-board.svg';
 import { ProfileFormData } from '../../model/types';
@@ -20,6 +20,8 @@ interface Step3_SkillDataProps {
   /**Доп.классы */
   className?: string;
 }
+
+// TL - Компонент решил временно не разделять, так как дедлайн очень близко
 
 export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -75,6 +77,23 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
       skillTitle: value,
     }));
   };
+
+  const handleFilesChange = useCallback(
+    (files: File[]) => {
+      if (formData.skillImageUrl?.length && formData.skillImageUrl.length > 0) {
+        formData.skillImageUrl.forEach((url) => URL.revokeObjectURL(url));
+      }
+      const imagesUrl = files.map((file) => {
+        return URL.createObjectURL(file);
+      });
+      setFormData((prev) => ({
+        ...prev,
+        skillImageUrl: imagesUrl,
+      }));
+    },
+    [formData.skillImageUrl],
+  );
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isFormValid) return;
@@ -87,7 +106,10 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
     formData.categoryId.teach !== '' &&
     formData.subcategoryId.teach !== null &&
     formData.subcategoryId.teach !== '' &&
-    formData.skillDescription.trim() !== '';
+    formData.skillDescription.trim() !== '' &&
+    formData.skillImageUrl?.length &&
+    formData.skillImageUrl.length >= 1 &&
+    formData.skillImageUrl.length <= 5;
 
   const selectedCategoryData = skillsFilterList.find((cat) => cat.id === formData.categoryId.teach);
   const currentSubCategories = selectedCategoryData ? selectedCategoryData.subFilters : [];
@@ -128,7 +150,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
           />
         </div>
         <div className={styles.description}>
-          <label className={styles.nameSkillLabel}>Описание </label>
+          <label className={styles.nameSkillLabel}>Описание</label>
           <textarea
             className={styles.textarea}
             value={formData.skillDescription}
@@ -139,7 +161,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
         </div>
 
         <div className={styles.uploaderWrapper}>
-          <SkillUploader />
+          <SkillUploader onFilesChange={handleFilesChange} />
         </div>
         <div className={styles.actionsButton}>
           <Button
@@ -183,7 +205,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
             subcategory: displaySubCategory || '',
             subcategoryId: String(formData.subcategoryId.teach || ''),
             tags: [],
-            imageUrl: [],
+            imageUrl: formData.skillImageUrl,
             authorId: '',
             createdAt: '',
           }}
