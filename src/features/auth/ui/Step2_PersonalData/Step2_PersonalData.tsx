@@ -39,12 +39,15 @@ export const Step2_PersonalData = ({
 }: Step2_PersonalDataProps) => {
   const [formData, setFormData] = useState<ProfileFormData>({
     name: '',
-    birthData: undefined,
+    birthDate: undefined,
     genderId: null,
-    citiId: null,
-    categoryId: null,
-    subcategoryId: null,
+    cityId: null,
+    categoryId: { teach: null, learn: null },
+    subcategoryId: { teach: null, learn: null },
     avatar: null,
+    skillTitle: '',
+    skillDescription: '',
+    skillImageUrl: null,
   });
   const allSubcategories: DropdownItem[] = skillsFilterList.flatMap(
     (category) =>
@@ -54,10 +57,12 @@ export const Step2_PersonalData = ({
       })) ?? [],
   );
 
-  const selectedCategory = skillsFilterList.find((category) => category.id === formData.categoryId);
+  const selectedCategory = skillsFilterList.find(
+    (category) => category.id === formData.categoryId.learn,
+  );
 
   const selectedSubcategoryCategory = skillsFilterList.find((category) =>
-    category.subFilters?.some((subcategory) => subcategory.id === formData.subcategoryId),
+    category.subFilters?.some((subcategory) => subcategory.id === formData.subcategoryId.learn),
   );
 
   const categoryItems: DropdownItem[] =
@@ -143,7 +148,7 @@ export const Step2_PersonalData = ({
             Дата рождения
             <DatePicker
               placeholder="дд.мм.гггг"
-              value={formData.birthData}
+              value={formData.birthDate}
               onChange={handleBirthChange}
             />
           </label>
@@ -172,7 +177,9 @@ export const Step2_PersonalData = ({
           <DdInputCheckbox
             items={categoryItems}
             placeholder="Выберите категорию"
-            onSelectItem={(id) => setFormData((prev) => ({ ...prev, categoryId: id }))}
+            onSelectItem={(id) =>
+              setFormData((prev) => ({ ...prev, categoryId: { ...prev.categoryId, learn: id } }))
+            }
           />
         </label>
         <label className={styles.label}>
@@ -180,7 +187,12 @@ export const Step2_PersonalData = ({
           <DdInputCheckbox
             items={subcategoryItems}
             placeholder="Выберите подкатегорию"
-            onSelectItem={(id) => setFormData((prev) => ({ ...prev, subcategoryId: id }))}
+            onSelectItem={(id) =>
+              setFormData((prev) => ({
+                ...prev,
+                subcategoryId: { ...prev.subcategoryId, learn: id },
+              }))
+            }
           />
         </label>
 

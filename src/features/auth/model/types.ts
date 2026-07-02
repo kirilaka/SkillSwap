@@ -4,7 +4,7 @@ export interface DualRoleData {
 }
 export interface ProfileFormData {
   name: string;
-  birthDate: string;
+  birthDate: Date | undefined;
   genderId: string | null;
   cityId: string | null;
   categoryId: DualRoleData;

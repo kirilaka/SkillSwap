@@ -28,7 +28,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [formData, setFormData] = useState<ProfileFormData>({
     name: '',
-    birthDate: '',
+    birthDate: undefined,
     genderId: null,
     cityId: null,
     categoryId: { teach: null, learn: null },
