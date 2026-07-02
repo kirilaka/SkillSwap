@@ -8,7 +8,7 @@ interface SectionCardsProps {
   title: string;
   className?: string;
   users?: UserInfo[];
-  variant?: 'all' | 'three';
+  variant?: 'all' | 'three' | 'scrollFour';
   onClick?: () => void;
 }
 
