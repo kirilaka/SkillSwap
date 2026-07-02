@@ -1,4 +1,4 @@
-.mainWrapper {
+.wrapperOf1To3 {
   position: relative;
 
   display: flex;
@@ -6,44 +6,97 @@
 
   width: 440px;
   height: 324px;
+
+  .buttonContainer {
+    left: 16px;
+    width: 292px;
+  }
+
+  .fallback {
+    align-self: center;
+    text-align: center;
+  }
+
+  .mainSwiper {
+    width: 324px;
+    max-width: 324px;
+    height: 324px;
+    max-height: 324px;
+  }
+
+  .subWrapper {
+    overflow: hidden;
+    width: 92px;
+    height: 324px;
+  }
+
+  .subSwiper,
+  .subSwiper * {
+    overflow: visible;
+    width: 92px;
+    height: 92px;
+  }
+
+  .slide * {
+    border-radius: $radius-lg;
+  }
+
+  .imgOverlay {
+    pointer-events: none;
+
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: 0;
+
+    align-content: center;
+
+    width: 92px;
+    height: 92px;
+    border-radius: $radius-lg;
+
+    text-align: center;
+    letter-spacing: -1.1%;
+
+    opacity: 1;
+    background-color: rgb(255 255 255 / 50%);
+
+    transition: opacity 0.3s ease-in-out;
+
+    &.hide {
+      opacity: 0;
+    }
+  }
 }
 
-.fallback {
-  align-self: center;
-  text-align: center;
-}
+.wrapperOf4 {
+  position: relative;
+  display: flex;
+  width: 1368px;
+  height: 368px;
 
-.mainSwiper {
-  width: 324px;
-  max-width: 324px;
-  height: 324px;
-  max-height: 324px;
-}
+  .buttonContainer {
+    left: -16px;
+    width: calc(100% + 32px);
+  }
 
-.subWrapper {
-  overflow: hidden;
-  width: 92px;
-  height: 324px;
-}
+  .mainSwiper {
+    width: 1368px;
+    height: 368px;
+  }
 
-.subSwiper,
-.subSwiper * {
-  overflow: visible;
-  width: 92px;
-  height: 92px;
+  .slide * {
+    border-radius: $radius-lg;
+  }
 }
 
 .buttonContainer {
   position: absolute;
   z-index: 2;
-  left: 16px;
 
   display: flex;
-  gap: 8px;
   align-self: center;
   justify-content: space-between;
-
-  width: 292px;
 }
 
 .button {
@@ -76,37 +129,6 @@
 
   &.hide {
     pointer-events: none;
-    opacity: 0;
-  }
-}
-
-.slide * {
-  border-radius: $radius-lg;
-}
-
-.imgOverlay {
-  pointer-events: none;
-
-  position: absolute;
-  z-index: 2;
-  right: 0;
-  bottom: 0;
-
-  align-content: center;
-
-  width: 92px;
-  height: 92px;
-  border-radius: $radius-lg;
-
-  text-align: center;
-  letter-spacing: -1.1%;
-
-  opacity: 1;
-  background-color: rgb(255 255 255 / 50%);
-
-  transition: opacity 0.3s ease-in-out;
-
-  &.hide {
     opacity: 0;
   }
 }
