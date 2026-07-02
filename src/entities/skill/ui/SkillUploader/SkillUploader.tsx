@@ -7,22 +7,29 @@ import styles from './SkillUploader.module.scss';
 export interface SkillUploaderProps {
   /** Доп. классы */
   className?: string;
+  /** Коллбек при изменении файлов */
+  onFilesChange?: (files: File[]) => void;
 }
 
 /** Компонент для загрузки изображений навыка */
-export const SkillUploader = ({ className = '' }: SkillUploaderProps) => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Файлы пока не сохраняем никуда
+export const SkillUploader = ({ className, onFilesChange }: SkillUploaderProps) => {
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (onFilesChange) {
+        onFilesChange(acceptedFiles);
+      }
 
-    console.log('Accepted files:', acceptedFiles);
-  }, []);
+      console.log('Accepted files:', acceptedFiles);
+    },
+    [onFilesChange],
+  );
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
     },
-    maxSize: 5 * 1024 * 1024, // 5MB
+    maxSize: 2 * 1024 * 1024, // 2MB
     maxFiles: 5,
   });
 
