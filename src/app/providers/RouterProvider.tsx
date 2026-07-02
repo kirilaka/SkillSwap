@@ -4,7 +4,7 @@ import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
 import { MainLayout } from '@/app/layouts';
 import { AuthLayout } from '@/app/layouts';
-// import { RegisterPage } from '@/pages/RegisterPage/RefisterPage';
+import { RegisterPage } from '@/pages/RegisterPage/RefisterPage';
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const SkillPage = lazy(() => import('@/pages/SkillPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
@@ -33,7 +33,7 @@ export function AppRouter() {
           </Route>
           <Route element={<AuthLayout />}>
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-            {/* <Route path={ROUTES.REGISTER} element={<RegisterPage />}/> */}
+            <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
           </Route>
         </Routes>
       </Suspense>

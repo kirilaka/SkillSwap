@@ -16,14 +16,20 @@ import { SkillType } from '@/shared/types';
 
 interface Step3_SkillDataProps {
   /**Сабмит при клике на кнопку*/
-  onSubmit: () => void;
+  onSubmit: (data: ProfileFormData) => void;
   /**Доп.классы */
   className?: string;
+  /**Обработчик клика по кнопке назад*/
+  onPrevButtonClick?: () => void;
 }
 
 // TL - Компонент решил временно не разделять, так как дедлайн очень близко
 
-export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) => {
+export const Step3_SkillData = ({
+  onSubmit,
+  className,
+  onPrevButtonClick,
+}: Step3_SkillDataProps) => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -164,14 +170,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
           <SkillUploader onFilesChange={handleFilesChange} />
         </div>
         <div className={styles.actionsButton}>
-          <Button
-            type="button"
-            buttonType="secondary"
-            onClick={() => {
-              // Здесь будет логика возврата на Шаг 2
-              console.log('Клик по кнопке Назад');
-            }}
-          >
+          <Button type="button" buttonType="secondary" onClick={onPrevButtonClick}>
             Назад
           </Button>
 
@@ -213,7 +212,7 @@ export const Step3_SkillData = ({ onSubmit, className }: Step3_SkillDataProps) =
           onConfirmEditButtonClick={() => {
             setIsPreviewModalOpen(false);
             setIsSuccessModalOpen(true);
-            onSubmit();
+            onSubmit(formData);
           }}
         />
       </Modal>

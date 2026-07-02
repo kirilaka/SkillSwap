@@ -94,7 +94,7 @@ export const Step2_PersonalData = ({
   const handleBirthChange = (date?: Date) => {
     setFormData((prev) => ({
       ...prev,
-      birthData: date,
+      birthDate: date,
     }));
   };
   const handleGenderChange = (id: string | null) => {
@@ -106,7 +106,7 @@ export const Step2_PersonalData = ({
   const handleCitiChange = (id: string | null) => {
     setFormData((prev) => ({
       ...prev,
-      citiId: id,
+      cityId: id,
     }));
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
