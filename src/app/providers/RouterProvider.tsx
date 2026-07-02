@@ -4,7 +4,7 @@ import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
 import { MainLayout } from '@/app/layouts';
 import { AuthLayout } from '@/app/layouts';
-import { RegisterPage } from '@/pages/RegisterPage/RefisterPage';
+import { RegisterPage } from '@/pages/RegisterPage/RegisterPage';
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const SkillPage = lazy(() => import('@/pages/SkillPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
