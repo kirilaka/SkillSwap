@@ -1,6 +1,6 @@
-// Интеграционное тестирование через renderWithProviders + React-компоненты
+// Интеграционное тестирование skillsSlice через renderWithProviders + React-компоненты
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -16,11 +16,14 @@ import {
   selectSkillsLoading,
   selectSkillsError,
   selectSkillById,
+  selectSkillsByAuthorId,
+  selectCurrentUserSkills,
 } from './skillsSlice';
 import * as skillsApi from '@/api/skills';
 import * as storage from '@/shared/lib/localStorage/CreatedSkillsStorage';
 import type { Skill } from '@/shared/types';
 import { renderWithProviders } from '@/shared/lib/tests/renderWithProvider';
+import type { GenderType } from '@/shared/types';
 
 vi.mock('@/api/skills');
 
@@ -47,7 +50,30 @@ const createdSkill: Skill = {
   source: 'created',
 };
 
-// ─── Тестовые компоненты ─────────────────────────────────────────
+const anotherSkill: Skill = {
+  ...mockSkill,
+  id: 'skill-2',
+  title: 'Node.js',
+  authorId: 'user2',
+};
+
+const authenticatedUserState = {
+  user: {
+    id: 'user1',
+    name: 'Test',
+    email: 'test@test.com',
+    avatarUrl: null,
+    createdAt: '',
+    description: '',
+    gender: 'male' as GenderType,
+    age: 25,
+    city: 'Moscow',
+  },
+  token: 'token123',
+  isAuth: true,
+  isLoading: false,
+  error: null,
+};
 
 function SkillsTestComponent() {
   const dispatch = useAppDispatch();
@@ -59,13 +85,61 @@ function SkillsTestComponent() {
   return (
     <div>
       <div data-testid="skills-count">{skills.length}</div>
+      <div data-testid="skills-titles">{skills.map((skill) => skill.title).join(', ')}</div>
       <div data-testid="current-skill">{currentSkill?.title ?? 'null'}</div>
       <div data-testid="is-loading">{isLoading.toString()}</div>
       <div data-testid="error">{error ?? 'null'}</div>
-      <button onClick={() => dispatch(fetchSkillsThunk())}>Fetch Skills</button>
-      <button onClick={() => dispatch(fetchSkillByIdThunk('skill-1'))}>Fetch By Id</button>
-      <button onClick={() => dispatch(clearSkillsError())}>Clear Error</button>
-      <button onClick={() => dispatch(clearCurrentSkill())}>Clear Current</button>
+
+      <button type="button" onClick={() => dispatch(fetchSkillsThunk())}>
+        Fetch Skills
+      </button>
+      <button type="button" onClick={() => dispatch(fetchSkillByIdThunk('skill-1'))}>
+        Fetch By Id
+      </button>
+      <button type="button" onClick={() => dispatch(clearSkillsError())}>
+        Clear Error
+      </button>
+      <button type="button" onClick={() => dispatch(clearCurrentSkill())}>
+        Clear Current
+      </button>
+    </div>
+  );
+}
+
+function CreateSkillTestComponent() {
+  const dispatch = useAppDispatch();
+  const skills = useAppSelector(selectSkills);
+
+  const lastSkill = skills.at(-1);
+
+  return (
+    <div>
+      <div data-testid="skills-count">{skills.length}</div>
+      <div data-testid="last-skill-title">{lastSkill?.title ?? 'null'}</div>
+      <div data-testid="last-skill-source">{lastSkill?.source ?? 'null'}</div>
+      <div data-testid="last-skill-author">{lastSkill?.authorId ?? 'null'}</div>
+
+      <button
+        type="button"
+        onClick={() =>
+          dispatch(
+            createSkillThunk({
+              title: 'New Skill',
+              description: 'Desc',
+              type: 'teach',
+              category: 'art',
+              categoryId: 'cat-1',
+              subcategory: 'Music',
+              subcategoryId: 'sub-1',
+              tags: [],
+              imageUrl: null,
+              authorId: 'user1',
+            }),
+          )
+        }
+      >
+        Create
+      </button>
     </div>
   );
 }
@@ -78,13 +152,16 @@ function UpdateDeleteTestComponent() {
   return (
     <div>
       <div data-testid="skills-count">{skills.length}</div>
+      <div data-testid="first-skill-title">{skills[0]?.title ?? 'null'}</div>
       <div data-testid="error">{error ?? 'null'}</div>
+
       <button
+        type="button"
         onClick={() =>
           dispatch(
             updateSkillThunk({
               skillId: 'skill-created-1',
-              updates: { title: 'Updated' },
+              updates: { title: 'Updated Vue' },
               currentUserId: 'user1',
             }),
           )
@@ -93,6 +170,7 @@ function UpdateDeleteTestComponent() {
         Update
       </button>
       <button
+        type="button"
         onClick={() =>
           dispatch(deleteSkillThunk({ skillId: 'skill-created-1', currentUserId: 'user1' }))
         }
@@ -103,19 +181,32 @@ function UpdateDeleteTestComponent() {
   );
 }
 
-// ─── Tests ─────────────────────────────────────────────────────────
+function SelectorTestComponent() {
+  const skillById = useAppSelector(selectSkillById('skill-1'));
+  const user1Skills = useAppSelector(selectSkillsByAuthorId('user1'));
+  const currentUserSkills = useAppSelector(selectCurrentUserSkills);
+
+  return (
+    <div>
+      <div data-testid="skill-by-id">{skillById?.title ?? 'null'}</div>
+      <div data-testid="by-author-count">{user1Skills.length}</div>
+      <div data-testid="current-user-count">{currentUserSkills.length}</div>
+    </div>
+  );
+}
 
 describe('skillsSlice with renderWithProviders', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('initial state', () => {
-    it('should have correct initial state', () => {
+    it('should render correct initial state from store', () => {
       renderWithProviders(<SkillsTestComponent />);
 
       expect(screen.getByTestId('skills-count')).toHaveTextContent('0');
+      expect(screen.getByTestId('skills-titles')).toHaveTextContent('');
       expect(screen.getByTestId('current-skill')).toHaveTextContent('null');
       expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
       expect(screen.getByTestId('error')).toHaveTextContent('null');
@@ -123,8 +214,9 @@ describe('skillsSlice with renderWithProviders', () => {
   });
 
   describe('fetchSkillsThunk', () => {
-    it('should merge mock and created skills', async () => {
+    it('should fetch skills and render merged mock + created skills', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkills).mockResolvedValue([mockSkill]);
       vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([createdSkill]);
 
@@ -132,117 +224,121 @@ describe('skillsSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Fetch Skills' }));
 
-      expect(screen.getByTestId('skills-count')).toHaveTextContent('2');
+      await waitFor(() => {
+        expect(screen.getByTestId('skills-count')).toHaveTextContent('2');
+      });
+
+      expect(screen.getByTestId('skills-titles')).toHaveTextContent('React, Vue');
+      expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
+      expect(screen.getByTestId('error')).toHaveTextContent('null');
     });
 
-    it('should handle rejected', async () => {
+    it('should render error if fetchSkillsThunk is rejected', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkills).mockRejectedValue(new Error('Network error'));
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch Skills' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Network error');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Network error');
+      });
+
       expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
     });
   });
 
   describe('fetchSkillByIdThunk', () => {
-    it('fulfilled: should set currentSkill', async () => {
+    it('should fetch skill by id and render currentSkill', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkillById).mockResolvedValue(mockSkill);
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch By Id' }));
 
-      expect(screen.getByTestId('current-skill')).toHaveTextContent('React');
+      await waitFor(() => {
+        expect(screen.getByTestId('current-skill')).toHaveTextContent('React');
+      });
+
       expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
+      expect(screen.getByTestId('error')).toHaveTextContent('null');
     });
 
-    it('fulfilled: should set null if skill not found', async () => {
+    it('should render null if skill by id is not found', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkillById).mockResolvedValue(undefined as unknown as Skill);
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch By Id' }));
 
-      expect(screen.getByTestId('current-skill')).toHaveTextContent('null');
+      await waitFor(() => {
+        expect(screen.getByTestId('current-skill')).toHaveTextContent('null');
+      });
     });
 
-    it('rejected: should set error', async () => {
+    it('should render error if fetchSkillByIdThunk is rejected', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkillById).mockRejectedValue(new Error('Not found'));
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch By Id' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Not found');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Not found');
+      });
+
       expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
     });
   });
 
   describe('createSkillThunk', () => {
-    it('should create skill with source created', async () => {
+    it('should create skill and render created skill data', async () => {
       const user = userEvent.setup();
+
       vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([]);
       vi.spyOn(storage, 'saveCreatedSkillsToStorage').mockImplementation(() => {});
 
-      function CreateTestComponent() {
-        const dispatch = useAppDispatch();
-        const skills = useAppSelector(selectSkills);
-
-        return (
-          <div>
-            <div data-testid="count">{skills.length}</div>
-            <button
-              onClick={() =>
-                dispatch(
-                  createSkillThunk({
-                    title: 'New Skill',
-                    description: 'Desc',
-                    type: 'teach',
-                    category: 'art',
-                    categoryId: 'cat-1',
-                    subcategory: 'Music',
-                    subcategoryId: 'sub-1',
-                    tags: [],
-                    imageUrl: null,
-                    authorId: 'user1',
-                  }),
-                )
-              }
-            >
-              Create
-            </button>
-          </div>
-        );
-      }
-
-      renderWithProviders(<CreateTestComponent />);
+      renderWithProviders(<CreateSkillTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Create' }));
 
-      expect(screen.getByTestId('count')).toHaveTextContent('1');
-      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(screen.getByTestId('skills-count')).toHaveTextContent('1');
+      });
+
+      expect(screen.getByTestId('last-skill-title')).toHaveTextContent('New Skill');
+      expect(screen.getByTestId('last-skill-source')).toHaveTextContent('created');
+      expect(screen.getByTestId('last-skill-author')).toHaveTextContent('user1');
+      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalledWith([
+        expect.objectContaining({
+          title: 'New Skill',
+          source: 'created',
+          authorId: 'user1',
+        }),
+      ]);
     });
   });
 
   describe('updateSkillThunk', () => {
-    it('should update own created skill', async () => {
+    it('should update own created skill and render updated title', async () => {
       const user = userEvent.setup();
-      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([
-        { ...createdSkill, authorId: 'user1' },
-      ]);
+      const myCreatedSkill = { ...createdSkill, authorId: 'user1' };
+
+      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([myCreatedSkill]);
       vi.spyOn(storage, 'saveCreatedSkillsToStorage').mockImplementation(() => {});
 
       renderWithProviders(<UpdateDeleteTestComponent />, {
         preloadedState: {
           skills: {
-            items: [{ ...createdSkill, authorId: 'user1' }],
+            items: [myCreatedSkill],
             currentSkill: null,
             isLoading: false,
             error: null,
@@ -252,11 +348,21 @@ describe('skillsSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Update' }));
 
+      await waitFor(() => {
+        expect(screen.getByTestId('first-skill-title')).toHaveTextContent('Updated Vue');
+      });
+
       expect(screen.getByTestId('skills-count')).toHaveTextContent('1');
-      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalled();
+      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalledWith([
+        expect.objectContaining({
+          id: 'skill-created-1',
+          title: 'Updated Vue',
+          authorId: 'user1',
+        }),
+      ]);
     });
 
-    it('should reject updating other user skill', async () => {
+    it('should render error and keep data when user tries to update other user skill', async () => {
       const user = userEvent.setup();
 
       renderWithProviders(<UpdateDeleteTestComponent />, {
@@ -272,40 +378,26 @@ describe('skillsSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Update' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Not authorized');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Not authorized');
+      });
+
+      expect(screen.getByTestId('first-skill-title')).toHaveTextContent('Vue');
     });
 
-    it('should reject updating mock skill', async () => {
+    it('should render error and keep data when user tries to update mock skill', async () => {
       const user = userEvent.setup();
 
-      function UpdateMockTestComponent() {
-        const dispatch = useAppDispatch();
-        const error = useAppSelector(selectSkillsError);
+      const mockSkillWithTargetId = {
+        ...mockSkill,
+        id: 'skill-created-1',
+        source: 'mock' as const,
+      };
 
-        return (
-          <div>
-            <div data-testid="error">{error ?? 'null'}</div>
-            <button
-              onClick={() =>
-                dispatch(
-                  updateSkillThunk({
-                    skillId: 'skill-1',
-                    updates: { title: 'Hacked' },
-                    currentUserId: 'user1',
-                  }),
-                )
-              }
-            >
-              Update Mock
-            </button>
-          </div>
-        );
-      }
-
-      renderWithProviders(<UpdateMockTestComponent />, {
+      renderWithProviders(<UpdateDeleteTestComponent />, {
         preloadedState: {
           skills: {
-            items: [mockSkill],
+            items: [mockSkillWithTargetId],
             currentSkill: null,
             isLoading: false,
             error: null,
@@ -313,24 +405,28 @@ describe('skillsSlice with renderWithProviders', () => {
         },
       });
 
-      await user.click(screen.getByRole('button', { name: 'Update Mock' }));
+      await user.click(screen.getByRole('button', { name: 'Update' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Cannot edit mock skills');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Cannot edit mock skills');
+      });
+
+      expect(screen.getByTestId('first-skill-title')).toHaveTextContent('React');
     });
   });
 
   describe('deleteSkillThunk', () => {
-    it('should delete own created skill', async () => {
+    it('should delete own created skill and render empty list', async () => {
       const user = userEvent.setup();
-      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([
-        { ...createdSkill, authorId: 'user1' },
-      ]);
+      const myCreatedSkill = { ...createdSkill, authorId: 'user1' };
+
+      vi.spyOn(storage, 'getCreatedSkillsFromStorage').mockReturnValue([myCreatedSkill]);
       vi.spyOn(storage, 'saveCreatedSkillsToStorage').mockImplementation(() => {});
 
       renderWithProviders(<UpdateDeleteTestComponent />, {
         preloadedState: {
           skills: {
-            items: [{ ...createdSkill, authorId: 'user1' }],
+            items: [myCreatedSkill],
             currentSkill: null,
             isLoading: false,
             error: null,
@@ -340,11 +436,15 @@ describe('skillsSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
 
-      expect(screen.getByTestId('skills-count')).toHaveTextContent('0');
-      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(screen.getByTestId('skills-count')).toHaveTextContent('0');
+      });
+
+      expect(screen.getByTestId('first-skill-title')).toHaveTextContent('null');
+      expect(storage.saveCreatedSkillsToStorage).toHaveBeenCalledWith([]);
     });
 
-    it('should reject deleting other user skill', async () => {
+    it('should render error and keep data when user tries to delete other user skill', async () => {
       const user = userEvent.setup();
 
       renderWithProviders(<UpdateDeleteTestComponent />, {
@@ -360,39 +460,27 @@ describe('skillsSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Not authorized');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Not authorized');
+      });
+
+      expect(screen.getByTestId('skills-count')).toHaveTextContent('1');
+      expect(screen.getByTestId('first-skill-title')).toHaveTextContent('Vue');
     });
 
-    it('should reject deleting mock skill', async () => {
+    it('should render error and keep data when user tries to delete mock skill', async () => {
       const user = userEvent.setup();
 
-      function DeleteMockTestComponent() {
-        const dispatch = useAppDispatch();
-        const error = useAppSelector(selectSkillsError);
+      const mockSkillWithTargetId = {
+        ...mockSkill,
+        id: 'skill-created-1',
+        source: 'mock' as const,
+      };
 
-        return (
-          <div>
-            <div data-testid="error">{error ?? 'null'}</div>
-            <button
-              onClick={() =>
-                dispatch(
-                  deleteSkillThunk({
-                    skillId: 'skill-1',
-                    currentUserId: 'user1',
-                  }),
-                )
-              }
-            >
-              Delete Mock
-            </button>
-          </div>
-        );
-      }
-
-      renderWithProviders(<DeleteMockTestComponent />, {
+      renderWithProviders(<UpdateDeleteTestComponent />, {
         preloadedState: {
           skills: {
-            items: [mockSkill],
+            items: [mockSkillWithTargetId],
             currentSkill: null,
             isLoading: false,
             error: null,
@@ -400,48 +488,58 @@ describe('skillsSlice with renderWithProviders', () => {
         },
       });
 
-      await user.click(screen.getByRole('button', { name: 'Delete Mock' }));
+      await user.click(screen.getByRole('button', { name: 'Delete' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Cannot delete mock skills');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Cannot delete mock skills');
+      });
+
+      expect(screen.getByTestId('skills-count')).toHaveTextContent('1');
+      expect(screen.getByTestId('first-skill-title')).toHaveTextContent('React');
     });
   });
 
-  describe('reducer actions', () => {
-    it('clearSkillsError should reset error', async () => {
+  describe('reducer actions through component dispatch', () => {
+    it('clearSkillsError should reset rendered error', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkills).mockRejectedValue(new Error('Fail'));
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch Skills' }));
-      expect(screen.getByTestId('error')).toHaveTextContent('Fail');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Fail');
+      });
 
       await user.click(screen.getByRole('button', { name: 'Clear Error' }));
+
       expect(screen.getByTestId('error')).toHaveTextContent('null');
     });
 
-    it('clearCurrentSkill should reset currentSkill', async () => {
+    it('clearCurrentSkill should reset rendered currentSkill', async () => {
       const user = userEvent.setup();
+
       vi.mocked(skillsApi.fetchSkillById).mockResolvedValue(mockSkill);
 
       renderWithProviders(<SkillsTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Fetch By Id' }));
-      expect(screen.getByTestId('current-skill')).toHaveTextContent('React');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('current-skill')).toHaveTextContent('React');
+      });
 
       await user.click(screen.getByRole('button', { name: 'Clear Current' }));
+
       expect(screen.getByTestId('current-skill')).toHaveTextContent('null');
     });
   });
 
-  describe('selectors', () => {
-    it('selectSkillById should find skill by id', () => {
-      function SkillByIdComponent() {
-        const skill = useAppSelector(selectSkillById('skill-1'));
-        return <div data-testid="skill">{skill?.title ?? 'null'}</div>;
-      }
-
-      renderWithProviders(<SkillByIdComponent />, {
+  describe('selectors through useAppSelector', () => {
+    it('should render skill found by selectSkillById', () => {
+      renderWithProviders(<SelectorTestComponent />, {
         preloadedState: {
           skills: {
             items: [mockSkill],
@@ -452,23 +550,14 @@ describe('skillsSlice with renderWithProviders', () => {
         },
       });
 
-      expect(screen.getByTestId('skill')).toHaveTextContent('React');
+      expect(screen.getByTestId('skill-by-id')).toHaveTextContent('React');
     });
 
-    it('selectSkillsByAuthorId should filter by author', () => {
-      function AuthorSelectorComponent() {
-        const skills = useAppSelector(selectSkills);
-        const byAuthor = skills.filter((s) => s.authorId === 'user1');
-        return <div data-testid="by-author">{byAuthor.length}</div>;
-      }
-
-      renderWithProviders(<AuthorSelectorComponent />, {
+    it('should render skills count filtered by selectSkillsByAuthorId', () => {
+      renderWithProviders(<SelectorTestComponent />, {
         preloadedState: {
           skills: {
-            items: [
-              { ...mockSkill, authorId: 'user1' },
-              { ...mockSkill, id: 'skill-2', authorId: 'user2' },
-            ],
+            items: [mockSkill, anotherSkill],
             currentSkill: null,
             isLoading: false,
             error: null,
@@ -476,63 +565,42 @@ describe('skillsSlice with renderWithProviders', () => {
         },
       });
 
-      expect(screen.getByTestId('by-author')).toHaveTextContent('1');
+      expect(screen.getByTestId('by-author-count')).toHaveTextContent('1');
     });
 
-    it('selectCurrentUserSkills should return empty if no user', () => {
-      function CurrentUserSkillsComponent() {
-        const skills = useAppSelector(selectSkills);
-        const currentUser = useAppSelector((state) => state.auth.user);
-        const userSkills = currentUser ? skills.filter((s) => s.authorId === currentUser.id) : [];
-        return <div data-testid="current-user">{userSkills.length}</div>;
-      }
-
-      renderWithProviders(<CurrentUserSkillsComponent />);
-
-      expect(screen.getByTestId('current-user')).toHaveTextContent('0');
-    });
-
-    it('selectCurrentUserSkills should return skills for authenticated user', () => {
-      function CurrentUserSkillsComponent() {
-        const skills = useAppSelector(selectSkills);
-        const currentUser = useAppSelector((state) => state.auth.user);
-        const userSkills = currentUser ? skills.filter((s) => s.authorId === currentUser.id) : [];
-        return <div data-testid="current-user">{userSkills.length}</div>;
-      }
-
-      renderWithProviders(<CurrentUserSkillsComponent />, {
+    it('should render empty current user skills if user is not authenticated', () => {
+      renderWithProviders(<SelectorTestComponent />, {
         preloadedState: {
           skills: {
-            items: [
-              { ...mockSkill, authorId: 'user1' },
-              { ...mockSkill, id: 'skill-2', authorId: 'user2' },
-              { ...mockSkill, id: 'skill-3', authorId: 'user1' },
-            ],
+            items: [mockSkill, anotherSkill],
             currentSkill: null,
-            isLoading: false,
-            error: null,
-          },
-          auth: {
-            user: {
-              id: 'user1',
-              name: 'Test',
-              email: 'test@test.com',
-              avatarUrl: null,
-              createdAt: '',
-              description: '',
-              gender: 'male',
-              age: 25,
-              city: 'Moscow',
-            },
-            token: 'token123',
-            isAuth: true,
             isLoading: false,
             error: null,
           },
         },
       });
 
-      expect(screen.getByTestId('current-user')).toHaveTextContent('2');
+      expect(screen.getByTestId('current-user-count')).toHaveTextContent('0');
+    });
+
+    it('should render current user skills from selectCurrentUserSkills', () => {
+      renderWithProviders(<SelectorTestComponent />, {
+        preloadedState: {
+          skills: {
+            items: [
+              { ...mockSkill, authorId: 'user1' },
+              { ...mockSkill, id: 'skill-2', title: 'Angular', authorId: 'user2' },
+              { ...mockSkill, id: 'skill-3', title: 'TypeScript', authorId: 'user1' },
+            ],
+            currentSkill: null,
+            isLoading: false,
+            error: null,
+          },
+          auth: authenticatedUserState,
+        },
+      });
+
+      expect(screen.getByTestId('current-user-count')).toHaveTextContent('2');
     });
   });
 });
