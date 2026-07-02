@@ -55,4 +55,17 @@ describe('Box', () => {
 
     expect(container.firstChild?.nodeName).toBe('DIV');
   });
+
+  it('прокидывает HTML-атрибуты в div', () => {
+    render(
+      <Box data-testid="box" data-state="open" id="main-box">
+        Контент
+      </Box>,
+    );
+
+    const box = screen.getByTestId('box');
+
+    expect(box).toHaveAttribute('data-state', 'open');
+    expect(box).toHaveAttribute('id', 'main-box');
+  });
 });
