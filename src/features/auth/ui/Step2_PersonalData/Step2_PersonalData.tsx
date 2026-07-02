@@ -11,7 +11,7 @@ import { DatePicker } from '@/shared/ui/DatePicker/DatePicker';
 import { cities } from 'src/entities/city/model/constants';
 import { skillsFilterList } from '@/features/filtration/models/artFilter';
 import { ProfileFormData } from '../../model/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const genders = [
   { id: 'male', label: 'Мужской' },
@@ -49,6 +49,14 @@ export const Step2_PersonalData = ({
     skillDescription: '',
     skillImageUrl: null,
   });
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  useEffect(() => {
+    return () => {
+      if (avatarPreview) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, [avatarPreview]);
   const isFormValid =
     formData.name.trim() !== '' &&
     formData.birthDate !== undefined &&
@@ -124,20 +132,23 @@ export const Step2_PersonalData = ({
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
+
     setFormData((prev) => ({
       ...prev,
       avatar: file,
     }));
+
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
-  const avatarUrl = formData.avatar ? URL.createObjectURL(formData.avatar) : '';
   return (
     <div className={clsx(className, styles.page)}>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.avatarContainer}>
           <label className={styles.avatar}>
-            <Avatar src={avatarUrl} alt="Изображение пользователя" />
+            <Avatar src={avatarPreview ?? undefined} alt="Изображение пользователя" />
             <img className={styles.addIcon} src={AddIcon} alt="" aria-hidden="true" />
             <input
               type="file"

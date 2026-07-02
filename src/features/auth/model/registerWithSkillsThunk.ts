@@ -4,7 +4,7 @@ import { createSkillThunk } from '@/entities/skill/model/skillsSlice';
 import type { UserInfo as User } from '@/shared/types';
 import type { Skill } from '@/shared/types';
 
-type SkillData = Omit<Skill, 'id' | 'createdAt' | 'source'>;
+type SkillData = Omit<Skill, 'id' | 'createdAt' | 'source' | 'authorId'>;
 
 interface RegisterWithSkillsPayload {
   user: RegisterPayload;
@@ -40,7 +40,9 @@ export const registerWithSkillsThunk = createAsyncThunk<
     ).unwrap();
 
     return authResult;
-  } catch {
-    return rejectWithValue('Ошибка при регистрации с навыками');
+  } catch (error) {
+    console.error('registerWithSkillsThunk error:', error);
+
+    return rejectWithValue(typeof error === 'string' ? error : 'Ошибка при регистрации с навыками');
   }
 });
