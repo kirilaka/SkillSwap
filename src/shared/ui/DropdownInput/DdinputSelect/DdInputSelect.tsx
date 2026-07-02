@@ -100,7 +100,11 @@ export const DdInputSelect = forwardRef<HTMLInputElement, DdInputSelectProps>(fu
       ref={dropdownRef}
       className={clsx(styles.container, className, (isOpen || isClosing) && styles.containerActive)}
     >
-      <Box className={clsx(styles.box, isOpen && styles.boxActive)}>
+      <Box
+        data-testid="dd-input-select-box"
+        data-state={isOpen ? 'open' : 'closed'}
+        className={clsx(styles.box, isOpen && styles.boxActive)}
+      >
         <Input
           ref={ref}
           className={styles.input}

@@ -91,45 +91,43 @@ describe('DdInputSelect', () => {
     });
   });
 
-  it.skip('при клике вне dropdown он закрывается — требует E2E: jsdom не поддерживает document.addEventListener для внешних кликов', async () => {
+  it('закрывается при клике вне dropdown', async () => {
     const user = userEvent.setup();
 
     render(
       <>
         <DdInputSelect items={mockItems} placeholder="Выберите город" />
-        <div data-testid="outside">Вне компонента</div>
+        <button type="button">Вне компонента</button>
       </>,
     );
 
     await user.click(screen.getByRole('textbox'));
-    expect(screen.getByText('Казань')).toBeInTheDocument();
 
-    await user.click(screen.getByTestId('outside'));
+    expect(screen.getByTestId('dd-input-select-box')).toHaveAttribute('data-state', 'open');
 
-    await waitFor(
-      () => {
-        expect(screen.queryByText('Казань')).not.toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
+    await user.click(screen.getByRole('button', { name: 'Вне компонента' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dd-input-select-box')).toHaveAttribute('data-state', 'closed');
+    });
   });
 
-  it.skip('закрывается по Escape — требует E2E: jsdom не поддерживает document.addEventListener для keydown', async () => {
+  it('закрывается по Escape', async () => {
     const user = userEvent.setup();
 
     render(<DdInputSelect items={mockItems} placeholder="Выберите город" />);
 
-    await user.click(screen.getByRole('textbox'));
-    expect(screen.getByText('Казань')).toBeInTheDocument();
+    const input = screen.getByRole('textbox');
+
+    await user.click(input);
+
+    expect(screen.getByTestId('dd-input-select-box')).toHaveAttribute('data-state', 'open');
 
     await user.keyboard('{Escape}');
 
-    await waitFor(
-      () => {
-        expect(screen.queryByText('Казань')).not.toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('dd-input-select-box')).toHaveAttribute('data-state', 'closed');
+    });
   });
 
   it('если передан disabled, input недоступен', () => {
