@@ -20,11 +20,9 @@ interface GalleryProps {
 export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) => {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
-  const [childrenLenght, setChildrenLenght] = useState(children.length);
   const [prevIsHide, setPrevIsHide] = useState(true);
   const [nextIsHide, setNextIsHide] = useState(false);
-  const [overlayIsHide, setOverlayIsHide] = useState(false);
-  const childrenLenghtRef = useRef(childrenLenght);
+  const [remainingCount, setRemainingCount] = useState(Math.max(children.length - 3, 0));
 
   // Обновляем ссылки после того, как Swiper инициализировался
   const handleSwiperInit = (swiper: SwiperType) => {
@@ -38,48 +36,19 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
     swiper.navigation.update();
   };
 
-  // если изображений больше трех, показать оверлей, с количеством оставшихся = -3
-
-  const handleButtonPrevClick = () => {
-    childrenLenghtRef.current += 1;
-
-    if (childrenLenghtRef.current == children.length) {
+  const updateButtons = (swiper: SwiperType) => {
+    if (swiper.isBeginning) {
       setPrevIsHide(true);
-    }
-    if (nextIsHide) {
-      setNextIsHide(false);
-    }
-
-    if (variant == '1-3') {
-      setChildrenLenght(childrenLenghtRef.current);
-      if (childrenLenghtRef.current <= 3) {
-        setOverlayIsHide(true);
-      } else if (overlayIsHide) setOverlayIsHide(false);
-    }
+    } else if (prevIsHide) setPrevIsHide(false);
+    if (swiper.isEnd) {
+      setNextIsHide(true);
+    } else if (nextIsHide) setNextIsHide(false);
   };
 
-  const handleButtonNextClick = () => {
-    childrenLenghtRef.current -= 1;
+  const updateOverlay = (swiper: SwiperType) => {
+    const count = Math.max(children.length - swiper.activeIndex - 3, 0);
 
-    if (variant == '1-3') {
-      if (childrenLenghtRef.current == 1) {
-        setNextIsHide(true);
-      }
-      if (prevIsHide) {
-        setPrevIsHide(false);
-      }
-
-      setChildrenLenght(childrenLenghtRef.current);
-      if (childrenLenghtRef.current <= 3) {
-        setOverlayIsHide(true);
-      } else if (overlayIsHide) setOverlayIsHide(false);
-    }
-    if (variant == '4') {
-      if (childrenLenghtRef.current == 4) {
-        setNextIsHide(true);
-      }
-      if (prevIsHide) setPrevIsHide(false);
-    }
+    setRemainingCount(count);
   };
 
   if (variant == '1-3') {
@@ -90,22 +59,20 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             <button
               className={clsx(styles.button, styles.buttonPrev, prevIsHide && styles.hide)}
               ref={prevRef}
-              onClick={handleButtonPrevClick}
             >
               <ChevronSvg />
             </button>
             <button
               className={clsx(styles.button, styles.buttonNext, nextIsHide && styles.hide)}
               ref={nextRef}
-              onClick={handleButtonNextClick}
             >
               <ChevronSvg />
             </button>
           </div>
         )}
         {children.length > 3 && (
-          <div className={clsx(styles.imgOverlay, overlayIsHide && styles.hide)}>
-            +{childrenLenght - 3}
+          <div className={clsx(styles.imgOverlay, remainingCount <= 0 && styles.hide)}>
+            +{remainingCount}
           </div>
         )}
         {children.length >= 1 && (
@@ -116,7 +83,15 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
               prevEl: prevRef.current,
               nextEl: nextRef.current,
             }}
-            onSwiper={handleSwiperInit}
+            onSwiper={(swiper) => {
+              handleSwiperInit(swiper);
+              updateButtons(swiper);
+              updateOverlay(swiper);
+            }}
+            onSlideChange={(swiper) => {
+              updateButtons(swiper);
+              updateOverlay(swiper);
+            }}
             allowTouchMove={false}
           >
             {children.map((child, index) => (
@@ -161,14 +136,12 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             <button
               className={clsx(styles.button, styles.buttonPrev, prevIsHide && styles.hide)}
               ref={prevRef}
-              onClick={handleButtonPrevClick}
             >
               <ChevronSvg />
             </button>
             <button
               className={clsx(styles.button, styles.buttonNext, nextIsHide && styles.hide)}
               ref={nextRef}
-              onClick={handleButtonNextClick}
             >
               <ChevronSvg />
             </button>
@@ -182,7 +155,15 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
               prevEl: prevRef.current,
               nextEl: nextRef.current,
             }}
-            onSwiper={handleSwiperInit}
+            onSwiper={(swiper) => {
+              handleSwiperInit(swiper);
+              updateButtons(swiper);
+              updateOverlay(swiper);
+            }}
+            onSlideChange={(swiper) => {
+              updateButtons(swiper);
+              updateOverlay(swiper);
+            }}
             allowTouchMove={false}
             spaceBetween={'24px'}
             slidesPerView={4}

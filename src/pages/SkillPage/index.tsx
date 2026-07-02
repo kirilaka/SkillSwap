@@ -2,15 +2,18 @@ import { UserCard } from '@/entities/user/ui/UserCard/UserCard';
 import { SkillCard } from '@/entities/skill/ui/SkillCard/SkillCard';
 import { SectionCards } from '@/widgets/MainSection/SectionCards/SectionCards';
 import { useLocation, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '@/store';
-import { fetchSkillByIdThunk, selectCurrentSkill } from '@/entities/skill/model/skillsSlice';
+import {
+  fetchSkillByIdThunk,
+  selectCurrentSkill,
+  selectSkills,
+} from '@/entities/skill/model/skillsSlice';
 import { useEffect, useMemo } from 'react';
 import { selectUsers } from '@/entities/user/model/usersSlice';
 import styles from './SkillPage.module.scss';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 export default function SkillPage() {
   const location = useLocation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { id: skillId } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -19,21 +22,28 @@ export default function SkillPage() {
     }
   }, [skillId, dispatch]);
   const user = location.state?.user ?? null;
-  const currentSkill = useSelector(selectCurrentSkill);
-  const users = useSelector(selectUsers);
+  const currentSkill = useAppSelector(selectCurrentSkill);
+  const users = useAppSelector(selectUsers);
+  const skills = useAppSelector(selectSkills);
   const filteredUsers = useMemo(() => {
     if (!currentSkill || !users) return [];
 
     return users.filter((u) => {
-      //Исключаем самого автора текущего навыка
-      if (user && u.id === user.id) return false;
-
-      return u.skills?.some((skill) => skill.id === currentSkill.id && skill.type === 'teach');
+      const filteredSkills = skills
+        .filter(
+          (s) =>
+            s.title.toLowerCase() == currentSkill.title.toLowerCase() &&
+            s.type === currentSkill.type,
+        )
+        .map((s) => {
+          return s.authorId;
+        });
+      return filteredSkills.includes(u.id) && u.id !== user?.id;
     });
-  }, [users, currentSkill, user]);
+  }, [users, user, currentSkill, skills]);
   return (
     <div className={styles.pageContainer}>
-      <UserCard className={styles.userArea} hasDescription={true} user={user} />
+      <UserCard className={styles.userArea} hasDescription={true} user={user} skills={skills} />
 
       {currentSkill ? <SkillCard className={styles.skillArea} skill={currentSkill} /> : null}
 
@@ -41,7 +51,8 @@ export default function SkillPage() {
         className={styles.sectionsArea}
         title={'Похожие предложения'}
         users={filteredUsers}
-        variant={'three'}
+        skills={skills}
+        variant="scrollFour"
       />
     </div>
   );

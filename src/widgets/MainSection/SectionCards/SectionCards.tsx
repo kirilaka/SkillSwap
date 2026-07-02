@@ -1,7 +1,8 @@
 import styles from './SectionCards.module.scss';
 import { UserCard } from '@/entities/user/ui/UserCard/UserCard';
-import { UserInfo } from '@/shared/types';
+import { Skill, UserInfo } from '@/shared/types';
 import { Button } from '@/shared/ui/Button/Button';
+import { Gallery } from '@/shared/ui/Gallery/Gallery';
 import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
 
 interface SectionCardsProps {
@@ -10,6 +11,7 @@ interface SectionCardsProps {
   users?: UserInfo[];
   variant?: 'all' | 'three' | 'scrollFour';
   onClick?: () => void;
+  skills?: Skill[];
 }
 
 export const SectionCards = ({
@@ -18,6 +20,7 @@ export const SectionCards = ({
   users = [],
   variant = 'three',
   onClick,
+  skills = [],
 }: SectionCardsProps) => {
   const displaydUsers = variant === 'three' ? users.slice(0, 3) : users;
 
@@ -34,11 +37,20 @@ export const SectionCards = ({
           </Button>
         )}
       </div>
-      <div className={styles.cards}>
-        {displaydUsers.map((user) => (
-          <UserCard key={user.id} user={user} hasDescription={false} />
-        ))}
-      </div>
+      {variant !== 'scrollFour' && (
+        <div className={styles.cards}>
+          {displaydUsers.map((user) => (
+            <UserCard key={user.id} user={user} hasDescription={false} skills={skills} />
+          ))}
+        </div>
+      )}
+      {variant === 'scrollFour' && (
+        <Gallery variant="4">
+          {displaydUsers.map((user) => (
+            <UserCard key={user.id} user={user} hasDescription={false} skills={skills} />
+          ))}
+        </Gallery>
+      )}
     </section>
   );
 };

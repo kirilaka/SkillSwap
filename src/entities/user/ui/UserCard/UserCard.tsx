@@ -37,7 +37,7 @@ export const UserCard = ({
     return null;
   }
 
-  const userSkills = skills ?? user.skills;
+  const userSkills = skills?.filter((s) => s.authorId === user?.id);
 
   const teachSkills = userSkills?.filter((s) => s.type === 'teach') ?? [];
   const learnSkills = userSkills?.filter((s) => s.type === 'learn') ?? [];
