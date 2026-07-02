@@ -262,6 +262,7 @@ export const FilterPanel = ({ className }: FilterPanelProps) => {
                 isActive={city === item.name}
                 onCheckboxClick={() => handleCitiesToggle(item.name)}
               />
+              // Здесь нужно доделать вывод макс. кол-ва городов
             ))}
           </div>
           <ControlChip
