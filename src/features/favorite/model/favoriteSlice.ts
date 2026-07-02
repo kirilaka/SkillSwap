@@ -100,10 +100,10 @@ export const {
 
 export default favoriteSlice.reducer;
 
-export const selectFavoriteUserIds = (state: { favorites: FavoritesState }) =>
-  state.favorites.favoriteUserIds;
+export const selectFavoriteUserIds = (state: { favorite: FavoritesState }) =>
+  state.favorite.favoriteUserIds;
 
-export const selectFavoritesError = (state: { favorites: FavoritesState }) => state.favorites.error;
+export const selectFavoritesError = (state: { favorite: FavoritesState }) => state.favorite.error;
 
 export const selectIsFavoriteUser = createSelector(
   [selectFavoriteUserIds, (_, userId: string) => userId],

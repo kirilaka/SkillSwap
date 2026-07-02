@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SkillPage from './index';
 import { UserInfo, Skill } from '@/shared/types';
+import { RequestsState } from '@/features/requests/model/requestsSlice';
 
 // ==========================================
 // МОКОВЫЕ ДАННЫЕ
@@ -15,7 +16,7 @@ const mockSkills: Skill[] = [
     title: 'Хочу научиться управлять командой',
     description:
       'Ищу наставника, который поможет освоить управление командой и развить лидерские качества.',
-    type: 'teach', // Екатерина ХОЧЕТ научиться
+    type: 'teach',
     category: 'business',
     categoryId: '1',
     subcategory: 'Управление командой',
@@ -130,19 +131,23 @@ const pageUser: UserInfo = {
   skills: mockSkills,
 };
 
+// Имитируем текущего авторизованного пользователя (например, Сашу),
+// чтобы кнопка "Предложить обмен" была активна на странице Екатерины (pageUser)
+const mockAuthUser: UserInfo = {
+  id: 'user-5',
+  name: 'Александр',
+  email: 'alex@example.com',
+  avatarUrl: null,
+  gender: 'male',
+  createdAt: '2026-02-01T12:00:00.000Z',
+  city: 'Москва',
+  age: 30,
+  description: 'Team Lead с 5-летним опытом. Обучаю управлению.',
+};
+
 const generalUsers: UserInfo[] = [
   pageUser,
-  {
-    id: 'user-5',
-    name: 'Александр',
-    email: 'alex@example.com',
-    avatarUrl: null,
-    gender: 'male',
-    createdAt: '2026-02-01T12:00:00.000Z',
-    city: 'Москва',
-    age: 30,
-    description: 'Team Lead с 5-летним опытом. Обучаю управлению.',
-  },
+  mockAuthUser,
   {
     id: 'user-6',
     name: 'Дмитрий',
@@ -201,7 +206,7 @@ const generalUsers: UserInfo[] = [
 ];
 
 // ==========================================
-// СБОРКА МОК-СТОРА
+// СБОРКА ОБНОВЛЕННОГО МОК-СТОРА
 // ==========================================
 const mockStore = configureStore({
   reducer: {
@@ -219,6 +224,46 @@ const mockStore = configureStore({
       name: 'users',
       initialState: { items: generalUsers, currentUser: pageUser, isLoading: false, error: null },
       reducers: {},
+    }).reducer,
+    // Добавляем слайс избранного (имя 'favorite' в соответствии со store.ts)
+    favorite: createSlice({
+      name: 'favorite',
+      initialState: {
+        favoriteUserIds: ['user-6'], // Можно сразу мокнуть кого-то в избранном для теста
+        error: null,
+      },
+      reducers: {
+        toggleFavoriteUser: (state, action) => {
+          const id = action.payload;
+          const index = state.favoriteUserIds.indexOf(id);
+          if (index >= 0) state.favoriteUserIds.splice(index, 1);
+          else state.favoriteUserIds.push(id);
+        },
+      },
+    }).reducer,
+    // Добавляем слайс авторизации
+    auth: createSlice({
+      name: 'auth',
+      initialState: {
+        user: mockAuthUser, // Передаем залогиненного юзера
+        isLoading: false,
+        error: null,
+      },
+      reducers: {},
+    }).reducer,
+    // Добавляем пустой слайс реквестов, чтобы экшен createRequest не падал
+    requests: createSlice({
+      name: 'requests',
+      initialState: {
+        items: [],
+        isLoading: false,
+        error: null,
+      } as RequestsState,
+      reducers: {
+        createRequest: (state, action) => {
+          state.items.push(action.payload);
+        },
+      },
     }).reducer,
   },
 });
