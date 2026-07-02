@@ -54,6 +54,7 @@ export const NotificationButton = ({
         <NotificationIcon hasNew={hasNew} className={styles.icon} />
       </button>
       <Dropdown isOpen={isOpen} onClose={handleClose} className={styles.dropdown}>
+        {/* Доделать кнопку 'Прочитать всё' */}
         <Box className={styles.box}>
           {!hasNotifications ? (
             <h2 className={styles.empty}>Тут пока что пусто</h2>
