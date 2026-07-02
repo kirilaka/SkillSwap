@@ -57,6 +57,14 @@ export const Step2_PersonalData = ({
       }
     };
   }, [avatarPreview]);
+  const isFormValid =
+    formData.name.trim() !== '' &&
+    formData.birthDate !== undefined &&
+    formData.genderId !== null &&
+    formData.cityId !== null &&
+    formData.categoryId.learn !== null &&
+    formData.subcategoryId.learn !== null;
+
   const allSubcategories: DropdownItem[] = skillsFilterList.flatMap(
     (category) =>
       category?.subFilters?.map((subcategory) => ({
@@ -211,7 +219,7 @@ export const Step2_PersonalData = ({
           <Button type="button" onClick={onPrevButtonClick}>
             Назад
           </Button>
-          <Button type="submit" buttonType="primary">
+          <Button type="submit" buttonType="primary" disabled={!isFormValid}>
             Продолжить
           </Button>
         </div>
