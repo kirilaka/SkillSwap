@@ -1,0 +1,164 @@
+.page {
+  display: flex;
+  gap: $space-lg;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 556px;
+  padding: 40px 60px;
+
+  background-color: $color-bg-card;
+}
+
+.textarea {
+  resize: vertical;
+
+  position: relative;
+
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 12px 52px 12px 20px;
+  border: 1px solid $color-accent-dark;
+  border-radius: $radius-lg;
+
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+
+  &:focus {
+    border-color: $color-button-primary;
+    outline: none;
+  }
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 556px;
+  padding: 132px 60px;
+  border-radius: $radius-lg;
+
+  background-color: $color-bg-card;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+
+  .title {
+    line-height: 28px;
+  }
+}
+
+.nameSkils {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.categorySkils {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.subcategorySkils {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.actionsButton {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.continueButton {
+  background-color: $color-accent-light;
+}
+
+.previewModal {
+  border: none;
+}
+
+.modalWindownSuccessfully {
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+  align-items: center;
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 556px;
+  min-height: 420px;
+  padding: 80px 60px;
+  border-radius: 12px;
+
+  opacity: 1;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+
+  width: 100%;
+}
+
+.modalTitle {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modalText {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.iconDoneBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconDone {
+  width: 100px;
+  height: 100px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonActions {
+  width: 100%;
+  background-color: $color-accent-light;
+}
