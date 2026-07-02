@@ -2,25 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Notification } from './Notification';
 import { fn } from 'storybook/test';
 
-const mockUser = {
-  id: '1',
-  name: 'Николай',
-  email: 'nikolay@example.com',
-  avatarUrl: null,
-  createdAt: '2024-01-15',
-};
-
 const meta: Meta<typeof Notification> = {
   title: 'Features/Notification',
   component: Notification,
   parameters: {
     layout: 'centered',
-  },
-  args: {
-    id: '1',
-    onClick: fn(),
-    user: mockUser,
-    date: new Date(),
   },
 };
 
@@ -30,32 +16,42 @@ type Story = StoryObj<typeof Notification>;
 
 export const NewSent: Story = {
   args: {
-    viewState: 'new',
-    exchangeStatus: 'sent',
-    date: new Date(),
+    id: '1',
+    title: 'Анна предлагает вам обмен',
+    description: 'Примите обмен, чтобы обсудить детали',
+    date: 'сегодня',
+    isNew: true,
+    onClick: fn(),
   },
 };
 
 export const NewCompleted: Story = {
   args: {
-    viewState: 'new',
-    exchangeStatus: 'completed',
-    date: new Date(),
+    id: '2',
+    title: 'Николай принял ваш обмен',
+    description: 'Перейдите в профиль, чтобы обсудить детали',
+    date: 'сегодня',
+    isNew: true,
+    onClick: fn(),
   },
 };
 
 export const ViewedSent: Story = {
   args: {
-    viewState: 'viewed',
-    exchangeStatus: 'sent',
-    date: new Date(),
+    id: '3',
+    title: 'Максим предлагает вам обмен',
+    description: 'Примите обмен, чтобы обсудить детали',
+    date: 'вчера',
+    isNew: false,
   },
 };
 
 export const ViewedCompleted: Story = {
   args: {
-    viewState: 'viewed',
-    exchangeStatus: 'completed',
-    date: new Date(),
+    id: '4',
+    title: 'Мария приняла ваш обмен',
+    description: 'Перейдите в профиль, чтобы обсудить детали',
+    date: '2 дня назад',
+    isNew: false,
   },
 };
