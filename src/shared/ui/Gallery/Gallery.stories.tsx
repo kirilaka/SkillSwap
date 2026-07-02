@@ -56,3 +56,9 @@ export const With1Image: Story = {
 export const Empty: Story = {
   args: { children: [] },
 };
+export const With7ImagesStroke: Story = {
+  args: {
+    children: renderImages(7),
+    variant: '4',
+  },
+};
