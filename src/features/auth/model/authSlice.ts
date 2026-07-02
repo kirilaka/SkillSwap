@@ -22,8 +22,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem('token'),
-  isAuth: !!localStorage.getItem('token'),
+  token: localStorage.getItem(TOKEN_KEY),
+  isAuth: !!localStorage.getItem(TOKEN_KEY),
   isLoading: false,
   error: null,
 };
@@ -47,12 +47,16 @@ const clearAuthData = () => {
   localStorage.removeItem(USER_ID_KEY);
 };
 
-interface RegisteredPayload {
+export interface RegisterPayload {
   name: string;
   email: string;
   city?: string;
   age?: number;
   gender: 'male' | 'female';
+}
+interface RegisterResult {
+  user: User;
+  token: string;
 }
 
 // Поиск пользователя во всех источниках
@@ -104,41 +108,42 @@ export const loginThunk = createAsyncThunk<User, string, { rejectValue: string }
   },
 );
 
-export const registerThunk = createAsyncThunk<User, RegisteredPayload, { rejectValue: string }>(
-  'auth/register',
-  async ({ name, email, city, age, gender }, { rejectWithValue }) => {
-    try {
-      const existingUser = await findUserByEmail(email);
-      if (existingUser) {
-        return rejectWithValue('Пользователь с таким email уже существует');
-      }
-      const newUser: User = {
-        id: `user-registered-${Date.now()}`,
-        name,
-        email,
-        avatarUrl: null,
-        createdAt: new Date().toISOString(),
-        city,
-        age,
-        gender,
-        description: '',
-      };
-
-      // Сохраняем в registeredUsers
-      const registeredUsers = getRegisteredUsers();
-      registeredUsers.push(newUser);
-      saveRegisteredUsers(registeredUsers);
-
-      // Авторизуем
-      const token = 'token123';
-      setAuthData(token, newUser.id);
-
-      return newUser;
-    } catch {
-      return rejectWithValue('Ошибка регистрации');
+export const registerThunk = createAsyncThunk<
+  RegisterResult,
+  RegisterPayload,
+  { rejectValue: string }
+>('auth/register', async (payload, { rejectWithValue }) => {
+  try {
+    const existingUser = await findUserByEmail(payload.email);
+    if (existingUser) {
+      return rejectWithValue('Пользователь с таким email уже существует');
     }
-  },
-);
+    const newUser: User = {
+      id: `user-registered-${Date.now()}`,
+      name: payload.name,
+      email: payload.email,
+      avatarUrl: null,
+      createdAt: new Date().toISOString(),
+      city: payload.city,
+      age: payload.age,
+      gender: payload.gender,
+      description: '',
+    };
+
+    // Сохраняем в registeredUsers
+    const registeredUsers = getRegisteredUsers();
+    registeredUsers.push(newUser);
+    saveRegisteredUsers(registeredUsers);
+
+    // Авторизуем
+    const token = 'token123';
+    setAuthData(token, newUser.id);
+
+    return { user: newUser, token };
+  } catch {
+    return rejectWithValue('Ошибка регистрации');
+  }
+});
 
 export const checkAuthThunk = createAsyncThunk<User | null, void, { rejectValue: string }>(
   'auth/checkAuth',
@@ -209,9 +214,9 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<User>) => {
-        state.user = action.payload;
-        state.token = localStorage.getItem(TOKEN_KEY);
+      .addCase(registerThunk.fulfilled, (state, action: PayloadAction<RegisterResult>) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
         state.isAuth = true;
         state.isLoading = false;
       })
@@ -232,11 +237,12 @@ const authSlice = createSlice({
         }
         state.isLoading = false;
       })
-      .addCase(checkAuthThunk.rejected, (state) => {
+      .addCase(checkAuthThunk.rejected, (state, action) => {
         state.user = null;
         state.token = null;
         state.isAuth = false;
         state.isLoading = false;
+        state.error = action.payload ?? 'Ошибка проверки авторизации';
       });
   },
 });
@@ -248,5 +254,6 @@ export const selectAuthToken = (state: { auth: AuthState }) => state.auth.token;
 export const selectIsAuth = (state: { auth: AuthState }) => state.auth.isAuth;
 export const selectAuthLoading = (state: { auth: AuthState }) => state.auth.isLoading;
 export const selectAuthError = (state: { auth: AuthState }) => state.auth.error;
+export const selectAuthUserId = (state: { auth: AuthState }) => state.auth.user?.id ?? null;
 
 export default authSlice.reducer;
