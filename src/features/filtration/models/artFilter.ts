@@ -136,14 +136,14 @@ export const exchangeTypeFilterList: MockFilterItem[] = [
   { id: 'all', label: 'Всё', hasSubFilters: false, checkboxVariant: 'circle', isActive: true },
   {
     id: 'teach',
-    label: 'Хочу научиться',
+    label: 'Могу научить',
     hasSubFilters: false,
     checkboxVariant: 'circle',
     isActive: false,
   },
   {
     id: 'learn',
-    label: 'Могу научить',
+    label: 'Хочу научиться',
     hasSubFilters: false,
     checkboxVariant: 'circle',
     isActive: false,

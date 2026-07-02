@@ -9,7 +9,8 @@ const meta: Meta<typeof FilterCategory> = {
     layout: 'centered',
   },
   args: {
-    onFiltersChange: fn(),
+    onCategoryToggle: fn(),
+    onSubcategoryToggle: fn(),
   },
 };
 
@@ -23,7 +24,7 @@ type Story = StoryObj<typeof FilterCategory>;
 export const SkillsFull: Story = {
   args: {
     title: 'Навыки',
-    initialFilters: [
+    filters: [
       {
         id: '1',
         label: 'Бизнес и карьера',
@@ -83,7 +84,7 @@ export const SkillsFull: Story = {
 export const OnlyFlat: Story = {
   args: {
     title: 'Дополнительно',
-    initialFilters: [
+    filters: [
       {
         id: '5',
         label: 'Дом и уют',
@@ -108,7 +109,7 @@ export const OnlyFlat: Story = {
 export const ActiveIndeterminate: Story = {
   args: {
     title: 'Активные подкатегории',
-    initialFilters: [
+    filters: [
       {
         id: 'sub-active',
         label: 'Категория с активным ребенком',

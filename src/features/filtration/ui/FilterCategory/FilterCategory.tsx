@@ -16,82 +16,29 @@ interface FilterCategoryProps {
   /** Заголовок всей категории */
   title: string;
   /** Список фильтров (используем расширенный тип с id и сабфильтрами) */
-  initialFilters: CategoryFilterElement[];
+  filters: CategoryFilterElement[];
+  /** обработчик чекбокса категорий */
+  onCategoryToggle?: (category: CategoryFilterElement) => void;
+  /** обработчик чекбокса сабкатегорий */
+  onSubcategoryToggle?: (subcategoryId: string) => void;
   /** Дополнительные классы */
   className?: string;
-  /** Колбэк, который сообщает наверх актуальное состояние фильтров после изменений */
-  onFiltersChange?: (updatedFilters: CategoryFilterElement[]) => void;
 }
 
 export const FilterCategory = ({
   title,
-  initialFilters,
+  filters,
   className,
-  onFiltersChange,
+  onCategoryToggle,
+  onSubcategoryToggle,
 }: FilterCategoryProps) => {
   // Стейт-объект, где ключ — id категории, значение — boolean (открыта/закрыта)
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
-  // Стейт для управления активностью чекбоксов
-  const [filters, setFilters] = useState<CategoryFilterElement[]>(initialFilters);
-
   const toggleSubCategory = (categoryId: string) => {
     setOpenCategories((prev) => ({
       ...prev,
       [categoryId]: !prev[categoryId],
     }));
-  };
-
-  const handleCheckboxClick = (clickedId: string) => {
-    const updatedFilters = filters.map((filter) => {
-      // случай 1: Кликнули на родительский чекбокс (например, '2')
-      if (filter.id === clickedId) {
-        const nextActiveState = !filter.isActive;
-
-        return {
-          ...filter,
-          isActive: nextActiveState,
-          // Условие: выбираем/отменяем все дочерние чекбоксы
-          subFilters: filter.subFilters?.map((sub) => ({
-            ...sub,
-            isActive: nextActiveState,
-          })),
-        };
-      }
-
-      // случай 2: Кликнули на дочерний чекбокс (например, '2.1')
-      if (filter.hasSubFilters && filter.subFilters) {
-        const hasChild = filter.subFilters.some((sub) => sub.id === clickedId);
-
-        if (hasChild) {
-          // Обновляем состояние конкретного ребенка
-          const updatedSubFilters = filter.subFilters.map((sub) =>
-            sub.id === clickedId ? { ...sub, isActive: !sub.isActive } : sub,
-          );
-
-          // Проверяем, выбран ли хотя бы один ребенок
-          const anyChildActive = updatedSubFilters.some((sub) => sub.isActive);
-
-          return {
-            ...filter,
-            subFilters: updatedSubFilters,
-            // Условие: если выбран дочерний, родительский помечается выбранным
-            isActive: anyChildActive,
-          };
-        }
-      }
-
-      // Если кликнули по обычному плоскому фильтру без подкатегорий
-      if (filter.id === clickedId) {
-        return { ...filter, isActive: !filter.isActive };
-      }
-
-      return filter;
-    });
-
-    // Обновляем локальный стейт компонента
-    setFilters(updatedFilters);
-    // Прокидываем изменения наверх родителю страницы/стору
-    onFiltersChange?.(updatedFilters);
   };
 
   return (
@@ -114,7 +61,7 @@ export const FilterCategory = ({
                 isActive={filter.isActive || hasActiveChildren}
                 checkboxVariant={filter.checkboxVariant || 'squareMinus'}
                 onTextClick={() => toggleSubCategory(filter.id)}
-                onCheckboxClick={() => handleCheckboxClick(filter.id)}
+                onCheckboxClick={() => onCategoryToggle?.(filter)}
               />
 
               <div className={clsx(styles.subCategoryList, { [styles.isOpen]: isBranchOpen })}>
@@ -127,8 +74,8 @@ export const FilterCategory = ({
                       hasSubFilters={false}
                       checkboxVariant={subFilter.checkboxVariant || 'squareCheck'}
                       isActive={subFilter.isActive}
-                      onTextClick={() => handleCheckboxClick(subFilter.id)}
-                      onCheckboxClick={() => handleCheckboxClick(subFilter.id)}
+                      onTextClick={() => onSubcategoryToggle?.(subFilter.id)}
+                      onCheckboxClick={() => onSubcategoryToggle?.(subFilter.id)}
                     />
                   );
                 })}
@@ -146,7 +93,7 @@ export const FilterCategory = ({
             hasSubFilters={false}
             checkboxVariant={filter.checkboxVariant || 'squareCheck'}
             isActive={filter.isActive}
-            onCheckboxClick={() => handleCheckboxClick(filter.id)}
+            onCheckboxClick={() => onCategoryToggle?.(filter)}
           />
         );
       })}

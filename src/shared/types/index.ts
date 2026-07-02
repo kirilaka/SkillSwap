@@ -16,6 +16,7 @@ export interface Skill {
   imageUrl: string[] | null;
   authorId: string;
   createdAt: string;
+  source?: 'mock' | 'created'; // ← добавить
 }
 
 // ─── User ────────────────────────────────────────────────
