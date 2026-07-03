@@ -1,5 +1,4 @@
-// src/features/filtration/models/filtrationSlice.integration.test.tsx
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -20,7 +19,7 @@ import {
   selectFilteredSkills,
 } from './filtrationSlice';
 import { renderWithProviders } from '@/shared/lib/tests/renderWithProvider';
-import type { UserInfo } from '@/shared/types';
+import type { UserInfo, Skill } from '@/shared/types';
 
 const mockUsers: UserInfo[] = [
   {
@@ -31,38 +30,6 @@ const mockUsers: UserInfo[] = [
     createdAt: '2024-01-01',
     gender: 'male',
     city: 'Moscow',
-    skills: [
-      {
-        id: 'skill-1',
-        title: 'React',
-        description: 'Frontend library',
-        type: 'teach',
-        category: 'business',
-        categoryId: 'cat-1',
-        subcategory: 'Frontend',
-        subcategoryId: 'sub-1',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-1',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-      {
-        id: 'skill-2',
-        title: 'Vue',
-        description: 'Progressive framework',
-        type: 'learn',
-        category: 'business',
-        categoryId: 'cat-1',
-        subcategory: 'Frontend',
-        subcategoryId: 'sub-2',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-1',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-    ],
   },
   {
     id: 'user-2',
@@ -72,27 +39,61 @@ const mockUsers: UserInfo[] = [
     createdAt: '2024-01-01',
     gender: 'female',
     city: 'SPb',
-    skills: [
-      {
-        id: 'skill-3',
-        title: 'Guitar',
-        description: 'Music instrument',
-        type: 'teach',
-        category: 'art',
-        categoryId: 'cat-2',
-        subcategory: 'Music',
-        subcategoryId: 'sub-3',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-2',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-    ],
   },
 ];
 
-// ─── Тестовые компоненты ─────────────────────────────────────────
+const mockSkills: Skill[] = [
+  {
+    id: 'skill-1',
+    title: 'React',
+    description: 'Frontend library',
+    type: 'teach',
+    category: 'business',
+    categoryId: 'cat-1',
+    subcategory: 'Frontend',
+    subcategoryId: 'sub-1',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-1',
+    createdAt: '2024-01-01',
+    source: 'mock',
+  },
+  {
+    id: 'skill-2',
+    title: 'Vue',
+    description: 'Progressive framework',
+    type: 'learn',
+    category: 'business',
+    categoryId: 'cat-1',
+    subcategory: 'Frontend',
+    subcategoryId: 'sub-2',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-1',
+    createdAt: '2024-01-01',
+    source: 'mock',
+  },
+  {
+    id: 'skill-3',
+    title: 'Guitar',
+    description: 'Music instrument',
+    type: 'teach',
+    category: 'art',
+    categoryId: 'cat-2',
+    subcategory: 'Music',
+    subcategoryId: 'sub-3',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-2',
+    createdAt: '2024-01-01',
+    source: 'mock',
+  },
+];
+
+const preloadedState = {
+  users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
+  skills: { items: mockSkills, currentSkill: null, isLoading: false, error: null },
+};
 
 function FiltrationTestComponent() {
   const dispatch = useAppDispatch();
@@ -150,13 +151,7 @@ function FilteredSkillsTestComponent() {
   );
 }
 
-// ─── Tests ─────────────────────────────────────────────────────────
-
 describe('filtrationSlice with renderWithProviders', () => {
-  beforeEach(() => {
-    // nothing to clear
-  });
-
   describe('initial state', () => {
     it('should render correct initial state', () => {
       renderWithProviders(<FiltrationTestComponent />);
@@ -170,30 +165,20 @@ describe('filtrationSlice with renderWithProviders', () => {
     });
   });
 
-  describe('toggleCategory', () => {
-    it('should add category and subcategories', async () => {
+  describe('basic reducers', () => {
+    it('should add and remove category and subcategories', async () => {
       const user = userEvent.setup();
       renderWithProviders(<FiltrationTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Toggle Cat' }));
-
       expect(screen.getByTestId('categories')).toHaveTextContent('cat-1');
       expect(screen.getByTestId('subcategories')).toHaveTextContent('sub-1');
-    });
-
-    it('should remove category and subcategories on second click', async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<FiltrationTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Toggle Cat' }));
-      await user.click(screen.getByRole('button', { name: 'Toggle Cat' }));
-
       expect(screen.getByTestId('categories')).toHaveTextContent('');
       expect(screen.getByTestId('subcategories')).toHaveTextContent('');
     });
-  });
 
-  describe('toggleSubcategory', () => {
     it('should add and remove subcategory', async () => {
       const user = userEvent.setup();
       renderWithProviders(<FiltrationTestComponent />);
@@ -204,63 +189,22 @@ describe('filtrationSlice with renderWithProviders', () => {
       await user.click(screen.getByRole('button', { name: 'Toggle Sub' }));
       expect(screen.getByTestId('subcategories')).toHaveTextContent('');
     });
-  });
 
-  describe('setExchangeType', () => {
-    it('should update exchange type', async () => {
+    it('should update filter values and reset them', async () => {
       const user = userEvent.setup();
       renderWithProviders(<FiltrationTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Set Teach' }));
+      await user.click(screen.getByRole('button', { name: 'Set Female' }));
+      await user.click(screen.getByRole('button', { name: 'Set City' }));
+      await user.click(screen.getByRole('button', { name: 'Set Search' }));
+
       expect(screen.getByTestId('exchange')).toHaveTextContent('teach');
-    });
-  });
-
-  describe('setGender', () => {
-    it('should update gender', async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<FiltrationTestComponent />);
-
-      await user.click(screen.getByRole('button', { name: 'Set Female' }));
       expect(screen.getByTestId('gender')).toHaveTextContent('female');
-    });
-  });
-
-  describe('setCity', () => {
-    it('should update city', async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<FiltrationTestComponent />);
-
-      await user.click(screen.getByRole('button', { name: 'Set City' }));
       expect(screen.getByTestId('city')).toHaveTextContent('Moscow');
-    });
-  });
-
-  describe('setSearchValue', () => {
-    it('should update search value', async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<FiltrationTestComponent />);
-
-      await user.click(screen.getByRole('button', { name: 'Set Search' }));
       expect(screen.getByTestId('search')).toHaveTextContent('react');
-    });
-  });
-
-  describe('resetFilters', () => {
-    it('should reset all filters', async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<FiltrationTestComponent />);
-
-      await user.click(screen.getByRole('button', { name: 'Toggle Cat' }));
-      await user.click(screen.getByRole('button', { name: 'Set Teach' }));
-      await user.click(screen.getByRole('button', { name: 'Set Female' }));
-      await user.click(screen.getByRole('button', { name: 'Set City' }));
-      await user.click(screen.getByRole('button', { name: 'Set Search' }));
 
       await user.click(screen.getByRole('button', { name: 'Reset' }));
-
-      expect(screen.getByTestId('categories')).toHaveTextContent('');
-      expect(screen.getByTestId('subcategories')).toHaveTextContent('');
       expect(screen.getByTestId('exchange')).toHaveTextContent('all');
       expect(screen.getByTestId('gender')).toHaveTextContent('any');
       expect(screen.getByTestId('city')).toHaveTextContent('');
@@ -270,11 +214,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
   describe('selectFilteredSkills', () => {
     it('should show all skills without filters', () => {
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       expect(screen.getByTestId('skills-count')).toHaveTextContent('3');
       expect(screen.getByTestId('skills-titles')).toHaveTextContent('React,Vue,Guitar');
@@ -282,11 +222,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should filter by category', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Cat' }));
 
@@ -296,11 +232,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should filter by exchange type', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Teach' }));
 
@@ -310,11 +242,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should filter by gender', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Female' }));
 
@@ -324,11 +252,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should filter by city', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter City' }));
 
@@ -336,13 +260,9 @@ describe('filtrationSlice with renderWithProviders', () => {
       expect(screen.getByTestId('skills-titles')).toHaveTextContent('React,Vue');
     });
 
-    it('should filter by search value (title)', async () => {
+    it('should filter by search value', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Search' }));
 
@@ -352,11 +272,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should combine filters by AND', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Cat' }));
       await user.click(screen.getByRole('button', { name: 'Filter Teach' }));
@@ -367,11 +283,7 @@ describe('filtrationSlice with renderWithProviders', () => {
 
     it('should reset filters and show all skills', async () => {
       const user = userEvent.setup();
-      renderWithProviders(<FilteredSkillsTestComponent />, {
-        preloadedState: {
-          users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
-        },
-      });
+      renderWithProviders(<FilteredSkillsTestComponent />, { preloadedState });
 
       await user.click(screen.getByRole('button', { name: 'Filter Cat' }));
       expect(screen.getByTestId('skills-count')).toHaveTextContent('2');

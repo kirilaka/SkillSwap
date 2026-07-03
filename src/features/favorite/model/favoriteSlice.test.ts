@@ -1,4 +1,3 @@
-// unit tests for favoriteSlice.ts
 import { describe, it, expect, beforeEach } from 'vitest';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import favoriteReducer, {
@@ -15,7 +14,7 @@ import favoriteReducer, {
 const STORAGE_KEY = 'favoriteUserIds';
 
 const rootReducer = combineReducers({
-  favorites: favoriteReducer,
+  favorite: favoriteReducer,
 });
 
 type RootState = ReturnType<typeof rootReducer>;
@@ -44,7 +43,7 @@ describe('favoriteSlice', () => {
 
     it('should load from preloaded state', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1', 'user-2'], error: null },
+        favorite: { favoriteUserIds: ['user-1', 'user-2'], error: null },
       });
 
       expect(selectFavoriteUserIds(store.getState())).toEqual(['user-1', 'user-2']);
@@ -77,7 +76,7 @@ describe('favoriteSlice', () => {
   describe('removeFavoriteUser', () => {
     it('should remove user from favorites', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1', 'user-2'], error: null },
+        favorite: { favoriteUserIds: ['user-1', 'user-2'], error: null },
       });
 
       store.dispatch(removeFavoriteUser('user-1'));
@@ -88,7 +87,7 @@ describe('favoriteSlice', () => {
 
     it('should handle removing non-existent user', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1'], error: null },
+        favorite: { favoriteUserIds: ['user-1'], error: null },
       });
 
       store.dispatch(removeFavoriteUser('user-999'));
@@ -106,7 +105,7 @@ describe('favoriteSlice', () => {
 
     it('should remove user when in favorites', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1', 'user-2'], error: null },
+        favorite: { favoriteUserIds: ['user-1', 'user-2'], error: null },
       });
 
       store.dispatch(toggleFavoriteUser('user-1'));
@@ -118,7 +117,7 @@ describe('favoriteSlice', () => {
   describe('clearFavorites', () => {
     it('should clear all favorites', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1', 'user-2'], error: null },
+        favorite: { favoriteUserIds: ['user-1', 'user-2'], error: null },
       });
 
       store.dispatch(clearFavorites());
@@ -131,7 +130,7 @@ describe('favoriteSlice', () => {
   describe('clearFavoritesError', () => {
     it('should clear error', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: [], error: 'Some error' },
+        favorite: { favoriteUserIds: [], error: 'Some error' },
       });
 
       store.dispatch(clearFavoritesError());
@@ -143,7 +142,7 @@ describe('favoriteSlice', () => {
   describe('selectors', () => {
     beforeEach(() => {
       store = createTestStore({
-        favorites: { favoriteUserIds: ['user-1', 'user-2'], error: null },
+        favorite: { favoriteUserIds: ['user-1', 'user-2'], error: null },
       });
     });
 
@@ -153,7 +152,7 @@ describe('favoriteSlice', () => {
 
     it('selectFavoritesError should return error', () => {
       store = createTestStore({
-        favorites: { favoriteUserIds: [], error: 'Test error' },
+        favorite: { favoriteUserIds: [], error: 'Test error' },
       });
       expect(selectFavoritesError(store.getState())).toBe('Test error');
     });

@@ -1,6 +1,5 @@
-// integration test
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -18,17 +17,6 @@ import {
 } from './authSlice';
 import { renderWithProviders } from '@/shared/lib/tests/renderWithProvider';
 
-vi.stubGlobal(
-  'fetch',
-  vi.fn(() =>
-    Promise.resolve({
-      json: () => Promise.resolve([]),
-    } as Response),
-  ),
-);
-
-const mockFetch = fetch as unknown as ReturnType<typeof vi.fn>;
-
 const mockUser = {
   id: 'user-mock-1',
   name: 'Mock User',
@@ -37,11 +25,21 @@ const mockUser = {
   createdAt: '2024-01-01',
   city: 'Moscow',
   age: 25,
-  gender: 'male',
+  gender: 'male' as const,
   description: 'Mock description',
 };
 
-// ─── Тестовые компоненты ─────────────────────────────────────────
+const mockRegisteredUser = {
+  ...mockUser,
+  password: 'password123',
+};
+
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
+
+const seedRegisteredUsers = () => {
+  localStorage.setItem('registeredUsers', JSON.stringify([mockRegisteredUser]));
+};
 
 function AuthTestComponent() {
   const dispatch = useAppDispatch();
@@ -58,7 +56,16 @@ function AuthTestComponent() {
       <div data-testid="is-loading">{isLoading.toString()}</div>
       <div data-testid="error">{error ?? 'null'}</div>
       <div data-testid="token">{token ?? 'null'}</div>
-      <button onClick={() => dispatch(loginThunk('mock@test.com'))}>Login</button>
+      <button
+        onClick={() => dispatch(loginThunk({ email: 'mock@test.com', password: 'password123' }))}
+      >
+        Login
+      </button>
+      <button
+        onClick={() => dispatch(loginThunk({ email: 'missing@test.com', password: 'password123' }))}
+      >
+        Login Missing
+      </button>
       <button onClick={() => dispatch(logout())}>Logout</button>
       <button onClick={() => dispatch(clearAuthError())}>Clear Error</button>
     </div>
@@ -83,6 +90,8 @@ function RegisterTestComponent() {
               name: 'New User',
               email: 'new@test.com',
               gender: 'female',
+              password: 'password123',
+              avatarUrl: null,
             }),
           )
         }
@@ -107,6 +116,8 @@ function RegisterDuplicateComponent() {
               name: 'Duplicate',
               email: 'mock@test.com',
               gender: 'male',
+              password: 'password123',
+              avatarUrl: null,
             }),
           )
         }
@@ -133,12 +144,13 @@ function CheckAuthTestComponent() {
   );
 }
 
-// ─── Tests ─────────────────────────────────────────────────────────
-
 describe('authSlice with renderWithProviders', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
+    mockFetch.mockResolvedValue({
+      json: () => Promise.resolve([]),
+    } as Response);
   });
 
   describe('initial state', () => {
@@ -154,32 +166,31 @@ describe('authSlice with renderWithProviders', () => {
   });
 
   describe('loginThunk', () => {
-    it('should login mock user successfully', async () => {
+    it('should login registered user successfully', async () => {
       const user = userEvent.setup();
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve([mockUser]),
-      } as Response);
+      seedRegisteredUsers();
 
       renderWithProviders(<AuthTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Login' }));
 
-      expect(screen.getByTestId('user-name')).toHaveTextContent('Mock User');
+      await waitFor(() => {
+        expect(screen.getByTestId('user-name')).toHaveTextContent('Mock User');
+      });
       expect(screen.getByTestId('is-auth')).toHaveTextContent('true');
       expect(screen.getByTestId('token')).toHaveTextContent('token123');
     });
 
     it('should reject if email not found', async () => {
       const user = userEvent.setup();
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve([]),
-      } as Response);
 
       renderWithProviders(<AuthTestComponent />);
 
-      await user.click(screen.getByRole('button', { name: 'Login' }));
+      await user.click(screen.getByRole('button', { name: 'Login Missing' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent('Пользователь не найден');
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Пользователь не найден');
+      });
       expect(screen.getByTestId('is-auth')).toHaveTextContent('false');
     });
   });
@@ -195,7 +206,9 @@ describe('authSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Register' }));
 
-      expect(screen.getByTestId('user-name')).toHaveTextContent('New User');
+      await waitFor(() => {
+        expect(screen.getByTestId('user-name')).toHaveTextContent('New User');
+      });
       expect(screen.getByTestId('is-auth')).toHaveTextContent('true');
     });
 
@@ -205,14 +218,15 @@ describe('authSlice with renderWithProviders', () => {
         json: () => Promise.resolve([mockUser]),
       } as Response);
 
-      // Только компонент с дублирующим email — без лишнего RegisterTestComponent
       renderWithProviders(<RegisterDuplicateComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Register Duplicate' }));
 
-      expect(screen.getByTestId('error')).toHaveTextContent(
-        'Пользователь с таким email уже существует',
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent(
+          'Пользователь с таким email уже существует',
+        );
+      });
     });
   });
 
@@ -230,7 +244,9 @@ describe('authSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Check Auth' }));
 
-      expect(screen.getByTestId('user-name')).toHaveTextContent('Mock User');
+      await waitFor(() => {
+        expect(screen.getByTestId('user-name')).toHaveTextContent('Mock User');
+      });
       expect(screen.getByTestId('is-auth')).toHaveTextContent('true');
       expect(screen.getByTestId('user-id')).toHaveTextContent('user-mock-1');
     });
@@ -248,8 +264,10 @@ describe('authSlice with renderWithProviders', () => {
 
       await user.click(screen.getByRole('button', { name: 'Check Auth' }));
 
+      await waitFor(() => {
+        expect(screen.getByTestId('is-auth')).toHaveTextContent('false');
+      });
       expect(screen.getByTestId('user-name')).toHaveTextContent('null');
-      expect(screen.getByTestId('is-auth')).toHaveTextContent('false');
       expect(screen.getByTestId('user-id')).toHaveTextContent('null');
     });
   });
@@ -257,14 +275,14 @@ describe('authSlice with renderWithProviders', () => {
   describe('logout', () => {
     it('should clear auth state', async () => {
       const user = userEvent.setup();
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve([mockUser]),
-      } as Response);
+      seedRegisteredUsers();
 
       renderWithProviders(<AuthTestComponent />);
 
       await user.click(screen.getByRole('button', { name: 'Login' }));
-      expect(screen.getByTestId('is-auth')).toHaveTextContent('true');
+      await waitFor(() => {
+        expect(screen.getByTestId('is-auth')).toHaveTextContent('true');
+      });
 
       await user.click(screen.getByRole('button', { name: 'Logout' }));
       expect(screen.getByTestId('is-auth')).toHaveTextContent('false');
@@ -276,14 +294,13 @@ describe('authSlice with renderWithProviders', () => {
   describe('reducer actions', () => {
     it('clearAuthError should reset error', async () => {
       const user = userEvent.setup();
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve([]),
-      } as Response);
 
       renderWithProviders(<AuthTestComponent />);
 
-      await user.click(screen.getByRole('button', { name: 'Login' }));
-      expect(screen.getByTestId('error')).toHaveTextContent('Пользователь не найден');
+      await user.click(screen.getByRole('button', { name: 'Login Missing' }));
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).toHaveTextContent('Пользователь не найден');
+      });
 
       await user.click(screen.getByRole('button', { name: 'Clear Error' }));
       expect(screen.getByTestId('error')).toHaveTextContent('null');
