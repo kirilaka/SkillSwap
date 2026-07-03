@@ -10,7 +10,9 @@
 
   &.withDescription {
     gap: 24px;
+    height: 444px;
     padding: 32px;
+    box-shadow: none;
 
     .skills {
       gap: 24px;
@@ -22,6 +24,7 @@
   }
 
   &.withoutDescription {
+    height: 368px;
     padding: 20px;
 
     .skills {
@@ -66,6 +69,7 @@
 
 .description {
   width: 100%;
+  height: 72px;
 
   font-size: $space-md;
   font-weight: 400;
@@ -85,5 +89,5 @@
 }
 
 .emptySkills {
-  height: 40px;
+  height: 32px;
 }

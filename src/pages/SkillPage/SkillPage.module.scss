@@ -1,0 +1,25 @@
+.pageContainer {
+  display: grid;
+  grid-template-areas:
+    'user skill'
+    'sections sections';
+  grid-template-columns: minmax(324px, 1fr) 3fr;
+  gap: $space-lg;
+
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 $space-lg;
+}
+
+.userArea {
+  grid-area: user;
+}
+
+.skillArea {
+  grid-area: skill;
+}
+
+.sectionsArea {
+  grid-area: sections;
+  margin-top: 60px; /* Дополнительный визуальный отступ для секции "Похожие предложения" */
+}

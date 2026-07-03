@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import clsx from 'clsx';
 import { Button } from '@/shared/ui/Button/Button';
 import { ShareIcon } from '@/shared/ui/Icons/ShareIcon/ShareIcon';
@@ -40,7 +39,7 @@ export interface SkillCardProps {
   className?: string;
 }
 
-export const SkillCard: FC<SkillCardProps> = ({
+export const SkillCard = ({
   skill,
   cardVariant = 'offer',
   isFavorite = false,
@@ -55,7 +54,7 @@ export const SkillCard: FC<SkillCardProps> = ({
   onDeleteButtonClick,
   onSendOfferButtonClick,
   className,
-}) => {
+}: SkillCardProps) => {
   const images = Array.isArray(skill.imageUrl) ? skill.imageUrl : [];
 
   return (

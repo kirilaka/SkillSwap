@@ -1,10 +1,127 @@
-// TODO: реализовать страницу SkillPage
+import { UserCard } from '@/entities/user/ui/UserCard/UserCard';
+import { SkillCard } from '@/entities/skill/ui/SkillCard/SkillCard';
+import { SectionCards } from '@/widgets/MainSection/SectionCards/SectionCards';
+import { useLocation, useParams } from 'react-router-dom';
+import {
+  fetchSkillByIdThunk,
+  selectCurrentSkill,
+  selectSkills,
+} from '@/entities/skill/model/skillsSlice';
+import { useEffect, useMemo } from 'react';
+import { selectUsers } from '@/entities/user/model/usersSlice';
+import styles from './SkillPage.module.scss';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectFavoriteUserIds, toggleFavoriteUser } from '@/features/favorite/model/favoriteSlice';
+import { selectAuthUser } from '@/features/auth/model/authSlice';
+import { createRequest } from '@/features/requests/model/requestsSlice';
 
 export default function SkillPage() {
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { id: skillId } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (skillId) {
+      dispatch(fetchSkillByIdThunk(skillId));
+    }
+  }, [skillId, dispatch]);
+
+  const user = location.state?.user ?? null;
+  const currentSkill = useAppSelector(selectCurrentSkill);
+  const users = useAppSelector(selectUsers);
+  const skills = useAppSelector(selectSkills);
+
+  const filteredUsers = useMemo(() => {
+    if (!currentSkill || !users) return [];
+
+    return users.filter((u) => {
+      const filteredSkills = skills
+        .filter(
+          (s) =>
+            s.title.toLowerCase() == currentSkill.title.toLowerCase() &&
+            s.type === currentSkill.type,
+        )
+        .map((s) => {
+          return s.authorId;
+        });
+      return filteredSkills.includes(u.id) && u.id !== user?.id;
+    });
+  }, [users, user, currentSkill, skills]);
+
+  // ==========================================
+  // ЛОГИКА ДЛЯ ВЗАИМОДЕЙСТВИЯ С ИЗБРАННЫМ (FAVORITES)
+  // ==========================================
+
+  // Получаем список ID всех пользователей, добавленных в избранное
+  const favoriteUserIds = useAppSelector(selectFavoriteUserIds);
+
+  /**
+   * Переключение статуса избранного для автора текущего навыка.
+   * Связывает UI-компонент SkillCard с фичей favoriteSlice.
+   */
+  const handleFavoriteClick = () => {
+    if (user?.id) {
+      dispatch(toggleFavoriteUser(user.id));
+    }
+  };
+
+  /** Проверка: находится ли автор просматриваемого навыка в избранном */
+  const isSkillAuthorFavorite = user ? favoriteUserIds.includes(user.id) : false;
+
+  // ==========================================
+  // ЛОГИКА ДЛЯ ЗАЯВОК НА ОБМЕН (REQUESTS)
+  // ==========================================
+
+  // Данные текущего авторизованного пользователя (инициатор обмена)
+  const authUser = useAppSelector(selectAuthUser);
+
+  /**
+   * Отправка запроса на обмен текущим навыком.
+   */
+  const handleSendOfferClick = () => {
+    // Для создания заявки обязательны: сам навык, его владелец и авторизованный отправитель
+    if (!currentSkill || !user || !authUser) return;
+
+    dispatch(
+      createRequest({
+        skillId: currentSkill.id, // Навык, на который откликнулись
+        fromUserId: authUser.id, // Кто предлагает обмен (текущий сессионный юзер)
+        toUserId: user.id, // Кому предлагается обмен (автор навыка из router state)
+      }),
+    );
+  };
+
+  /**
+   * Условия блокировки кнопки "Предложить обмен":
+   * 1. Нет данных о навыке или его авторе.
+   * 2. Пользователь не авторизован в системе.
+   * 3. Пользователь открыл страницу своего собственного навыка (обмен с самим собой запрещен).
+   */
+  const isOfferDisabled = !currentSkill || !user || !authUser || authUser.id === user.id;
+
   return (
-    <main>
-      <h1>SkillPage</h1>
-      <p>Страница в разработке</p>
-    </main>
+    <div className={styles.pageContainer}>
+      <UserCard className={styles.userArea} hasDescription={true} user={user} skills={skills} />
+
+      {currentSkill ? (
+        <SkillCard
+          className={styles.skillArea}
+          skill={currentSkill}
+          isFavorite={isSkillAuthorFavorite}
+          // Если данных об авторе нет, кнопка избранного не сработает
+          onFavoriteClick={user ? handleFavoriteClick : undefined}
+          // Если обмен недоступен/запрещен, передаем undefined для автоматического выключения кнопки внутри SkillCard
+          onSendOfferButtonClick={isOfferDisabled ? undefined : handleSendOfferClick}
+        />
+      ) : null}
+
+      <SectionCards
+        className={styles.sectionsArea}
+        title={'Похожие предложения'}
+        users={filteredUsers}
+        skills={skills}
+        variant="scrollFour"
+      />
+    </div>
   );
 }

@@ -6,6 +6,8 @@ import { SkillWrapper } from '@/entities/skill/ui/SkillWrapper/SkillWrapper';
 import { Box } from '@/shared/ui/Box/Box';
 import clsx from 'clsx';
 import { FavoriteButton } from '@/features/favorite/ui/FavoriteButton';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/shared/lib/constants';
 
 interface UserCardProps {
   /** Пользователь для отображения */
@@ -33,11 +35,12 @@ export const UserCard = ({
   onFavoriteClick,
   className,
 }: UserCardProps) => {
+  const navigate = useNavigate();
   if (!user) {
     return null;
   }
 
-  const userSkills = skills ?? user.skills;
+  const userSkills = skills?.filter((s) => s.authorId === user?.id);
 
   const teachSkills = userSkills?.filter((s) => s.type === 'teach') ?? [];
   const learnSkills = userSkills?.filter((s) => s.type === 'learn') ?? [];
@@ -95,7 +98,14 @@ export const UserCard = ({
         </div>
       </div>
       {!hasDescription && (
-        <Button onClick={onButtonClick} className={styles.buttonMore} buttonType="primary">
+        <Button
+          onClick={() => {
+            navigate(generatePath(ROUTES.SKILL, { id: teachSkills[0].id }));
+            onButtonClick?.();
+          }}
+          className={styles.buttonMore}
+          buttonType="primary"
+        >
           Подробнее
         </Button>
       )}
