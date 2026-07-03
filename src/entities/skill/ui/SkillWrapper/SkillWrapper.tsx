@@ -29,7 +29,7 @@ export const SkillWrapper = ({
         [styles.skillWrapperIcon]: variant == 'icon',
       })}
     >
-      {children}
+      {variant === 'text' ? <span className={styles.text}>{children}</span> : children}
     </div>
   );
 };

@@ -30,8 +30,8 @@ export const findUserByEmail = async (email: string): Promise<UserInfo | undefin
   // Ищем в users.json
   const response = await fetch('/db/users.json');
 
-  const data: { users: UserInfo[] } = await response.json();
-  const mockUser = data.users.find((user) => user.email === email);
+  const data: UserInfo[] = await response.json();
+  const mockUser = data.find((user) => user.email === email);
 
   if (mockUser) {
     return mockUser;
@@ -56,8 +56,8 @@ export const findUserById = async (userId: string): Promise<UserInfo | undefined
   // ищем в user.json
   const response = await fetch('/db/users.json');
 
-  const data: { users: UserInfo[] } = await response.json();
-  const mockUser = data.users.find((user) => user.id === userId);
+  const data: UserInfo[] = await response.json();
+  const mockUser = data.find((user) => user.id === userId);
 
   if (mockUser) {
     return mockUser;

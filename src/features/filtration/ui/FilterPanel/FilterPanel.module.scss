@@ -4,10 +4,13 @@
   gap: 2.5rem; /* 40px */
 
   width: 20.25rem; /* 324px */
+  height: fit-content;
   padding: 1.25rem; /* 20px */
   border-radius: 0.75rem; /* 12px */
 
   background: $color-bg-card;
+
+  transition: height 0.3s ease-in-out;
 }
 
 .header {

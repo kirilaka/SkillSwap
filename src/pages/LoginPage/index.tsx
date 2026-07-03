@@ -2,8 +2,7 @@ import { Step1_UserData } from '@/features/auth/ui/Step1_UserData/Step1_UserData
 import styles from './LoginPage.module.scss';
 import { useAppDispatch } from '@/store/hooks';
 import { loginThunk } from '@/features/auth/model/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/shared/lib/constants';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface LoginFormData {
   email: string;
@@ -12,7 +11,9 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+  const from = location.state.from;
 
   const handleStep1Submit = async (data: LoginFormData) => {
     try {
@@ -23,7 +24,7 @@ export default function LoginPage() {
         }),
       ).unwrap();
 
-      navigate(ROUTES.PROFILE);
+      navigate(from);
     } catch (error) {
       console.log('Ошибка входа:', error);
     }

@@ -10,6 +10,7 @@
 }
 
 .skillWrapperText {
+  width: 40%;
   padding: 8px 12px;
   border-radius: 20px;
 
@@ -17,6 +18,17 @@
   font-size: $font-size-xs;
   line-height: 16px;
   color: $color-text-primary;
+
+  .text {
+    overflow: hidden;
+    display: block;
+
+    min-width: 0;
+    max-width: 100%;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .business {

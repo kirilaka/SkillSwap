@@ -97,46 +97,49 @@ export const selectAvailableCities = (state: RootState) => {
 
 export const selectFilteredSkills = (state: RootState) => {
   const users = state.users.items;
+  const skills = state.skills.items ?? [];
+
   const { selectedCategoryIds, selectedSubcategoryIds, exchangeType, gender, city, searchValue } =
     state.filtration;
 
-  return users.flatMap((user) => {
-    const skills = user.skills ?? [];
+  return skills.filter((skill) => {
+    const author = users.find((user) => user.id === skill.authorId);
 
-    return skills.filter((skill) => {
-      if (selectedCategoryIds.length > 0 && !selectedCategoryIds.includes(skill.categoryId)) {
-        return false;
-      }
+    if (!author) {
+      return false;
+    }
 
-      if (
-        selectedSubcategoryIds.length > 0 &&
-        !selectedSubcategoryIds.includes(skill.subcategoryId)
-      ) {
-        return false;
-      }
+    if (selectedCategoryIds.length > 0 && !selectedCategoryIds.includes(skill.categoryId)) {
+      return false;
+    }
 
-      if (exchangeType !== 'all' && skill.type !== exchangeType) {
-        return false;
-      }
+    if (
+      selectedSubcategoryIds.length > 0 &&
+      !selectedSubcategoryIds.includes(skill.subcategoryId)
+    ) {
+      return false;
+    }
 
-      if (gender !== 'any' && user.gender !== gender) {
-        return false;
-      }
+    if (exchangeType !== 'all' && skill.type !== exchangeType) {
+      return false;
+    }
 
-      if (city && user.city !== city) {
-        return false;
-      }
+    if (gender !== 'any' && author.gender !== gender) {
+      return false;
+    }
 
-      if (searchValue) {
-        const value = searchValue.toLowerCase();
+    if (city && author.city !== city) {
+      return false;
+    }
 
-        return (
-          skill.title.toLowerCase().includes(value) ||
-          skill.description.toLowerCase().includes(value)
-        );
-      }
+    if (searchValue) {
+      const value = searchValue.toLowerCase();
 
-      return true;
-    });
+      return (
+        skill.title.toLowerCase().includes(value) || skill.description.toLowerCase().includes(value)
+      );
+    }
+
+    return true;
   });
 };
