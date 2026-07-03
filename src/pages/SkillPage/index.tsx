@@ -21,6 +21,7 @@ export default function SkillPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id: skillId } = useParams<{ id: string }>();
+  console.log(skillId);
 
   useEffect(() => {
     if (skillId) {
@@ -29,9 +30,13 @@ export default function SkillPage() {
   }, [skillId, dispatch]);
 
   const currentSkill = useAppSelector(selectCurrentSkill);
+  console.log(currentSkill);
   const users = useAppSelector(selectUsers);
+  console.log(users);
   const skills = useAppSelector(selectSkills);
+  console.log(skills);
   const stateUser = location.state?.user ?? null;
+  console.log(stateUser);
 
   const author = useMemo(() => {
     if (stateUser) return stateUser;

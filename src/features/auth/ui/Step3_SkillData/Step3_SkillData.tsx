@@ -13,6 +13,7 @@ import { skillsFilterList } from '@/features/filtration/models/artFilter';
 import DoneIcon from '@/shared/ui/Icons/DoneIcon/DoneIcon.svg';
 import { SKILL_CATEGORIES } from '@/shared/lib/constants';
 import { SkillType } from '@/shared/types';
+import { fileToBase64 } from '@/shared/lib/helpers';
 
 interface Step3_SkillDataProps {
   /**Сабмит при клике на кнопку*/
@@ -84,21 +85,14 @@ export const Step3_SkillData = ({
     }));
   };
 
-  const handleFilesChange = useCallback(
-    (files: File[]) => {
-      if (formData.skillImageUrl?.length && formData.skillImageUrl.length > 0) {
-        formData.skillImageUrl.forEach((url) => URL.revokeObjectURL(url));
-      }
-      const imagesUrl = files.map((file) => {
-        return URL.createObjectURL(file);
-      });
-      setFormData((prev) => ({
-        ...prev,
-        skillImageUrl: imagesUrl,
-      }));
-    },
-    [formData.skillImageUrl],
-  );
+  const handleFilesChange = useCallback(async (files: File[]) => {
+    const imageUrls = await Promise.all(files.map((file) => fileToBase64(file)));
+
+    setFormData((prev) => ({
+      ...prev,
+      skillImageUrl: imageUrls,
+    }));
+  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
