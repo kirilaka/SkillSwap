@@ -5,9 +5,10 @@ export const TOKEN_KEY = 'token';
 export const USER_ID_KEY = 'userId';
 export const REGISTERED_USERS_KEY = 'registeredUsers';
 
-export const getRegisteredUsers = (): UserInfo[] => {
-  const raw = localStorage.getItem(REGISTERED_USERS_KEY);
-  return raw ? JSON.parse(raw) : [];
+export const getRegisteredUsers = (): RegisteredUser[] => {
+  const users = localStorage.getItem(REGISTERED_USERS_KEY);
+
+  return users ? JSON.parse(users) : [];
 };
 
 export const saveRegisteredUsers = (users: UserInfo[]) => {
@@ -39,6 +40,16 @@ export const findUserByEmail = async (email: string): Promise<UserInfo | undefin
   // Ищем в зарегестрированных
   const registeredUsers = getRegisteredUsers();
   return registeredUsers.find((u) => u.email === email);
+};
+
+export type RegisteredUser = UserInfo & {
+  password: string;
+};
+
+export const findRegisteredUserByEmail = (email: string): RegisteredUser | undefined => {
+  const registeredUsers = getRegisteredUsers();
+
+  return registeredUsers.find((user) => user.email === email);
 };
 
 export const findUserById = async (userId: string): Promise<UserInfo | undefined> => {

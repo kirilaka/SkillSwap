@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import {
   clearAuthData,
+  findRegisteredUserByEmail,
   findUserByEmail,
   findUserById,
   getRegisteredUsers,
@@ -46,22 +47,33 @@ interface RegisterResult {
   token: string;
 }
 
-export const loginThunk = createAsyncThunk<UserInfo, string, { rejectValue: string }>(
-  'auth/login',
-  async (email, { rejectWithValue }) => {
-    try {
-      const userEmail = await findUserByEmail(email);
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
 
-      if (!userEmail) {
+export const loginThunk = createAsyncThunk<UserInfo, LoginPayload, { rejectValue: string }>(
+  'auth/login',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const user = findRegisteredUserByEmail(email);
+
+      if (!user) {
         return rejectWithValue('Пользователь не найден');
       }
 
-      const token = 'token123';
-      setAuthData(token, userEmail.id);
+      if (user.password !== password) {
+        return rejectWithValue('Неверный пароль');
+      }
 
-      return userEmail;
+      const token = 'token123';
+      setAuthData(token, user.id);
+
+      const userWithoutPassword = { ...user, password: '' };
+
+      return userWithoutPassword;
     } catch {
-      return rejectWithValue('Ошибка загрузки пользователя');
+      return rejectWithValue('Ошибка авторизации');
     }
   },
 );
