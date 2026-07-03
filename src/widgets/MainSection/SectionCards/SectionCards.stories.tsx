@@ -5,7 +5,7 @@ import { fn } from 'storybook/test';
 
 import usersData from '@/../public/db/users.json';
 
-const users = usersData.users as UserInfo[];
+const users = usersData as UserInfo[];
 
 const meta = {
   title: 'widgets/MainSection/SectionCards',
