@@ -28,10 +28,17 @@ export default function SkillPage() {
     }
   }, [skillId, dispatch]);
 
-  const user = location.state?.user ?? null;
   const currentSkill = useAppSelector(selectCurrentSkill);
   const users = useAppSelector(selectUsers);
   const skills = useAppSelector(selectSkills);
+  const stateUser = location.state?.user ?? null;
+
+  const author = useMemo(() => {
+    if (stateUser) return stateUser;
+    if (!currentSkill) return null;
+
+    return users.find((user) => user.id === currentSkill.authorId) ?? null;
+  }, [stateUser, currentSkill, users]);
 
   const filteredUsers = useMemo(() => {
     if (!currentSkill || !users) return [];
@@ -46,9 +53,9 @@ export default function SkillPage() {
         .map((s) => {
           return s.authorId;
         });
-      return filteredSkills.includes(u.id) && u.id !== user?.id;
+      return filteredSkills.includes(u.id) && u.id !== author?.id;
     });
-  }, [users, user, currentSkill, skills]);
+  }, [users, author, currentSkill, skills]);
 
   // ==========================================
   // ЛОГИКА ДЛЯ ВЗАИМОДЕЙСТВИЯ С ИЗБРАННЫМ (FAVORITES)
@@ -62,13 +69,13 @@ export default function SkillPage() {
    * Связывает UI-компонент SkillCard с фичей favoriteSlice.
    */
   const handleFavoriteClick = () => {
-    if (user?.id) {
-      dispatch(toggleFavoriteUser(user.id));
+    if (author?.id) {
+      dispatch(toggleFavoriteUser(author.id));
     }
   };
 
   /** Проверка: находится ли автор просматриваемого навыка в избранном */
-  const isSkillAuthorFavorite = user ? favoriteUserIds.includes(user.id) : false;
+  const isSkillAuthorFavorite = author ? favoriteUserIds.includes(author.id) : false;
 
   // ==========================================
   // ЛОГИКА ДЛЯ ЗАЯВОК НА ОБМЕН (REQUESTS)
@@ -82,7 +89,7 @@ export default function SkillPage() {
    */
   const handleSendOfferClick = () => {
     // Для создания заявки обязательны: сам навык, его владелец и авторизованный отправитель
-    if (!currentSkill || !user) return;
+    if (!currentSkill || !author) return;
     if (!authUser) {
       console.log(location);
       return navigate(ROUTES.LOGIN, {
@@ -93,7 +100,7 @@ export default function SkillPage() {
       createRequest({
         skillId: currentSkill.id, // Навык, на который откликнулись
         fromUserId: authUser.id, // Кто предлагает обмен (текущий сессионный юзер)
-        toUserId: user.id, // Кому предлагается обмен (автор навыка из router state)
+        toUserId: author.id, // Кому предлагается обмен (автор навыка из router state)
       }),
     );
   };
@@ -104,11 +111,11 @@ export default function SkillPage() {
    * 2. Пользователь не авторизован в системе.
    * 3. Пользователь открыл страницу своего собственного навыка (обмен с самим собой запрещен).
    */
-  const isOfferDisabled = !currentSkill || !user || authUser?.id === user.id;
+  const isOfferDisabled = !currentSkill || !author || authUser?.id === author.id;
 
   return (
     <div className={styles.pageContainer}>
-      <UserCard className={styles.userArea} hasDescription={true} user={user} skills={skills} />
+      <UserCard className={styles.userArea} hasDescription={true} user={author} skills={skills} />
 
       {currentSkill ? (
         <SkillCard
@@ -116,7 +123,7 @@ export default function SkillPage() {
           skill={currentSkill}
           isFavorite={isSkillAuthorFavorite}
           // Если данных об авторе нет, кнопка избранного не сработает
-          onFavoriteClick={user ? handleFavoriteClick : undefined}
+          onFavoriteClick={author ? handleFavoriteClick : undefined}
           // Если обмен недоступен/запрещен, передаем undefined для автоматического выключения кнопки внутри SkillCard
           onSendOfferButtonClick={isOfferDisabled ? undefined : handleSendOfferClick}
         />

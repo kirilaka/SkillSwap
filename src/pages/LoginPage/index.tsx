@@ -3,17 +3,24 @@ import styles from './LoginPage.module.scss';
 import { useAppDispatch } from '@/store/hooks';
 import { loginThunk } from '@/features/auth/model/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/shared/lib/constants';
 
 interface LoginFormData {
   email: string;
   password: string;
 }
 
+type LocationState = {
+  from?: string;
+};
+
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state.from;
+
+  const state = location.state as LocationState | null;
+  const from = state?.from ?? ROUTES.HOME;
 
   const handleStep1Submit = async (data: LoginFormData) => {
     try {
