@@ -1,4 +1,3 @@
-// unit test
 import { describe, it, expect, beforeEach } from 'vitest';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import filtrationReducer, {
@@ -20,12 +19,20 @@ import filtrationReducer, {
   selectFilteredSkills,
 } from './filtrationSlice';
 import usersReducer from '@/entities/user/model/usersSlice';
-import type { UserInfo } from '@/shared/types';
+import skillsReducer from '@/entities/skill/model/skillsSlice';
+import favoriteReducer from '@/features/favorite/model/favoriteSlice';
+import authReducer from '@/features/auth/model/authSlice';
+import requestsReducer from '@/features/requests/model/requestsSlice';
+import type { UserInfo, Skill } from '@/shared/types';
 import type { RootState } from '@/store';
 
 const rootReducer = combineReducers({
   filtration: filtrationReducer,
   users: usersReducer,
+  skills: skillsReducer,
+  favorite: favoriteReducer,
+  auth: authReducer,
+  requests: requestsReducer,
 });
 
 type TestState = ReturnType<typeof rootReducer>;
@@ -37,9 +44,6 @@ const createTestStore = (preloadedState?: Partial<TestState>) =>
   });
 
 type TestStore = ReturnType<typeof createTestStore>;
-
-// ─── Helper: кастуем к RootState для селекторов ────────────────────
-
 const getStateAsRoot = (store: TestStore): RootState => store.getState() as unknown as RootState;
 
 const mockUsers: UserInfo[] = [
@@ -51,38 +55,6 @@ const mockUsers: UserInfo[] = [
     createdAt: '2024-01-01',
     gender: 'male',
     city: 'Moscow',
-    skills: [
-      {
-        id: 'skill-1',
-        title: 'React',
-        description: 'Frontend library for building UI',
-        type: 'teach',
-        category: 'business',
-        categoryId: 'cat-1',
-        subcategory: 'Frontend',
-        subcategoryId: 'sub-1',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-1',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-      {
-        id: 'skill-2',
-        title: 'Vue',
-        description: 'Progressive JavaScript framework',
-        type: 'learn',
-        category: 'business',
-        categoryId: 'cat-1',
-        subcategory: 'Frontend',
-        subcategoryId: 'sub-2',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-1',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-    ],
   },
   {
     id: 'user-2',
@@ -92,23 +64,6 @@ const mockUsers: UserInfo[] = [
     createdAt: '2024-01-01',
     gender: 'female',
     city: 'SPb',
-    skills: [
-      {
-        id: 'skill-3',
-        title: 'Guitar',
-        description: 'Acoustic music instrument',
-        type: 'teach',
-        category: 'art',
-        categoryId: 'cat-2',
-        subcategory: 'Music',
-        subcategoryId: 'sub-3',
-        tags: [],
-        imageUrl: null,
-        authorId: 'user-2',
-        createdAt: '2024-01-01',
-        source: 'mock',
-      },
-    ],
   },
   {
     id: 'user-3',
@@ -118,7 +73,54 @@ const mockUsers: UserInfo[] = [
     createdAt: '2024-01-01',
     gender: 'male',
     city: 'Moscow',
-    skills: [],
+  },
+];
+
+const mockSkills: Skill[] = [
+  {
+    id: 'skill-1',
+    title: 'React',
+    description: 'Frontend library for building UI',
+    type: 'teach',
+    category: 'business',
+    categoryId: 'cat-1',
+    subcategory: 'Frontend',
+    subcategoryId: 'sub-1',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-1',
+    createdAt: '2024-01-01',
+    source: 'mock',
+  },
+  {
+    id: 'skill-2',
+    title: 'Vue',
+    description: 'Progressive JavaScript framework',
+    type: 'learn',
+    category: 'business',
+    categoryId: 'cat-1',
+    subcategory: 'Frontend',
+    subcategoryId: 'sub-2',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-1',
+    createdAt: '2024-01-01',
+    source: 'mock',
+  },
+  {
+    id: 'skill-3',
+    title: 'Guitar',
+    description: 'Acoustic music instrument',
+    type: 'teach',
+    category: 'art',
+    categoryId: 'cat-2',
+    subcategory: 'Music',
+    subcategoryId: 'sub-3',
+    tags: [],
+    imageUrl: null,
+    authorId: 'user-2',
+    createdAt: '2024-01-01',
+    source: 'mock',
   },
 ];
 
@@ -128,6 +130,18 @@ describe('filtrationSlice', () => {
   beforeEach(() => {
     store = createTestStore({
       users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
+      skills: { items: mockSkills, currentSkill: null, isLoading: false, error: null },
+      favorite: { favoriteUserIds: [], error: null },
+      auth: { user: null, token: null, isAuth: false, isLoading: false, error: null },
+      requests: { items: [], isLoading: false, error: null },
+      filtration: {
+        selectedCategoryIds: [],
+        selectedSubcategoryIds: [],
+        exchangeType: 'all',
+        gender: 'any',
+        city: '',
+        searchValue: '',
+      },
     });
   });
 
@@ -148,8 +162,7 @@ describe('filtrationSlice', () => {
       store.dispatch(toggleCategory({ categoryId: 'cat-1', subcategoryIds: ['sub-1', 'sub-2'] }));
 
       expect(selectSelectedCategoryIds(getStateAsRoot(store))).toContain('cat-1');
-      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).toContain('sub-1');
-      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).toContain('sub-2');
+      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).toEqual(['sub-1', 'sub-2']);
     });
 
     it('should remove category and its subcategories on second toggle', () => {
@@ -157,8 +170,7 @@ describe('filtrationSlice', () => {
       store.dispatch(toggleCategory({ categoryId: 'cat-1', subcategoryIds: ['sub-1', 'sub-2'] }));
 
       expect(selectSelectedCategoryIds(getStateAsRoot(store))).not.toContain('cat-1');
-      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).not.toContain('sub-1');
-      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).not.toContain('sub-2');
+      expect(selectSelectedSubcategoryIds(getStateAsRoot(store))).toEqual([]);
     });
   });
 
@@ -177,34 +189,24 @@ describe('filtrationSlice', () => {
     });
   });
 
-  describe('setExchangeType', () => {
+  describe('setters', () => {
     it('should set exchange type', () => {
       store.dispatch(setExchangeType('teach'));
-
       expect(selectExchangeType(getStateAsRoot(store))).toBe('teach');
     });
-  });
 
-  describe('setGender', () => {
     it('should set gender', () => {
       store.dispatch(setGender('female'));
-
       expect(selectGender(getStateAsRoot(store))).toBe('female');
     });
-  });
 
-  describe('setCity', () => {
     it('should set city', () => {
       store.dispatch(setCity('Kazan'));
-
       expect(selectCity(getStateAsRoot(store))).toBe('Kazan');
     });
-  });
 
-  describe('setSearchValue', () => {
     it('should set search value', () => {
       store.dispatch(setSearchValue('react'));
-
       expect(selectSearchValue(getStateAsRoot(store))).toBe('react');
     });
   });
@@ -219,8 +221,7 @@ describe('filtrationSlice', () => {
 
       store.dispatch(resetFilters());
 
-      const state = selectFiltration(getStateAsRoot(store));
-      expect(state).toEqual({
+      expect(selectFiltration(getStateAsRoot(store))).toEqual({
         selectedCategoryIds: [],
         selectedSubcategoryIds: [],
         exchangeType: 'all',
@@ -293,7 +294,7 @@ describe('filtrationSlice', () => {
       expect(skills.map((s) => s.id)).toEqual(['skill-1', 'skill-2']);
     });
 
-    it('should filter by title (case insensitive)', () => {
+    it('should filter by title case-insensitively', () => {
       store.dispatch(setSearchValue('REACT'));
 
       const skills = selectFilteredSkills(getStateAsRoot(store));
@@ -302,7 +303,7 @@ describe('filtrationSlice', () => {
       expect(skills[0].title).toBe('React');
     });
 
-    it('should filter by description (case insensitive)', () => {
+    it('should filter by description case-insensitively', () => {
       store.dispatch(setSearchValue('ACOUSTIC'));
 
       const skills = selectFilteredSkills(getStateAsRoot(store));

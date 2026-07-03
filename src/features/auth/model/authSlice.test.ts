@@ -1,6 +1,5 @@
-// unit test
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import authReducer, {
   loginThunk,
   registerThunk,
@@ -16,9 +15,23 @@ import authReducer, {
   selectAuthError,
   selectAuthUserId,
 } from './authSlice';
+import usersReducer from '@/entities/user/model/usersSlice';
+import skillsReducer from '@/entities/skill/model/skillsSlice';
+import favoriteReducer from '@/features/favorite/model/favoriteSlice';
+import filtrationReducer from '@/features/filtration/models/filtrationSlice';
+import requestsReducer from '@/features/requests/model/requestsSlice';
 import type { User, UserInfo } from '@/shared/types';
 
-// ─── Mocks ─────────────────────────────────────────────────────────
+const rootReducer = combineReducers({
+  filtration: filtrationReducer,
+  users: usersReducer,
+  skills: skillsReducer,
+  favorite: favoriteReducer,
+  auth: authReducer,
+  requests: requestsReducer,
+});
+
+type TestState = ReturnType<typeof rootReducer>;
 
 const mockUsers: UserInfo[] = [
   {
@@ -37,46 +50,67 @@ const mockUsers: UserInfo[] = [
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
 
-// ─── Helpers ───────────────────────────────────────────────────────
-
-const createTestStore = () =>
+const createTestStore = (preloadedState?: Partial<TestState>) =>
   configureStore({
-    reducer: { auth: authReducer },
+    reducer: rootReducer,
+    preloadedState,
   });
 
 type TestStore = ReturnType<typeof createTestStore>;
 
-// ─── Tests ───────────────────────────────────────────────────────────
+const mockRegisteredUser = {
+  ...mockUsers[0],
+  password: 'password123',
+};
+
+const seedRegisteredUsers = (users = [mockRegisteredUser]) => {
+  localStorage.setItem('registeredUsers', JSON.stringify(users));
+};
 
 describe('authSlice', () => {
   let store: TestStore;
 
   beforeEach(() => {
-    store = createTestStore();
     vi.clearAllMocks();
     localStorage.clear();
+    mockFetch.mockResolvedValue({
+      json: () => Promise.resolve(mockUsers),
+    } as Response);
+
+    store = createTestStore({
+      users: { items: mockUsers, currentUser: null, isLoading: false, error: null },
+      skills: { items: [], currentSkill: null, isLoading: false, error: null },
+      favorite: { favoriteUserIds: [], error: null },
+      auth: { user: null, token: null, isAuth: false, isLoading: false, error: null },
+      filtration: {
+        selectedCategoryIds: [],
+        selectedSubcategoryIds: [],
+        exchangeType: 'all',
+        gender: 'any',
+        city: '',
+        searchValue: '',
+      },
+      requests: { items: [], isLoading: false, error: null },
+    });
   });
 
   describe('initial state', () => {
     it('should have correct initial state', () => {
-      const state = store.getState();
-      expect(state.auth.user).toBeNull();
-      expect(state.auth.token).toBeNull();
-      expect(state.auth.isAuth).toBe(false);
-      expect(state.auth.isLoading).toBe(false);
-      expect(state.auth.error).toBeNull();
+      expect(selectAuthUser(store.getState())).toBeNull();
+      expect(selectAuthToken(store.getState())).toBeNull();
+      expect(selectIsAuth(store.getState())).toBe(false);
+      expect(selectAuthLoading(store.getState())).toBe(false);
+      expect(selectAuthError(store.getState())).toBeNull();
     });
   });
 
-  // ─── loginThunk ─────────────────────────────────────────────
-
   describe('loginThunk', () => {
-    it('should login mock user successfully', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
+    it('should login registered user successfully', async () => {
+      seedRegisteredUsers();
 
-      await store.dispatch(loginThunk('mock@test.com'));
+      await store
+        .dispatch(loginThunk({ email: 'mock@test.com', password: 'password123' }))
+        .unwrap();
 
       expect(selectAuthUser(store.getState())?.email).toBe('mock@test.com');
       expect(selectIsAuth(store.getState())).toBe(true);
@@ -85,41 +119,22 @@ describe('authSlice', () => {
       expect(localStorage.getItem('userId')).toBe('user-mock-1');
     });
 
-    it('should login registered user from localStorage', async () => {
-      const registeredUser: UserInfo = {
-        id: 'user-reg-1',
-        name: 'Registered',
-        email: 'reg@test.com',
-        avatarUrl: null,
-        createdAt: '2024-01-01',
-      };
-
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
-
-      // Сохраняем в localStorage до вызова
-      localStorage.setItem('registeredUsers', JSON.stringify([registeredUser]));
-
-      await store.dispatch(loginThunk('reg@test.com'));
-
-      expect(selectAuthUser(store.getState())?.email).toBe('reg@test.com');
-      expect(selectIsAuth(store.getState())).toBe(true);
-    });
-
-    it('should reject if email not found', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
-
-      await store.dispatch(loginThunk('nonexistent@test.com'));
+    it('should reject if email not found in registered users', async () => {
+      await store.dispatch(loginThunk({ email: 'nonexistent@test.com', password: 'password123' }));
 
       expect(selectAuthError(store.getState())).toBe('Пользователь не найден');
       expect(selectIsAuth(store.getState())).toBe(false);
     });
-  });
 
-  // ─── registerThunk ──────────────────────────────────────────
+    it('should reject if password is wrong', async () => {
+      seedRegisteredUsers();
+
+      await store.dispatch(loginThunk({ email: 'mock@test.com', password: 'wrong' }));
+
+      expect(selectAuthError(store.getState())).toBe('Неверный пароль');
+      expect(selectIsAuth(store.getState())).toBe(false);
+    });
+  });
 
   describe('registerThunk', () => {
     it('should create new user', async () => {
@@ -127,15 +142,19 @@ describe('authSlice', () => {
         json: () => Promise.resolve([]),
       } as Response);
 
-      await store.dispatch(
-        registerThunk({
-          name: 'New User',
-          email: 'new@test.com',
-          gender: 'female',
-          city: 'SPb',
-          age: 30,
-        }),
-      );
+      await store
+        .dispatch(
+          registerThunk({
+            name: 'New User',
+            email: 'new@test.com',
+            gender: 'female',
+            city: 'SPb',
+            age: 30,
+            password: '32323323',
+            avatarUrl: null,
+          }),
+        )
+        .unwrap();
 
       const user = selectAuthUser(store.getState());
       expect(user?.email).toBe('new@test.com');
@@ -144,7 +163,7 @@ describe('authSlice', () => {
       expect(selectAuthToken(store.getState())).toBe('token123');
     });
 
-    it('should reject duplicate email', async () => {
+    it('should reject duplicate email from mock users', async () => {
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve(mockUsers),
       } as Response);
@@ -154,6 +173,8 @@ describe('authSlice', () => {
           name: 'Duplicate',
           email: 'mock@test.com',
           gender: 'male',
+          password: '32323323',
+          avatarUrl: null,
         }),
       );
 
@@ -161,39 +182,41 @@ describe('authSlice', () => {
       expect(selectIsAuth(store.getState())).toBe(false);
     });
 
-    it('should save token, userId and registeredUsers to localStorage', async () => {
+    it('should save token, userId and new registered user to localStorage', async () => {
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve([]),
       } as Response);
 
-      await store.dispatch(
-        registerThunk({
-          name: 'Storage Test',
-          email: 'storage@test.com',
-          gender: 'male',
-        }),
-      );
+      await store
+        .dispatch(
+          registerThunk({
+            name: 'Storage Test',
+            email: 'storage@test.com',
+            gender: 'male',
+            password: '32323323',
+            avatarUrl: null,
+          }),
+        )
+        .unwrap();
 
       expect(localStorage.getItem('token')).toBe('token123');
       expect(localStorage.getItem('userId')).toContain('user-registered-');
       const registered = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       expect(registered).toHaveLength(1);
       expect(registered[0].email).toBe('storage@test.com');
+      expect(registered[0].password).toBe('32323323');
     });
   });
 
-  // ─── checkAuthThunk ─────────────────────────────────────────
-
   describe('checkAuthThunk', () => {
-    it('should restore user from localStorage', async () => {
+    it('should restore mock user from localStorage', async () => {
       localStorage.setItem('token', 'token123');
       localStorage.setItem('userId', 'user-mock-1');
-
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve(mockUsers),
       } as Response);
 
-      await store.dispatch(checkAuthThunk());
+      await store.dispatch(checkAuthThunk()).unwrap();
 
       expect(selectAuthUser(store.getState())?.id).toBe('user-mock-1');
       expect(selectIsAuth(store.getState())).toBe(true);
@@ -202,7 +225,6 @@ describe('authSlice', () => {
     it('should reset auth if userId not found', async () => {
       localStorage.setItem('token', 'token123');
       localStorage.setItem('userId', 'non-existent');
-
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve(mockUsers),
       } as Response);
@@ -216,19 +238,15 @@ describe('authSlice', () => {
     });
   });
 
-  // ─── logout ─────────────────────────────────────────────────
-
   describe('logout', () => {
     it('should clear token and userId', async () => {
-      // Сначала логиним
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
+      seedRegisteredUsers();
 
-      await store.dispatch(loginThunk('mock@test.com'));
+      await store
+        .dispatch(loginThunk({ email: 'mock@test.com', password: 'password123' }))
+        .unwrap();
       expect(selectIsAuth(store.getState())).toBe(true);
 
-      // Логаут
       store.dispatch(logout());
 
       expect(selectAuthUser(store.getState())).toBeNull();
@@ -238,7 +256,7 @@ describe('authSlice', () => {
       expect(localStorage.getItem('userId')).toBeNull();
     });
 
-    it('should not remove registeredUsers', async () => {
+    it('should not remove registeredUsers', () => {
       localStorage.setItem('registeredUsers', JSON.stringify([{ id: '1', name: 'Test' }]));
 
       store.dispatch(logout());
@@ -246,8 +264,6 @@ describe('authSlice', () => {
       expect(localStorage.getItem('registeredUsers')).not.toBeNull();
     });
   });
-
-  // ─── reducer actions ───────────────────────────────────────
 
   describe('reducer actions', () => {
     it('clearAuthError should reset error', () => {
@@ -268,13 +284,8 @@ describe('authSlice', () => {
       expect(selectAuthUser(store.getState())?.name).toBe('Test');
     });
 
-    it('updateAuthUser should update user fields', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
-
-      await store.dispatch(loginThunk('mock@test.com'));
-
+    it('updateAuthUser should update user fields', () => {
+      store.dispatch(setAuthUser(mockUsers[0]));
       store.dispatch(updateAuthUser({ name: 'Updated Name', city: 'Kazan' }));
 
       const user = selectAuthUser(store.getState());
@@ -290,15 +301,9 @@ describe('authSlice', () => {
     });
   });
 
-  // ─── selectors ─────────────────────────────────────────────
-
   describe('selectors', () => {
-    it('selectAuthUserId should return user id', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: () => Promise.resolve(mockUsers),
-      } as Response);
-
-      await store.dispatch(loginThunk('mock@test.com'));
+    it('selectAuthUserId should return user id', () => {
+      store.dispatch(setAuthUser(mockUsers[0]));
 
       expect(selectAuthUserId(store.getState())).toBe('user-mock-1');
     });
