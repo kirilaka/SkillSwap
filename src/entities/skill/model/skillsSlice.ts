@@ -37,10 +37,27 @@ export const fetchSkillsThunk = createAsyncThunk<Skill[], void, { rejectValue: s
 
 export const fetchSkillByIdThunk = createAsyncThunk<Skill | null, string, { rejectValue: string }>(
   'skills/fetchById',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, getState }) => {
     try {
-      const skill = await fetchSkillById(id);
-      return skill ?? null;
+      const state = getState() as { skills: SkillsState };
+
+      const skillFromState = state.skills.items.find((skill) => skill.id === id);
+
+      if (skillFromState) {
+        return skillFromState;
+      }
+
+      const createdSkills = getCreatedSkillsFromStorage();
+
+      const skillFromStorage = createdSkills.find((skill) => skill.id === id);
+
+      if (skillFromStorage) {
+        return skillFromStorage;
+      }
+
+      const skillFromJson = await fetchSkillById(id);
+
+      return skillFromJson ?? null;
     } catch (err) {
       return rejectWithValue(err instanceof Error ? err.message : 'Unknown error');
     }

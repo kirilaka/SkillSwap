@@ -17,3 +17,17 @@ export function truncate(str: string, maxLength: number): string {
 export function generateId(): string {
   return crypto.randomUUID();
 }
+//** Преобразовать файл в строку base64 и сохранить её */
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+};
