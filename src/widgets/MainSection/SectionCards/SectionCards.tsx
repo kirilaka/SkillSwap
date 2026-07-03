@@ -1,9 +1,11 @@
 import styles from './SectionCards.module.scss';
 import { UserCard } from '@/entities/user/ui/UserCard/UserCard';
+import { selectFavoriteUserIds, toggleFavoriteUser } from '@/features/favorite/model/favoriteSlice';
 import { Skill, UserInfo } from '@/shared/types';
 import { Button } from '@/shared/ui/Button/Button';
 import { Gallery } from '@/shared/ui/Gallery/Gallery';
 import { ChevronIcon } from '@/shared/ui/Icons/ChevronIcon/ChevronIcon';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 interface SectionCardsProps {
   title: string;
@@ -12,6 +14,8 @@ interface SectionCardsProps {
   variant?: 'all' | 'three' | 'scrollFour';
   onClick?: () => void;
   skills?: Skill[];
+  /** Обработчик клика на избранное */
+  onFavoriteClick?: () => void;
 }
 
 export const SectionCards = ({
@@ -21,10 +25,14 @@ export const SectionCards = ({
   variant = 'three',
   onClick,
   skills = [],
+  onFavoriteClick,
 }: SectionCardsProps) => {
+  const dispatch = useAppDispatch();
   const displaydUsers = variant === 'three' ? users.slice(0, 3) : users;
 
   const showButton = variant === 'three';
+  // Получаем список ID всех пользователей, добавленных в избранное
+  const favoriteUserIds = useAppSelector(selectFavoriteUserIds);
 
   return (
     <section className={className}>
@@ -40,14 +48,38 @@ export const SectionCards = ({
       {variant !== 'scrollFour' && (
         <div className={styles.cards}>
           {displaydUsers.map((user) => (
-            <UserCard key={user.id} user={user} hasDescription={false} skills={skills} />
+            <UserCard
+              key={user.id}
+              user={user}
+              hasDescription={false}
+              skills={skills}
+              isFavorite={user ? favoriteUserIds.includes(user.id) : false}
+              onFavoriteClick={() => {
+                if (user?.id) {
+                  dispatch(toggleFavoriteUser(user.id));
+                }
+                onFavoriteClick?.();
+              }}
+            />
           ))}
         </div>
       )}
       {variant === 'scrollFour' && (
         <Gallery variant="4">
           {displaydUsers.map((user) => (
-            <UserCard key={user.id} user={user} hasDescription={false} skills={skills} />
+            <UserCard
+              key={user.id}
+              user={user}
+              hasDescription={false}
+              skills={skills}
+              isFavorite={user ? favoriteUserIds.includes(user.id) : false}
+              onFavoriteClick={() => {
+                if (user?.id) {
+                  dispatch(toggleFavoriteUser(user.id));
+                }
+                onFavoriteClick?.();
+              }}
+            />
           ))}
         </Gallery>
       )}
