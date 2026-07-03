@@ -1,9 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
 import { MainLayout } from '@/app/layouts';
 import { AuthLayout } from '@/app/layouts';
+import { useAppDispatch } from '@/store/hooks';
+import { checkAuthThunk } from '@/features/auth/model/authSlice';
+import { fetchUsersThunk } from '@/entities/user/model/usersSlice';
+import { fetchSkillsThunk } from '@/entities/skill/model/skillsSlice';
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const SkillPage = lazy(() => import('@/pages/SkillPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
@@ -14,6 +18,13 @@ const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export function AppRouter() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUsersThunk());
+    dispatch(fetchSkillsThunk());
+    dispatch(checkAuthThunk());
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <Suspense fallback={<div>Загрузка...</div>}>

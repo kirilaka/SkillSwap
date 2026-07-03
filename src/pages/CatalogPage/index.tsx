@@ -1,10 +1,10 @@
 import { FilterPanel } from '@/features/filtration/ui/FilterPanel';
 import styles from './CatalogPage.module.scss';
 import { SectionCards } from '@/widgets/MainSection/SectionCards/SectionCards';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchUsersThunk, selectUsers } from '@/entities/user/model/usersSlice';
-import { fetchSkillsThunk, selectSkills } from '@/entities/skill/model/skillsSlice';
-import { useEffect, useMemo } from 'react';
+import { useAppSelector } from '@/store/hooks';
+import { selectUsers } from '@/entities/user/model/usersSlice';
+import { selectSkills } from '@/entities/skill/model/skillsSlice';
+import { useMemo } from 'react';
 import {
   selectCity,
   selectExchangeType,
@@ -17,12 +17,6 @@ import {
 import { UserInfo } from '@/shared/types';
 
 export default function CatalogPage() {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchUsersThunk());
-    dispatch(fetchSkillsThunk());
-  }, [dispatch]);
-
   const selectedCategoryIds = useAppSelector(selectSelectedCategoryIds);
   const selectedSubcategoryIds = useAppSelector(selectSelectedSubcategoryIds);
   const exchangeType = useAppSelector(selectExchangeType);
