@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { Children, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -9,7 +9,7 @@ import 'swiper/css/navigation';
 import styles from './Gallery.module.scss';
 
 interface GalleryProps {
-  children: React.ReactNode[];
+  children: React.ReactNode;
   className?: string;
   /** Вид галереи.
    * 1-3 = 1 крупное, 3 малых изображения. ( По умолчанию )
@@ -22,7 +22,8 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
   const nextRef = useRef<HTMLButtonElement>(null);
   const [prevIsHide, setPrevIsHide] = useState(true);
   const [nextIsHide, setNextIsHide] = useState(false);
-  const [remainingCount, setRemainingCount] = useState(Math.max(children.length - 3, 0));
+  const childrenArray = Children.toArray(children);
+  const [remainingCount, setRemainingCount] = useState(Math.max(childrenArray.length - 3, 0));
 
   // Обновляем ссылки после того, как Swiper инициализировался
   const handleSwiperInit = (swiper: SwiperType) => {
@@ -46,7 +47,8 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
   };
 
   const updateOverlay = (swiper: SwiperType) => {
-    const count = Math.max(children.length - swiper.activeIndex - 3, 0);
+    const activeIndex = swiper.activeIndex ?? 0;
+    const count = Math.max(childrenArray.length - activeIndex - 3, 0);
 
     setRemainingCount(count);
   };
@@ -54,7 +56,7 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
   if (variant == '1-3') {
     return (
       <div className={clsx(styles.wrapperOf1To3, className)}>
-        {children.length > 1 && (
+        {childrenArray.length > 1 && (
           <div className={styles.buttonContainer}>
             <button
               className={clsx(styles.button, styles.buttonPrev, prevIsHide && styles.hide)}
@@ -70,12 +72,12 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             </button>
           </div>
         )}
-        {children.length > 3 && (
+        {childrenArray.length > 3 && (
           <div className={clsx(styles.imgOverlay, remainingCount <= 0 && styles.hide)}>
             +{remainingCount}
           </div>
         )}
-        {children.length >= 1 && (
+        {childrenArray.length >= 1 && (
           <Swiper
             modules={[Navigation]}
             className={styles.mainSwiper}
@@ -94,14 +96,14 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             }}
             allowTouchMove={false}
           >
-            {children.map((child, index) => (
+            {childrenArray.map((child, index) => (
               <SwiperSlide key={index} className={styles.slide}>
                 {child}
               </SwiperSlide>
             ))}
           </Swiper>
         )}
-        {children.length >= 1 && (
+        {childrenArray.length >= 1 && (
           <div className={styles.subWrapper}>
             <Swiper
               modules={[Navigation]}
@@ -115,7 +117,7 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
               spaceBetween={'24px'}
               allowTouchMove={false}
             >
-              {children.map((child, index) => (
+              {childrenArray.map((child, index) => (
                 <SwiperSlide key={index} className={styles.slide}>
                   {child}
                 </SwiperSlide>
@@ -123,7 +125,7 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             </Swiper>
           </div>
         )}
-        {children.length < 1 && (
+        {childrenArray.length < 1 && (
           <h2 className={styles.fallback}>Тут могли быть фотографии, но они улетели в отпуск...</h2>
         )}
       </div>
@@ -131,7 +133,7 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
   } else if (variant == '4') {
     return (
       <div className={styles.wrapperOf4}>
-        {children.length > 4 && (
+        {childrenArray.length > 4 && (
           <div className={styles.buttonContainer}>
             <button
               className={clsx(styles.button, styles.buttonPrev, prevIsHide && styles.hide)}
@@ -147,7 +149,7 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             </button>
           </div>
         )}
-        {children.length >= 1 && (
+        {childrenArray.length >= 1 && (
           <Swiper
             modules={[Navigation]}
             className={styles.mainSwiper}
@@ -168,14 +170,14 @@ export const Gallery = ({ children, className, variant = '1-3' }: GalleryProps) 
             spaceBetween={'24px'}
             slidesPerView={4}
           >
-            {children.map((child, index) => (
+            {childrenArray.map((child, index) => (
               <SwiperSlide key={index} className={styles.slide}>
                 {child}
               </SwiperSlide>
             ))}
           </Swiper>
         )}
-        {children.length < 1 && (
+        {childrenArray.length < 1 && (
           <h2 className={styles.fallback}>Предложения не смогли пройти на платформу 9 и 3/4...</h2>
         )}
       </div>
