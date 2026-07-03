@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
 import { ROUTES } from '@/shared/lib/constants';
 import { PrivateRoute } from '@/features/auth/ui/PrivateRoute';
@@ -35,7 +35,11 @@ export function AppRouter() {
 
             <Route element={<PrivateRoute />}>
               <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
-              <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+              <Route
+                path={ROUTES.PROFILE}
+                element={<Navigate to={ROUTES.PROFILE_PERSONAL_INFO} replace />}
+              />
+              <Route path={ROUTES.PROFILE_PERSONAL_INFO} element={<ProfilePage />} />
               <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
             </Route>
 

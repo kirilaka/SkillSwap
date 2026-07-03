@@ -4,11 +4,12 @@ import { LikeIcon } from '@/shared/ui/Icons/LikeIcon/LikeIcon';
 import { IdeaIcon } from '@/shared/ui/Icons/IdeaIcon/IdeaIcon';
 import { UserIcon } from '@/shared/ui/Icons/UserIcon/UserIcon';
 import { SidebarItemProps } from './types';
+import { ROUTES } from '@/shared/lib/constants';
 
 export const SidebarItems: SidebarItemProps[] = [
-  { label: 'Заявки', path: '/profile/applications', Icon: RequestIcon },
-  { label: 'Мои обмены', path: '/profile/my-swaps', Icon: MessageTextIcon },
-  { label: 'Избранное', path: '/profile/favorites', Icon: LikeIcon },
-  { label: 'Мои навыки', path: '/profile/my-skills', Icon: IdeaIcon },
-  { label: 'Личные данные', path: '/profile/personal-info', Icon: UserIcon },
+  { label: 'Заявки', path: ROUTES.PROFILE_APPLICATIONS, Icon: RequestIcon },
+  { label: 'Мои обмены', path: ROUTES.PROFILE_MY_SWAPS, Icon: MessageTextIcon },
+  { label: 'Избранное', path: ROUTES.PROFILE_FAVORITES, Icon: LikeIcon },
+  { label: 'Мои навыки', path: ROUTES.PROFILE_MY_SKILLS, Icon: IdeaIcon },
+  { label: 'Личные данные', path: ROUTES.PROFILE_PERSONAL_INFO, Icon: UserIcon },
 ];

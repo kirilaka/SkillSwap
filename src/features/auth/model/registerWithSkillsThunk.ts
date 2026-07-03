@@ -3,6 +3,7 @@ import { registerThunk, type RegisterPayload } from './authSlice';
 import { createSkillThunk } from '@/entities/skill/model/skillsSlice';
 import type { UserInfo as User } from '@/shared/types';
 import type { Skill } from '@/shared/types';
+import { addUser } from '@/entities/user/model/usersSlice';
 
 type SkillData = Omit<Skill, 'id' | 'createdAt' | 'source' | 'authorId'>;
 
@@ -20,6 +21,7 @@ export const registerWithSkillsThunk = createAsyncThunk<
   try {
     // 1. Регистрируем пользователя
     const authResult = await dispatch(registerThunk(payload.user)).unwrap();
+    dispatch(addUser(authResult.user));
 
     // 2. Создаём навык "хочу научиться"
     await dispatch(
