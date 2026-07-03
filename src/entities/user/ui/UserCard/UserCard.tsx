@@ -45,20 +45,31 @@ export const UserCard = ({
   const teachSkills = userSkills?.filter((s) => s.type === 'teach') ?? [];
   const learnSkills = userSkills?.filter((s) => s.type === 'learn') ?? [];
 
-  const renderSkillList = (skillList: Skill[]) => {
-    if (skillList.length === 0) {
+  const renderSkillList = (skillList: Skill[] | Skill) => {
+    if (!skillList) {
       return <div className={styles.emptySkills} />;
     }
     return (
       <>
-        {skillList.slice(0, 2).map((skill) => (
-          <SkillWrapper key={skill.id} variant="text" skillCategory={skill.category || 'more'}>
-            {skill.title}
-          </SkillWrapper>
-        ))}
-        {skillList.length > 2 && (
+        {Array.isArray(skillList) &&
+          skillList.slice(0, 2).map((skill) => (
+            <SkillWrapper key={skill.id} variant="text" skillCategory={skill.category || 'more'}>
+              {skill.title}
+            </SkillWrapper>
+          ))}
+        {Array.isArray(skillList) && skillList.length > 2 && (
           <SkillWrapper variant="text" skillCategory="more">
             +{skillList.length - 2}
+          </SkillWrapper>
+        )}
+        {!Array.isArray(skillList) && (
+          <SkillWrapper
+            className={styles.soloSkill}
+            key={skillList.id}
+            variant="text"
+            skillCategory={skillList.category || 'more'}
+          >
+            {skillList.title}
           </SkillWrapper>
         )}
       </>
@@ -90,7 +101,7 @@ export const UserCard = ({
       <div className={styles.skills}>
         <div className={styles.skillGroup}>
           <h4>Может научить:</h4>
-          <div className={styles.skillList}>{renderSkillList(teachSkills)}</div>
+          <div className={styles.skillList}>{renderSkillList(teachSkills[0])}</div>
         </div>
         <div className={styles.skillGroup}>
           <h4>Хочет научиться:</h4>
@@ -100,7 +111,9 @@ export const UserCard = ({
       {!hasDescription && (
         <Button
           onClick={() => {
-            navigate(generatePath(ROUTES.SKILL, { id: teachSkills[0].id }));
+            navigate(generatePath(ROUTES.SKILL, { id: teachSkills[0].id }), {
+              state: { user: user },
+            });
             onButtonClick?.();
           }}
           className={styles.buttonMore}

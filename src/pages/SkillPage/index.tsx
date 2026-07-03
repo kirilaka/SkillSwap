@@ -1,7 +1,7 @@
 import { UserCard } from '@/entities/user/ui/UserCard/UserCard';
 import { SkillCard } from '@/entities/skill/ui/SkillCard/SkillCard';
 import { SectionCards } from '@/widgets/MainSection/SectionCards/SectionCards';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   fetchSkillByIdThunk,
   selectCurrentSkill,
@@ -14,9 +14,11 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectFavoriteUserIds, toggleFavoriteUser } from '@/features/favorite/model/favoriteSlice';
 import { selectAuthUser } from '@/features/auth/model/authSlice';
 import { createRequest } from '@/features/requests/model/requestsSlice';
+import { ROUTES } from '@/shared/lib/constants';
 
 export default function SkillPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id: skillId } = useParams<{ id: string }>();
 
@@ -80,8 +82,13 @@ export default function SkillPage() {
    */
   const handleSendOfferClick = () => {
     // Для создания заявки обязательны: сам навык, его владелец и авторизованный отправитель
-    if (!currentSkill || !user || !authUser) return;
-
+    if (!currentSkill || !user) return;
+    if (!authUser) {
+      console.log(location);
+      return navigate(ROUTES.LOGIN, {
+        state: { from: location },
+      });
+    }
     dispatch(
       createRequest({
         skillId: currentSkill.id, // Навык, на который откликнулись
@@ -97,7 +104,7 @@ export default function SkillPage() {
    * 2. Пользователь не авторизован в системе.
    * 3. Пользователь открыл страницу своего собственного навыка (обмен с самим собой запрещен).
    */
-  const isOfferDisabled = !currentSkill || !user || !authUser || authUser.id === user.id;
+  const isOfferDisabled = !currentSkill || !user || authUser?.id === user.id;
 
   return (
     <div className={styles.pageContainer}>

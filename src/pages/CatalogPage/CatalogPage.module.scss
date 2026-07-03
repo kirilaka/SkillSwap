@@ -1,0 +1,17 @@
+.page {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 24px;
+
+  width: 100%;
+  max-width: 1440px;
+  padding: 32px 36px 60px;
+
+  .content {
+    grid-column: 2;
+  }
+}
+
+.filterPanel {
+  grid-column: 1;
+}
