@@ -15,12 +15,18 @@ interface Step1_UserDataProps {
   onSubmit: (data: RegistrationFormData) => void;
   /**Доп.классы */
   className?: string;
+  /** Где используется */
+  variant?: 'register' | 'login';
 }
 interface RegistrationFormData {
   email: string;
   password: string;
 }
-export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => {
+export const Step1_UserData = ({
+  onSubmit,
+  className,
+  variant = 'register',
+}: Step1_UserDataProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,8 +63,10 @@ export const Step1_UserData = ({ onSubmit, className }: Step1_UserDataProps) => 
 
     if (emailError || passwordError) return;
     // Пока только такая валидация :((
-    const existingUser = await findUserByEmail(email);
-    if (existingUser) return alert('Пользователь с таким email уже зарегистрирован');
+    if (variant === 'register') {
+      const existingUser = await findUserByEmail(email);
+      if (existingUser) return alert('Пользователь с таким email уже зарегистрирован');
+    }
     onSubmit({
       email: email,
       password: password,

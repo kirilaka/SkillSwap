@@ -10,7 +10,7 @@ import { Step3_SkillData } from '@/features/auth/ui/Step3_SkillData/Step3_SkillD
 import { useAppDispatch } from '@/store/hooks';
 import { registerWithSkillsThunk } from '@/features/auth/model/registerWithSkillsThunk';
 import { skillsFilterList } from '@/features/filtration/models/artFilter';
-interface UserStep1Data {
+export interface UserStep1Data {
   email?: string;
   password?: string;
 }
