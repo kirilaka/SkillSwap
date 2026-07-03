@@ -42,6 +42,15 @@ interface RegisterFormData {
   teachSkill: TeachSkillData | null;
 }
 
+export const skillCategories: SKILL_CATEGORIES[] = [
+  'business',
+  'art',
+  'language',
+  'education',
+  'home',
+  'health',
+];
+
 export default function RegisterPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -148,15 +157,6 @@ export default function RegisterPage() {
       return;
     }
     const avatarUrl = user.avatar ? URL.createObjectURL(user.avatar) : '';
-
-    const skillCategories: SKILL_CATEGORIES[] = [
-      'business',
-      'art',
-      'language',
-      'education',
-      'home',
-      'health',
-    ];
 
     const getSkillCategoryData = (subcategoryId: string | null) => {
       const selectedCategoryBySubcategoryId = skillsFilterList.find((category) =>

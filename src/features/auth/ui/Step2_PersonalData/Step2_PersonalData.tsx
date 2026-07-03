@@ -119,7 +119,7 @@ export const Step2_PersonalData = ({
       genderId: id,
     }));
   };
-  const handleCitiChange = (id: string | null) => {
+  const handleCityChange = (id: string | null) => {
     setFormData((prev) => ({
       ...prev,
       cityId: id,
@@ -127,7 +127,17 @@ export const Step2_PersonalData = ({
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    const selectedCity = cities.find((city) => city.id === formData.cityId);
+
+    if (!selectedCity) {
+      return;
+    }
+
+    onSubmit({
+      ...formData,
+      cityId: selectedCity.name,
+    });
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,7 +198,7 @@ export const Step2_PersonalData = ({
               label: city.name,
             }))}
             placeholder="Не указан"
-            onSelectItem={handleCitiChange}
+            onSelectItem={handleCityChange}
           />
         </label>
         <label className={styles.label}>

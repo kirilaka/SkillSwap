@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchUserById, fetchUsers } from '@/api/users';
 import { UserInfo } from '@/shared/types';
 
@@ -41,6 +41,13 @@ export const usersSlice = createSlice({
     /** очистка выбранного пользователя */
     clearCurrentUser: (state) => {
       state.currentUser = null;
+    },
+    addUser: (state, action: PayloadAction<UserInfo>) => {
+      const exists = state.items.some((user) => user.id === action.payload.id);
+
+      if (!exists) {
+        state.items.push(action.payload);
+      }
     },
   },
   selectors: {
@@ -87,7 +94,7 @@ export const usersSlice = createSlice({
 
 export default usersSlice.reducer;
 
-export const { clearUsersError, clearCurrentUser } = usersSlice.actions;
+export const { clearUsersError, clearCurrentUser, addUser } = usersSlice.actions;
 
 export const {
   selectUsers,
