@@ -8,8 +8,13 @@
 React, TypeScript, Redux Toolkit, FSD, SCSS, Vite
 
 ## Моя роль
-Разрабатывал фильтрацию навыков по категориям, городу, 
-полу и типу обмена. Работал с Redux, писал селекторы и слайсы.
+- Добавил фильтрацию по городу в FilterPanel (Redux, селекторы)
+- Подключил FilterPanel к Redux store
+- Создал favoritesSlice и подключил к store
+- Разработал компонент SkillCard
+- Создал userSlice и подключил reducer к root store
+- Добавил компонент SignUpProgress
+- Добавил компонент SkillWrapper и stories для Storybook
 
 ---
 
